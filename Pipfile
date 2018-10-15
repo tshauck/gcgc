@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+tensorflow = "1.11.0"
+biopython = "1.72"
+
+[dev-packages]
+black = "*"
+ipython = "*"
+pycodestyle = "*"
+python-language-server = {version = "*", extras = ["pycodestyle", "flake8"]}
+"flake8" = "3.5.0"
+ipdb = "*"
+
+[requires]
+python_version = "3.6"
