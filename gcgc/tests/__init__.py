@@ -4,25 +4,24 @@ import unittest
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
+from Bio import SeqIO
 import numpy as np
 
 from gcgc.alphabet import UnambiguousDnaExtendedAlphabet
 from gcgc.alphabet import IUPACProteinExtendedAlphabet
-from gcgc.fasta_generator import FASTARecordGenerator
+from gcgc.seq_record import EncodedSeqRecord
 from gcgc.tests.fixtures import P53_HUMAN
 
 
 class TestSeqRecordEncoder(unittest.TestCase):
     def setUp(self):
         self.sr = SeqRecord(Seq("ATCG"))
-        self.alphabet = UnambiguousDnaExtendedAlphabet(5)
+        self.alphabet = UnambiguousDnaExtendedAlphabet()
 
     def test_pad(self):
-        alpha_len = 2
-        alphabet = UnambiguousDnaExtendedAlphabet(alpha_len)
-        encoded = alphabet.encode(self.sr)
-
-        self.assertEqual(len(encoded), alpha_len)
+        padding = 10
+        encoded = EncodedSeqRecord(self.alphabet, self.sr, padding_to=padding)
+        self.assertEqual(len(encoded.pad), padding)
 
     def test_seq_record_encoder(self):
         expected_array = np.array(
@@ -36,16 +35,16 @@ class TestSeqRecordEncoder(unittest.TestCase):
             ],
             dtype=np.int,
         )
-        encoded_seq = self.alphabet.one_hot_encode_sequence(str(self.sr.seq))
-        np.testing.assert_array_equal(encoded_seq, expected_array)
+        encoded = EncodedSeqRecord(self.alphabet, self.sr)
+        np.testing.assert_array_equal(encoded.one_hot_encode_sequence, expected_array)
 
     def test_yield_fasta_record(self):
 
-        protein_alphabet = IUPACProteinExtendedAlphabet(padding_to=50)
-        fr = FASTARecordGenerator(P53_HUMAN, protein_alphabet)
+        protein_alphabet = IUPACProteinExtendedAlphabet()
 
-        for encoded in fr:
-            self.assertEqual(
-                encoded["one_hot_sequence"].shape,
-                (395, len(protein_alphabet.letters_and_tokens)),
-            )
+        with open(P53_HUMAN) as f:
+            for r in SeqIO.parse(f, format="fasta"):
+                encoded = EncodedSeqRecord(protein_alphabet, r)
+                self.assertEqual(
+                    np.asarray(encoded.one_hot_encode_sequence).shape, (395, 29)
+                )

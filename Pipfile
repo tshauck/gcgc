@@ -14,6 +14,7 @@ pycodestyle = "*"
 python-language-server = {version = "*", extras = ["pycodestyle", "flake8"]}
 "flake8" = "3.5.0"
 ipdb = "*"
+tox = "==3.5.2"
 
 [requires]
 python_version = "3.6"

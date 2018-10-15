@@ -4,4 +4,4 @@
 import pathlib
 
 _PATH = pathlib.Path(__file__).parent
-P53_HUMAN = _PATH / 'p53_human'
+P53_HUMAN = _PATH / 'p53_human/p53_human.fasta'
