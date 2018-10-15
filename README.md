@@ -1,37 +1,18 @@
-====
-GCGC
-====
+# GCGC
 
-
-.. image:: https://img.shields.io/pypi/v/gcgc.svg
-        :target: https://pypi.python.org/pypi/gcgc
-
-.. image:: https://img.shields.io/travis/tshauck/gcgc.svg
-        :target: https://travis-ci.org/tshauck/gcgc
-
-.. image:: https://readthedocs.org/projects/gcgc/badge/?version=latest
-        :target: https://gcgc.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-
-
+[![](https://img.shields.io/pypi/v/gcgc.svg)](https://pypi.python.org/pypi/gcgc)
+[![](https://img.shields.io/travis/tshauck/gcgc.svg)](https://travis-ci.org/tshauck/gcgc)
+[![Docs](https://readthedocs.org/projects/gcgc/badge/?version=latest)](https://gcgc.readthedocs.io/en/latest/?badge=latest)
 
 GCGC
 
+- Free software: MIT license
+- Documentation: https://gcgc.readthedocs.io.
 
-* Free software: MIT license
-* Documentation: https://gcgc.readthedocs.io.
+## Features
 
+## Credits
 
-Features
---------
+This package was created with [Cookiecutter][1].
 
-* TODO
-
-Credits
--------
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+[1]: https://github.com/audreyr/cookiecutter

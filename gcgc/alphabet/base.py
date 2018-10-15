@@ -2,9 +2,7 @@
 # All Rights Reserved
 
 from typing import Sequence
-from abc import ABC
-
-from Bio.Data import IUPACData
+from abc import ABC, abstractproperty
 
 
 class EncodingAlphabet(ABC):
@@ -17,7 +15,7 @@ class EncodingAlphabet(ABC):
     END = "<"
     PADDING = "|"
 
-    def __init__(self, letters: Sequence[str]):
+    def __init__(self):
         """
         Create the EncodingAlphabet object.
 
@@ -25,7 +23,6 @@ class EncodingAlphabet(ABC):
             letters: A list of tokens which constitue the alphabet.
         """
 
-        self.letters = letters
         self.letters_and_tokens = self.letters + self.START + self.END + self.PADDING
 
         self.encoding_index = {
@@ -34,6 +31,12 @@ class EncodingAlphabet(ABC):
         self.decoding_index = {
             idx: letter for letter, idx in self.encoding_index.items()
         }
+
+    @abstractproperty
+    def letters(self) -> str:
+        """
+        Expected to be overidden.
+        """
 
     def encode_token(self, token: str) -> int:
         """
@@ -86,22 +89,3 @@ class EncodingAlphabet(ABC):
         """
 
         return "".join(self.decode_token(s) for s in int_seq)
-
-
-class IUPACProteinExtendedAlphabet(EncodingAlphabet):
-    def __init__(self):
-        super(IUPACProteinExtendedAlphabet, self).__init__(
-            IUPACData.extended_protein_letters
-        )
-
-
-class IUPACDnaExtendedAlphabet(EncodingAlphabet):
-    def __init__(self):
-        super(IUPACDnaExtendedAlphabet, self).__init__(IUPACData.extended_dna_letters)
-
-
-class UnambiguousDnaExtendedAlphabet(EncodingAlphabet):
-    def __init__(self):
-        super(UnambiguousDnaExtendedAlphabet, self).__init__(
-            IUPACData.unambiguous_dna_letters
-        )

@@ -7,8 +7,8 @@ from Bio.Seq import Seq
 from Bio import SeqIO
 import numpy as np
 
-from gcgc.alphabet import UnambiguousDnaExtendedAlphabet
-from gcgc.alphabet import IUPACProteinExtendedAlphabet
+from gcgc.alphabet.iupac import UnambiguousDnaAlphabet
+from gcgc.alphabet.iupac import ExtendedProteinAlphabet
 from gcgc.seq_record import EncodedSeqRecord
 from gcgc.tests.fixtures import P53_HUMAN
 
@@ -16,7 +16,7 @@ from gcgc.tests.fixtures import P53_HUMAN
 class TestSeqRecordEncoder(unittest.TestCase):
     def setUp(self):
         self.sr = SeqRecord(Seq("ATCG"))
-        self.alphabet = UnambiguousDnaExtendedAlphabet()
+        self.alphabet = UnambiguousDnaAlphabet()
 
     def test_pad(self):
         padding = 10
@@ -40,7 +40,7 @@ class TestSeqRecordEncoder(unittest.TestCase):
 
     def test_yield_fasta_record(self):
 
-        protein_alphabet = IUPACProteinExtendedAlphabet()
+        protein_alphabet = ExtendedProteinAlphabet()
 
         with open(P53_HUMAN) as f:
             for r in SeqIO.parse(f, format="fasta"):
