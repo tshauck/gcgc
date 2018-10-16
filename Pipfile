@@ -4,17 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tensorflow = "1.11.0"
-biopython = "1.72"
+tensorflow = "*"
+biopython = "*"
+numpy = "*"
 
 [dev-packages]
 black = "*"
 ipython = "*"
 pycodestyle = "*"
-python-language-server = {version = "*", extras = ["pycodestyle", "flake8"]}
-"flake8" = "3.5.0"
+python-language-server = {version = "*", extras = ["pycodestyle"]}
 ipdb = "*"
-tox = "==3.5.2"
+tox = "*"
 
 [requires]
 python_version = "3.6"
