@@ -1,20 +1,22 @@
 language: python
 python:
-- '3.6'
-install:
-- pip install -r requirements-dev.txt
-- pip install -r requirements.txt
-- pip install -U tox-travis
-script: python -m unittest discover gcgc.tests
+  - "3.6"
+
 jobs:
   include:
-  - stage: pypi release
-    if: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
-    deploy:
-      provider: pypi
-      user: trent.hauck
-      password:
-        secure: pYxqDuhZjMSPr6GFHL7pvvAdBjIWe5WbLMaYVZ9DMo4n+QFbmM05LUSqLc7a2Dz1IvcFIDEwEUyaNVSO6b8kkoPaBvWE3tIGZ0A3eymUWGlu1R0U2Q7d3Gua1zvzSSR1XQh+7rgjx95fgs8lJmlZqCv0MsWu7JSnsC4irNXZ2+jfdaVDMjL6EkaGGDoHrwzDB8GLJO6jKlzMfxwKJ4eScdasYb4vyiTm9y5oy+EBT67q+cTpmPJc+PDr8Qay4PkHeYw5QpDkjvmkRk1kPpWOzCieaJBynL2UkAZaSqy5XjvXS4QEwpbaLHMNRFBQwW5Lp6p67PVLUfa7F3rPPfp2DRpEwhRh6PyxJJufKqv+JSAPINN+7pURSn5wS7TBRBBHX8uIw0j4Ihros3jORZ8cLL5Akxp34+XqgXS9goW39k5EL9FsMCKtXsxZGm1/4lunHLwa9iSPQHwJd4nBYBYo14HVC6Smj1pNeOonrNwp3nADvy+f5xRT94CARXwgc6cAZMroY2nYmwdPxQuMdRiyToipApZfftzrtoD5tidSOYW1cJChvCF252zWwZLUWAIVgqPjadmxSCRGnAujXxvWPUywQVhCHXMt16OUCqUpxJXsAMCO4tIxwqxEdefj5oSPxG1YPrzZEVqcIMzgTIRyZphJIPtBwPFOEerz3m85Z3c=
-      distributions: sdist bdist_wheel
-      on:
-        tags: true
+    - install:
+        - pip install -r requirements-dev.txt
+        - pip install -r requirements.txt
+        - pip install -U tox-travis
+      script: python -m unittest discover gcgc.tests
+    - stage: pypi release
+      if: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
+      deploy:
+        provider: pypi
+        user: trent.hauck
+        password:
+          secure:
+            pYxqDuhZjMSPr6GFHL7pvvAdBjIWe5WbLMaYVZ9DMo4n+QFbmM05LUSqLc7a2Dz1IvcFIDEwEUyaNVSO6b8kkoPaBvWE3tIGZ0A3eymUWGlu1R0U2Q7d3Gua1zvzSSR1XQh+7rgjx95fgs8lJmlZqCv0MsWu7JSnsC4irNXZ2+jfdaVDMjL6EkaGGDoHrwzDB8GLJO6jKlzMfxwKJ4eScdasYb4vyiTm9y5oy+EBT67q+cTpmPJc+PDr8Qay4PkHeYw5QpDkjvmkRk1kPpWOzCieaJBynL2UkAZaSqy5XjvXS4QEwpbaLHMNRFBQwW5Lp6p67PVLUfa7F3rPPfp2DRpEwhRh6PyxJJufKqv+JSAPINN+7pURSn5wS7TBRBBHX8uIw0j4Ihros3jORZ8cLL5Akxp34+XqgXS9goW39k5EL9FsMCKtXsxZGm1/4lunHLwa9iSPQHwJd4nBYBYo14HVC6Smj1pNeOonrNwp3nADvy+f5xRT94CARXwgc6cAZMroY2nYmwdPxQuMdRiyToipApZfftzrtoD5tidSOYW1cJChvCF252zWwZLUWAIVgqPjadmxSCRGnAujXxvWPUywQVhCHXMt16OUCqUpxJXsAMCO4tIxwqxEdefj5oSPxG1YPrzZEVqcIMzgTIRyZphJIPtBwPFOEerz3m85Z3c=
+        distributions: sdist bdist_wheel
+        on:
+          tags: true
