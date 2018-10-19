@@ -9,6 +9,7 @@ jobs:
       python:
         - "3.6"
     - stage: pypi release
+      script: skip
       language: python
       python:
         - "3.6"
