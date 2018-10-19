@@ -23,6 +23,7 @@ pycodestyle==2.4.0
 pygments==2.2.0
 python-jsonrpc-server==0.0.2
 python-language-server==0.21.2
+semver==2.8.1
 simplegeneric==0.8.1
 six==1.11.0
 toml==0.10.0
