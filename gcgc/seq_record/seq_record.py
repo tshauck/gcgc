@@ -54,12 +54,9 @@ class EncodedSeqRecord(object):
             return self.seq_record.seq
 
     @property
-    def pad(self) -> str:
+    def padded(self) -> str:
         """
         Pad a sequence up to self.padding_to if it's shorter, otherwise return the sequence.
-
-        Args:
-            seq: The sequence to pad.
 
         Returns:
             The sequence padding up to padding_to characters.
@@ -81,9 +78,6 @@ class EncodedSeqRecord(object):
         """
         Encodes D x N where D is the size of the alphabet and N is the padding.
         """
-
-        # This is a bit jenky as even if we aren't encapselating the sequence
-        # it still is used to determine size of the onehot encoding.
 
         encoded_sequence = self.alphabet.integer_encode(self._seq)
         encoded_len = len(encoded_sequence)

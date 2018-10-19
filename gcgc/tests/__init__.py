@@ -21,7 +21,7 @@ class TestSeqRecordEncoder(unittest.TestCase):
     def test_pad(self):
         padding = 10
         encoded = EncodedSeqRecord(self.alphabet, self.sr, padding_to=padding)
-        self.assertEqual(len(encoded.pad), padding)
+        self.assertEqual(len(encoded.padded), padding)
 
     def test_seq_record_encoder(self):
         expected_array = np.array(
