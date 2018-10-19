@@ -9,6 +9,13 @@ jobs:
       python:
         - "3.6"
     - stage: pypi release
+      language: python
+      python:
+        - "3.6"
+      install:
+        - pip install -r requirements-dev.txt
+        - pip install -r requirements.txt
+        - pip install -U tox-travis
       if: tag =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
       deploy:
         provider: pypi
