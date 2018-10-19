@@ -13,7 +13,7 @@ requirements = ["Click>=6.0"]
 setup_requirements = []
 test_requirements = []
 
-version = "0.1.1c"
+version = "0.1.1rc"
 
 setup(
     author="Trent Hauck",
