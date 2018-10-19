@@ -1,4 +1,4 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-__version__ = "0.1.1b"
+__version__ = "0.1.1c"
