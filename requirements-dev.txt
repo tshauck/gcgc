@@ -1,0 +1,32 @@
+-i https://pypi.org/simple
+appdirs==1.4.3
+appnope==0.1.0; sys_platform == 'darwin'
+attrs==18.2.0
+backcall==0.1.0
+black==18.9b0
+click==7.0; python_version != '3.0.*'
+decorator==4.3.0
+filelock==3.0.9
+future==0.16.0
+ipdb==0.11
+ipython-genutils==0.2.0
+ipython==7.0.1
+jedi==0.13.1
+parso==0.3.1
+pexpect==4.6.0; sys_platform != 'win32'
+pickleshare==0.7.5
+pluggy==0.8.0; python_version != '3.1.*'
+prompt-toolkit==2.0.6
+ptyprocess==0.6.0
+py==1.7.0; python_version != '3.0.*'
+pycodestyle==2.4.0
+pygments==2.2.0
+python-jsonrpc-server==0.0.2
+python-language-server==0.21.2
+simplegeneric==0.8.1
+six==1.11.0
+toml==0.10.0
+tox==3.5.2
+traitlets==4.3.2
+virtualenv==16.0.0; python_version != '3.0.*'
+wcwidth==0.1.7
