@@ -26,12 +26,9 @@ class EncodedSeqRecord(object):
         self.padding_to = padding_to
 
     @property
-    def encapsulate_sequence(self) -> str:
+    def _encapsulated_sequence(self) -> str:
         """
         Wrap a sequence with the start and end tokens.
-
-        Args:
-            seq: The sequence.
 
         Returns:
             The sequence wrapped in START and END from the alphabet.
@@ -42,14 +39,10 @@ class EncodedSeqRecord(object):
     def _seq(self) -> str:
         """
         Return the sequence that is encapsulated in the tokens, if the associated flag is set.
-
-        Args:
-            seq: The alphabet of the sequence.
-
         """
 
         if self.encapsulate:
-            return self.encapsulate_sequence
+            return self._encapsulated_sequence
         else:
             return self.seq_record.seq
 
@@ -77,6 +70,9 @@ class EncodedSeqRecord(object):
     def one_hot_encode_sequence(self) -> Sequence[Sequence[int]]:
         """
         Encodes D x N where D is the size of the alphabet and N is the padding.
+
+        Returns:
+            A one hot encoded matrix representing the sequence.
         """
 
         encoded_sequence = self.alphabet.integer_encode(self._seq)
