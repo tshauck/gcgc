@@ -1,31 +1,29 @@
 jobs:
   include:
-    - install:
-        - pip install -r requirements-dev.txt
-        - pip install -r requirements.txt
-        - pip install -U tox-travis
-      script: python -m unittest discover gcgc.tests
-      language: python
-      python:
-        - "3.6"
-    - stage: pypi release
-      script: skip
-      language: python
-      python:
-        - "3.6"
-      install:
-        - pip install -r requirements-dev.txt
-        - pip install -r requirements.txt
-        - pip install -U tox-travis
-      if: tag =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
-      deploy:
-        provider: pypi
-        user: trent.hauck
-        password:
-          secure:
-            pYxqDuhZjMSPr6GFHL7pvvAdBjIWe5WbLMaYVZ9DMo4n+QFbmM05LUSqLc7a2Dz1IvcFIDEwEUyaNVSO6b8kkoPaBvWE3tIGZ0A3eymUWGlu1R0U2Q7d3Gua1zvzSSR1XQh+7rgjx95fgs8lJmlZqCv0MsWu7JSnsC4irNXZ2+jfdaVDMjL6EkaGGDoHrwzDB8GLJO6jKlzMfxwKJ4eScdasYb4vyiTm9y5oy+EBT67q+cTpmPJc+PDr8Qay4PkHeYw5QpDkjvmkRk1kPpWOzCieaJBynL2UkAZaSqy5XjvXS4QEwpbaLHMNRFBQwW5Lp6p67PVLUfa7F3rPPfp2DRpEwhRh6PyxJJufKqv+JSAPINN+7pURSn5wS7TBRBBHX8uIw0j4Ihros3jORZ8cLL5Akxp34+XqgXS9goW39k5EL9FsMCKtXsxZGm1/4lunHLwa9iSPQHwJd4nBYBYo14HVC6Smj1pNeOonrNwp3nADvy+f5xRT94CARXwgc6cAZMroY2nYmwdPxQuMdRiyToipApZfftzrtoD5tidSOYW1cJChvCF252zWwZLUWAIVgqPjadmxSCRGnAujXxvWPUywQVhCHXMt16OUCqUpxJXsAMCO4tIxwqxEdefj5oSPxG1YPrzZEVqcIMzgTIRyZphJIPtBwPFOEerz3m85Z3c=
-        distributions: sdist bdist_wheel
-        on:
-          tags: true
+  - install:
+    - pip install -r requirements-dev.txt
+    - pip install -r requirements.txt
+    - pip install -U tox-travis
+    script: python -m unittest discover gcgc.tests
+    language: python
+    python:
+    - '3.6'
+  - stage: pypi release
+    script: skip
+    language: python
+    python:
+    - '3.6'
+    install:
+    - pip install -r requirements-dev.txt
+    - pip install -r requirements.txt
+    - pip install -U tox-travis
+    if: tag =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
+    deploy:
+      provider: pypi
+      user: trent.hauck
+      distributions: sdist bdist_wheel
+      secure: umnfz/1nazlyU5CiUhfN8MMLzTBfdqdbPZEb1mjpoh/csBlsGM7COurV2YyCOfkM7TmejAidk76OuCX9WtUIomRI2rFY1NCVdsulH6eqSSpwuNoDhpBib6RPatw4ZHTbPHdqxML32QgrJhbOnjUp+gQJYyJR7NFVkwFU3x73c4tHKfsYl1POtXZ6qlnCQ1CQB6ov/alGGSwI/SojwIIwkpipNNVRCd6iZMSqs0br667v77yJIphrj19MqvupnbujjSMKEfcFLSR56hGegTBGNB6UVUgtJr0baoT6zzDNCdY6tVFfM3H0GdctwVlffDzgJf0/r61hDta1RSZhYPt5i+xEeextY/OXOly2KjbnZZ4ITG7N2Y4q/lOqbm7sbACcdM+l/a9y8L9TdOPOPiv9/RW0rwCMnymMcXNgGdWALMwF4dTK8l50kMLPMMITwbfFxcP/Iz6SapqqgQbwd1qmKaGAoYt2N4VuWAEw7cXRE4/4jRzYkc/plPEy6Gs8TD/HHSVEOxywxoMH2YOMDfr6x0iTNMFA7fNXqaXQb0fgsdXW7T2ivdptiPFivPsY9VvXgVuCJPU25/UNraMHc6JliDIgzBj6slMvSqtLURs4FV9cIgDVuwEelZ+1LFM4J6aEfabsj/HuhPgmKesARm6mN9FMwbViomH56cJIZnYAKtQ=
       on:
         tags: true
+    on:
+      tags: true
