@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "gcgc"
+version = "0.0.0"
+description = ""
+authors = ["Trent Hauck <trent@trenthauck.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+biopython = "=1.72"
+numpy = "=1.15.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+black = "=18.9b0"
+mypy = "=0.641"
+mypy-extensions = "=0.4.1"
+pycodestyle = "=2.4.0"
+python-language-server = "=0.21.2"
+ipdb = "^0.11.0"
+flake8 = "^3.6"
+pytest-cov = "^2.6"
+mkdocs = "^1.0"
+mkdocs-material = "^3.0"
+bumpversion = "^0.5.3"
+
+[tool.poetry.plugins."console_scripts"]
+"gcgc" = "gcgc.cli:main"
+
+[tool.black]
+line-length = 100
+py36 = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | build
+  | dist
+)/
+'''
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

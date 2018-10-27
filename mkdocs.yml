@@ -1,0 +1,8 @@
+site_name: "GCGC Documentation"
+theme:
+  name: "material"
+  logo:
+    icon: "bug_report"
+  palette:
+    primary: "light blue"
+    accent: "white"

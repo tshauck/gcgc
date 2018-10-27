@@ -1,0 +1,9 @@
+jobs:
+  include:
+  - install:
+    - pip install poetry
+    - poetry install
+    script: make
+    language: python
+    python:
+    - '3.6'
