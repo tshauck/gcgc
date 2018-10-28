@@ -1,4 +1,6 @@
-"""Console script for gcgc."""
+# (c) Copyright 2018 Trent Hauck
+# All Rights Reserved
+
 import sys
 import click
 
