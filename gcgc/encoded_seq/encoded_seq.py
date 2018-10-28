@@ -25,7 +25,7 @@ class EncodedSeq(Seq):
         """
 
         gcgc_alphabet = biopython_alphabet_to_gcgc_alphabet(seq.alphabet)
-        return cls(seq._data, gcgc_alphabet)
+        return cls(str(seq), gcgc_alphabet)
 
     def encapsulate(self) -> "EncodedSeq":
         return self.alphabet.START + self + self.alphabet.END
@@ -72,3 +72,20 @@ class EncodedSeq(Seq):
         one_hot_seq[np.arange(encoded_len), encoded_sequence] = 1
 
         return one_hot_seq.tolist()
+
+    def __add__(self, other) -> "EncodedSeq":
+        """
+        Add two enccoded sequences together.
+        """
+        added_seq = super().__add__(other)
+        return self.from_seq(added_seq)
+
+    def __getitem__(self, index) -> "EncodedSeq":
+        """
+        """
+
+        got_item = super().__getitem__(index)
+        if isinstance(index, int):
+            return got_item
+        else:
+            return self.from_seq(got_item)

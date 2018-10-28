@@ -47,14 +47,17 @@ class TestEncodedSeq(unittest.TestCase):
         es = EncodedSeq("A", ExtendedIUPACDNAEncoding())
         new_es = es.encapsulate().conform(length)
         self.assertEqual(len(new_es), length)
+        self.assertIsInstance(new_es, EncodedSeq)
 
         es = EncodedSeq("ATCGGCG", ExtendedIUPACDNAEncoding())
         new_es = es.encapsulate().conform(length)
         self.assertEqual(len(new_es), length)
+        self.assertIsInstance(new_es, EncodedSeq)
 
         es = EncodedSeq("ATC", ExtendedIUPACDNAEncoding())
         new_es = es.encapsulate().conform(length)
         self.assertEqual(len(new_es), length)
+        self.assertIsInstance(new_es, EncodedSeq)
 
     def test_one_hot_encoding(self):
 
