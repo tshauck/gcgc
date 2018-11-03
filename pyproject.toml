@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gcgc"
-version = "0.2.0"
+version = "0.2.1dev"
 description = "GCGC is a preprocessing library for biological sequence model development."
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 
