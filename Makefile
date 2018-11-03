@@ -9,3 +9,7 @@ test:
 .PHONY: build
 build:
 	poetry build
+
+.PHONY: publish
+publish:
+	poetry publish
