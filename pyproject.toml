@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gcgc"
-version = "0.2.0b"
+version = "0.2.0c"
 description = ""
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 
