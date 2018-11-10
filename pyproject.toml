@@ -5,7 +5,7 @@ description = "GCGC is a preprocessing library for biological sequence model dev
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 
 [tool.poetry.dependencies]
-python = "=3.6.6"
+python = "^3.6"
 biopython = "=1.72"
 numpy = "=1.15.2"
 tensorflow = "^1.12"

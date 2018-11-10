@@ -13,3 +13,9 @@ build:
 .PHONY: publish
 publish:
 	poetry publish
+
+.PHONY: dev_release
+dev_release:
+	bumpversion prerelversion
+	git push --tags
+	poeetry publish
