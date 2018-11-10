@@ -5,7 +5,6 @@
 test:
 	pytest -v -s --cov-report term-missing --cov=gcgc
 
-
 .PHONY: build
 build:
 	poetry build
@@ -14,8 +13,10 @@ build:
 publish:
 	poetry publish
 
-.PHONY: dev_release
-dev_release:
+.PHONY: dev_version
+dev_version:
 	bumpversion prerelversion
 	git push --tags
-	poetry publish
+
+.PHONY: dev_release
+dev_release: dev_version build publish
