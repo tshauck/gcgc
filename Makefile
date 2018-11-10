@@ -18,4 +18,4 @@ publish:
 dev_release:
 	bumpversion prerelversion
 	git push --tags
-	poeetry publish
+	poetry publish
