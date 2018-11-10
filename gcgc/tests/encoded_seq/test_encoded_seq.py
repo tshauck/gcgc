@@ -20,10 +20,9 @@ class TestEncodedSeq(unittest.TestCase):
     def test_pad_to(self):
 
         pad_to = 10
-        es = EncodedSeq("ATCG", ExtendedIUPACDNAEncoding())
-        new_es = es.pad(pad_to)
+        es = EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()).pad(pad_to)
 
-        self.assertEqual(len(new_es), pad_to)
+        self.assertEqual(len(es), pad_to)
 
     def test_pad_to_over(self):
 

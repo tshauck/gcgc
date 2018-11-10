@@ -32,6 +32,7 @@ class EncodedSeq(Seq):
 
     def pad(self, pad_to: int = 50) -> "EncodedSeq":
         """
+        Pad a sequence up to `pad_to` characters.
         """
 
         seq_len = len(self)
@@ -45,7 +46,6 @@ class EncodedSeq(Seq):
         return self + extra_chars
 
     def conform(self, conform_to: int = 50) -> "EncodedSeq":
-
         seq_len = len(self)
 
         if seq_len == conform_to:
@@ -54,6 +54,10 @@ class EncodedSeq(Seq):
             return self.pad(pad_to=conform_to)
         else:
             return self[:conform_to]
+
+    @property
+    def integer_encoded(self):
+        return self.alphabet.integer_encode(self)
 
     @property
     def one_hot_encode_sequence(self) -> Sequence[Sequence[int]]:
@@ -81,8 +85,6 @@ class EncodedSeq(Seq):
         return self.from_seq(added_seq)
 
     def __getitem__(self, index) -> "EncodedSeq":
-        """
-        """
 
         got_item = super().__getitem__(index)
         if isinstance(index, int):
