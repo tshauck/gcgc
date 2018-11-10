@@ -3,7 +3,7 @@ jobs:
   - install:
     - pip install poetry
     - poetry install
-    script: make
+    script: make test
     language: python
     python:
     - '3.6'
