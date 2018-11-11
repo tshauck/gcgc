@@ -8,7 +8,6 @@ from Bio import SeqIO
 import tensorflow as tf
 
 from gcgc.encoded_seq import EncodedSeq
-from gcgc.alphabet.iupac import ExtendedIUPACDNAEncoding
 from gcgc.third_party.tensorflow_utils import record as gcgc_record
 from gcgc.tests.fixtures import P53_HUMAN
 

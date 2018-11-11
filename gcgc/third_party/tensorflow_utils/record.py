@@ -1,13 +1,13 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from typing import NamedTuple, Sequence
+from typing import NamedTuple
 
 import tensorflow as tf
 import numpy as np
 
 
-def to_tensorflow_record(encoded_seq):
+def to_tensorflow_record(encoded_seq) -> tf.train.Example:
     """
     Convert the sequence to a tensorflow record.
     """
@@ -28,13 +28,18 @@ def to_tensorflow_record(encoded_seq):
     return example
 
 
-# TODO(trent): Fully functional EncodedSeq?
+# TODO: Should this be SequenceRecordExample?? I.e. probably want to have the actual id of the
+# sequence for later use.
 class ParsedEncodedSequence(NamedTuple):
     integer_encoded: np.ndarray
     alphabet_letters: np.ndarray
 
 
-def from_tensorflow_example(example):
+def from_tensorflow_example(example: tf.train.Example) -> ParsedEncodedSequence:
+    """
+    Given the example return an encoded sequence with the integer encoding and alphabet.
+    """
+
     features = {
         "integer_encoded": tf.FixedLenSequenceFeature((), tf.int64, allow_missing=True),
         "alphabet_letters": tf.FixedLenSequenceFeature((), tf.string, allow_missing=True),

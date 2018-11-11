@@ -85,7 +85,6 @@ class EncodedSeq(Seq):
         return self.from_seq(added_seq)
 
     def __getitem__(self, index) -> "EncodedSeq":
-
         got_item = super().__getitem__(index)
         if isinstance(index, int):
             return got_item
