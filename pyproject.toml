@@ -8,7 +8,8 @@ authors = ["Trent Hauck <trent@trenthauck.com>"]
 python = "^3.6"
 biopython = "=1.72"
 numpy = "=1.15.2"
-tensorflow = "^1.12"
+aiohttp = "^3.4"
+torch = "=1.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
@@ -23,6 +24,9 @@ pytest-cov = "^2.6"
 mkdocs = "^1.0"
 mkdocs-material = "^3.0"
 bumpversion = "^0.5.3"
+pudb = "^2018.1"
+pygments = "^2.3"
+pyre-check = "^0.0.18"
 
 [tool.poetry.plugins."console_scripts"]
 "gcgc" = "gcgc.cli:main"

@@ -4,25 +4,13 @@
 
 import unittest
 from click.testing import CliRunner
-from pathlib import Path
 
-from Bio.SeqRecord import SeqRecord
-from Bio import SeqIO
-
-from gcgc.encoded_seq import EncodedSeq
-from gcgc.alphabet.iupac import ExtendedIUPACDNAEncoding
 from gcgc import cli
 from gcgc.tests.fixtures import P53_HUMAN
 
 
 class TestGcgc(unittest.TestCase):
     """Tests for `gcgc` package."""
-
-    def setUp(self):
-        """Set up test fixtures, if any."""
-
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
 
     def test_command_line_interface(self):
         """Test the CLI."""

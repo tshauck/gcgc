@@ -60,7 +60,7 @@ class EncodedSeq(Seq):
         return self.alphabet.integer_encode(self)
 
     @property
-    def one_hot_encode_sequence(self) -> Sequence[Sequence[int]]:
+    def one_hot_encoded(self) -> Sequence[Sequence[int]]:
         """
         Encodes D x N where D is the size of the alphabet and N is the padding.
 

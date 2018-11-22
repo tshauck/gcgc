@@ -68,7 +68,7 @@ class TestEncodedSeq(unittest.TestCase):
         ]
 
         es = EncodedSeq("ATCG", ExtendedIUPACDNAEncoding())
-        assert_array_equal(es.one_hot_encode_sequence, expected)
+        assert_array_equal(es.one_hot_encoded, expected)
 
     def test_from_seq_bad_alphabet(self):
         seq = Seq("ATCG", None)

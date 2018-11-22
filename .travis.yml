@@ -5,5 +5,7 @@ jobs:
     - poetry install
     script: make test
     language: python
+    dist: xenial
+    sudo: required
     python:
-    - '3.6'
+    - '3.7'

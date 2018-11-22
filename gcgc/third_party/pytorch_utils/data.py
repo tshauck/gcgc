@@ -1,0 +1,126 @@
+# (c) Copyright 2018 Trent Hauck
+# All Rights Reserved
+
+from typing import Generator
+from typing import Dict
+from typing import Callable
+from typing import Optional
+from pathlib import Path
+
+from Bio import SeqIO
+from Bio import File
+import torch.utils.data
+import torch
+
+from gcgc.alphabet.base import EncodingAlphabet
+from gcgc.alphabet import ExtendedIUPACDNAEncoding
+from gcgc.parser import SequenceParser
+
+
+class _SequenceIndexer(object):
+    """
+    This is a helper object that is used to mediate between the indexes in the underlying files
+    and providing a consistent interface for __getitem__ in the GenomicDataset object.
+    """
+
+    def __init__(self):
+        self._record_index = {}
+        self._counter = -1
+
+    def __call__(self, sid):
+        try:
+            return self._record_index[sid]
+        except KeyError:
+            self._counter = self._counter + 1
+            self._record_index[sid] = self._counter
+            return self._record_index[sid]
+
+
+class GenomicDataset(torch.utils.data.Dataset):
+    """
+    GenomicDataset can be used to load sequence information into a format aminable to PyTorch.
+    """
+
+    def __init__(
+        self,
+        file_index: Dict[Path, File._IndexedSeqFileDict],
+        parser: SequenceParser,
+        file_format: str = "fasta",
+        alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
+    ):
+        """
+        Initialize the GenomicDataset object.
+
+        It is recommended that you do _not_ itstantiate this object directly, and instead you should
+        use one of the @classmethods.
+
+        Args:
+            file_index: A dictionary mapping the Path of the file to its index.
+            parser: The parser object which specifies how the input sequence should be parsed.
+            file_format: The format of the file to parse. This should be one understood by
+                Biopython.
+            alphabet: The alphabet the sequence is expected to use.
+        """
+
+        self._file_index = file_index
+        self._parser = parser
+        self._file_format = file_format
+        self._alphabet = alphabet
+
+        super().__init__()
+
+    @classmethod
+    def init_from_path(
+        cls,
+        path: Path,
+        parser: SequenceParser,
+        file_format: str = "fasta",
+        alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
+    ) -> "GenomicDataset":
+        """
+        Init from a single file. This is a convience method that delegates to
+        init_from_path_generator.
+        """
+
+        def yield_path() -> Generator[Path, None, None]:
+            yield path
+
+        return cls.init_from_path_generator(yield_path(), parser, file_format, alphabet)
+
+    @classmethod
+    def init_from_path_generator(
+        cls,
+        file_generator: Generator[Path, None, None],
+        parser: SequenceParser,
+        file_format="fasta",
+        alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
+    ) -> "GenomicDataset":
+        """
+        Initialize the GenomicDataset from a pathlib.Path generator. For example, the
+        pathlib.Path.glob returns a Path generator.
+        """
+
+        file_index = {}
+        si = _SequenceIndexer()
+
+        for f in sorted(file_generator):
+            file_index[f] = SeqIO.index(str(f), file_format, key_function=si)
+
+        return cls(file_index, parser=parser, file_format=file_format)
+
+    def __len__(self) -> int:
+        """
+        Return the length of the dataset.
+        """
+        return sum(len(v) for v in self._file_index.values())
+
+    def __getitem__(self, i: int):
+        """
+        Get the record from the index.
+        """
+
+        for k, v in self._file_index.items():
+            try:
+                return self._parser.parse_record(v[i], k)
+            except KeyError:
+                pass

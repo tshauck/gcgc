@@ -3,4 +3,12 @@
 
 
 class GCGCAlphabetException(Exception):
-    pass
+    """
+    Raised when there's an error with GCGC's alphabet.
+    """
+
+
+class EncodedSeqLengthParserException(Exception):
+    """
+    Raised when there's an issue with the EncodedSeqLengthParser's parsing.
+    """
