@@ -1,19 +1,16 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from typing import Optional
-from typing import Dict
-from typing import List
-
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional
 
 import torch
 from Bio.SeqRecord import SeqRecord
 
 from gcgc.encoded_seq import EncodedSeq
-from gcgc.fields import FileMetaDataField
 from gcgc.exceptions import EncodedSeqLengthParserException
+from gcgc.fields import FileMetaDataField
 
 
 @dataclass
@@ -34,6 +31,7 @@ class EncodedSeqLengthParser:
 
         raise RuntimeError(
             "Could not parse seq length for some reason, check parser configuration."
+            f"conform_to={self.conform_to} pad_to={self.pad_to}"
         )
 
 

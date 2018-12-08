@@ -3,12 +3,12 @@
 
 from typing import Sequence
 
-from Bio.Seq import Seq
 import numpy as np
+from Bio.Seq import Seq
 
 from gcgc.alphabet.base import EncodingAlphabet
-from gcgc.exceptions import GCGCAlphabetException
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
+from gcgc.exceptions import GCGCAlphabetException
 
 
 class EncodedSeq(Seq):

@@ -1,15 +1,13 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-import sys
-import click
-import pathlib
 import logging
+import pathlib
+import sys
 
-from Bio import SeqIO
+import click
 
 from gcgc import __version__
-from gcgc.encoded_seq import EncodedSeq
 from gcgc.datasets import dataset
 
 logging.basicConfig(level=logging.INFO)
@@ -28,11 +26,11 @@ def version():
 
 
 @main.command()
-@click.argument("organism_id")
+@click.argument("organism_id", nargs=-1)
 @click.argument("data_directory")
 def download_organism(organism_id, data_directory):
     path = pathlib.Path(data_directory)
-    taxon_dataset = dataset.TaxonDataset([83333], path)
+    taxon_dataset = dataset.TaxonDataset(organism_id, path)
     taxon_dataset.download_files()
 
 

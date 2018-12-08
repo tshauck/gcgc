@@ -28,3 +28,7 @@ dev_release: dev_version build publish
 .PHONY: pyre_check
 pyre_check:
 	pyre check
+
+.PHONY: isort
+isort:
+	isort

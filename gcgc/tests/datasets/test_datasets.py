@@ -1,10 +1,9 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
+import tempfile
 import unittest
 from pathlib import Path
-
-import tempfile
 
 from gcgc.datasets import dataset
 

@@ -1,19 +1,15 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from typing import Generator
-from typing import Dict
-from typing import Callable
-from typing import Optional
 from pathlib import Path
+from typing import Dict, Generator
 
-from Bio import SeqIO
-from Bio import File
-import torch.utils.data
 import torch
+import torch.utils.data
+from Bio import File, SeqIO
 
-from gcgc.alphabet.base import EncodingAlphabet
 from gcgc.alphabet import ExtendedIUPACDNAEncoding
+from gcgc.alphabet.base import EncodingAlphabet
 from gcgc.parser import SequenceParser
 
 

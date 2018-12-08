@@ -1,16 +1,16 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from pathlib import Path
 import unittest
-
-from gcgc.parser.base import SequenceParser, EncodedSeqLengthParser
-from gcgc.fields import FileMetaDataField
+from pathlib import Path
 
 import torch
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+from gcgc.fields import FileMetaDataField
+from gcgc.parser.base import EncodedSeqLengthParser, SequenceParser
 
 
 class TestParser(unittest.TestCase):

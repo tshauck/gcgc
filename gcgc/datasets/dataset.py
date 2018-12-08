@@ -1,16 +1,13 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from dataclasses import dataclass
-from pathlib import Path
-from typing import List
-from typing import Sequence
-from typing import Optional
 import asyncio
 import logging
+from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Optional, Sequence
 
 import aiohttp
-
 
 logger = logging.getLogger(__name__)
 
@@ -50,10 +47,6 @@ class DataFile:
 DataFiles = List[DataFile]
 
 
-def download_url(query_str, file_format):
-    return f"https://www.uniprot.org/uniprot/?{query_str}&format={file_format}"
-
-
 class UniprotDataset(object):
     """
     A base class that loads data from Uniprot.
@@ -70,6 +63,10 @@ class UniprotDataset(object):
 
         self.data_files = data_files
         self.file_format = file_format
+
+    @staticmethod
+    def _url(query_str, file_format):
+        return f"https://www.uniprot.org/uniprot/?{query_str}&format={file_format}"
 
     def download_files(self):
         asyncio.run(self._download())
@@ -102,9 +99,7 @@ class TaxonDataset(UniprotDataset):
 
         for taxon_id in self.taxon_ids:
 
-            url = download_url(
-                query_str=f"query=reviewed:yes+AND+organism:{taxon_id}", file_format=file_format
-            )
+            url = self._url(f"query=reviewed:yes+AND+organism:{taxon_id}", file_format=file_format)
             local_path = data_directory / str(f"{taxon_id}.{file_format}")
 
             files_to_download.append(DataFile(url, local_path))

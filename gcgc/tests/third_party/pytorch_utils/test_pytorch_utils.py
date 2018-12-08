@@ -4,9 +4,7 @@
 import unittest
 
 from gcgc.parser import SequenceParser
-from gcgc.tests.fixtures import ECOLI_PATH
-from gcgc.tests.fixtures import P53_HUMAN
-
+from gcgc.tests.fixtures import ECOLI_PATH, P53_HUMAN
 from gcgc.third_party.pytorch_utils.data import GenomicDataset
 
 

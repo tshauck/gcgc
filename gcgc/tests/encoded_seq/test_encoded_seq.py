@@ -3,12 +3,12 @@
 
 import unittest
 
-from numpy.testing import assert_array_equal
-from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
+from Bio.Seq import Seq
+from numpy.testing import assert_array_equal
 
-from gcgc.encoded_seq import EncodedSeq
 from gcgc.alphabet.iupac import ExtendedIUPACDNAEncoding
+from gcgc.encoded_seq import EncodedSeq
 from gcgc.exceptions import GCGCAlphabetException
 
 

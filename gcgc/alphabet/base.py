@@ -1,8 +1,8 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from typing import Sequence
 from abc import ABC
+from typing import Sequence
 
 
 class EncodingAlphabet(ABC):
