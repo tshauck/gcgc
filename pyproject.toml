@@ -10,6 +10,7 @@ biopython = "=1.72"
 numpy = "=1.15.2"
 aiohttp = "^3.4"
 torch = "=1.0.0"
+structlog = "^18.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"

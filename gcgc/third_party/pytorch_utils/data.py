@@ -42,7 +42,6 @@ class GenomicDataset(torch.utils.data.Dataset):
         file_index: Dict[Path, File._IndexedSeqFileDict],
         parser: SequenceParser,
         file_format: str = "fasta",
-        alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
     ):
         """
         Initialize the GenomicDataset object.
@@ -55,13 +54,11 @@ class GenomicDataset(torch.utils.data.Dataset):
             parser: The parser object which specifies how the input sequence should be parsed.
             file_format: The format of the file to parse. This should be one understood by
                 Biopython.
-            alphabet: The alphabet the sequence is expected to use.
         """
 
         self._file_index = file_index
         self._parser = parser
         self._file_format = file_format
-        self._alphabet = alphabet
 
         super().__init__()
 
@@ -100,7 +97,7 @@ class GenomicDataset(torch.utils.data.Dataset):
         si = _SequenceIndexer()
 
         for f in sorted(file_generator):
-            file_index[f] = SeqIO.index(str(f), file_format, key_function=si)
+            file_index[f] = SeqIO.index(str(f), file_format, key_function=si, alphabet=alphabet)
 
         return cls(file_index, parser=parser, file_format=file_format)
 
