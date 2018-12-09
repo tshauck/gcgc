@@ -38,7 +38,7 @@ class LabelField(Field):
         Encode the label, then return the integer representation.
         """
         encoded_label = self.encode(label)
-        return torch.LongTensor([encoded_label])
+        return torch.tensor(encoded_label)
 
     @classmethod
     def from_vocabulary(cls, name: str, vocab: List[str]):

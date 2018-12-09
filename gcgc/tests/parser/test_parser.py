@@ -14,12 +14,6 @@ from gcgc.parser.base import EncodedSeqLengthParser, SequenceParser
 
 
 class TestParser(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_parser(self):
         vocab = [Path("ecoli"), Path("human")]
 
@@ -34,9 +28,9 @@ class TestParser(unittest.TestCase):
         input_seq = SeqRecord(Seq("ATCG", alphabet=dna))
 
         test_values = [
-            (input_seq, Path("ecoli"), torch.LongTensor([0])),
-            (input_seq, Path("human"), torch.LongTensor([1])),
-            (input_seq, Path("human"), torch.LongTensor([1])),
+            (input_seq, Path("ecoli"), torch.tensor(0)),
+            (input_seq, Path("human"), torch.tensor(1)),
+            (input_seq, Path("human"), torch.tensor(1)),
         ]
 
         for i, p, es in test_values:
