@@ -27,7 +27,7 @@ def version():
 
 @main.command()
 @click.argument("organism_id", nargs=-1)
-@click.argument("data_directory")
+@click.argument("data_directory", nargs=1)
 def download_organism(organism_id, data_directory):
     path = pathlib.Path(data_directory)
     taxon_dataset = dataset.TaxonDataset(organism_id, path)
