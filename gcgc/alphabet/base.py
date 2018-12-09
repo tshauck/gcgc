@@ -4,6 +4,8 @@
 from abc import ABC
 from typing import Sequence
 
+from gcgc.exceptions import GCGCAlphabetLetterEncodingException
+
 
 class EncodingAlphabet(ABC):
     """
@@ -62,7 +64,10 @@ class EncodingAlphabet(ABC):
             The integer sequence representation of the sequence.
         """
 
-        return [self.encoding_index[s] for s in seq]
+        try:
+            return [self.encoding_index[s] for s in seq]
+        except KeyError:
+            raise GCGCAlphabetLetterEncodingException(f"{seq} not in {self.encoding_index}")
 
     def integer_decode(self, int_seq: Sequence[int]) -> str:
         """

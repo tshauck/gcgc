@@ -8,6 +8,18 @@ class GCGCAlphabetException(Exception):
     """
 
 
+class GCGCAlphabetLetterEncodingException(GCGCAlphabetException):
+    """
+    Thrown when GCGC's alphabet tries to encode a letter it wasn't aware of.
+    """
+
+
+class GCGCAlphabetLetterDecodingException(GCGCAlphabetException):
+    """
+    Thrown when GCGC's alphabet tries to decode a letter it wasn't aware of.
+    """
+
+
 class EncodedSeqLengthParserException(Exception):
     """
     Raised when there's an issue with the EncodedSeqLengthParser's parsing.
