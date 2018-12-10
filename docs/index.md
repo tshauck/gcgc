@@ -12,7 +12,7 @@ is for the tools to be integrated into a larger processing pipeline.
 
 GCGC can be installed via pip:
 
-```sh
+```bash
 $ pip install gcgc
 ```
 
