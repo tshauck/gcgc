@@ -10,9 +10,9 @@
 GCGC can be installed via pip:
 
 ```sh
-pip install gcgc
+$ pip install gcgc
 ```
 
 ## Documentation
 
-The GCGC documentation is located at [gcgc.trethauck.com](http://gcgc.trenthauck.com).
+The GCGC documentation is located at [gcgc.trenthauck.com](http://gcgc.trenthauck.com).
