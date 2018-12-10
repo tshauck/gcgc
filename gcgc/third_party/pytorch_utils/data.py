@@ -117,3 +117,6 @@ class GenomicDataset(torch.utils.data.Dataset):
                 return self._parser.parse_record(v[i], k)
             except KeyError:
                 pass
+
+        else:
+            raise RuntimeError(f"Exausted file index while looking for {i}.")
