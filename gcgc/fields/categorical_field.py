@@ -83,10 +83,10 @@ class FileMetaDataField(LabelField):
         return self.postprocess(raw_str)
 
     @classmethod
-    def from_path_vocabulary(
+    def from_paths(
         cls,
         name: str,
-        vocab: List[Path],
+        paths: List[Path],
         preprocess: Callable[[Path], str] = default_preprocess,
         postprocess: Callable[[str], Path] = default_postprocess,
     ):
@@ -94,7 +94,7 @@ class FileMetaDataField(LabelField):
         Given a set of exemplar paths, create the (d-)encoding dict and return the field.
         """
 
-        str_vocab = [preprocess(p) for p in vocab]
+        str_vocab = [preprocess(p) for p in paths]
         label_field = super().from_vocabulary(name, str_vocab)
 
         return FileMetaDataField(

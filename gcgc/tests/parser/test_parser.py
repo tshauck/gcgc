@@ -17,7 +17,7 @@ class TestParser(unittest.TestCase):
     def test_parser(self):
         vocab = [Path("ecoli"), Path("human")]
 
-        f = FileMetaDataField.from_path_vocabulary("species", vocab)
+        f = FileMetaDataField.from_paths("species", vocab)
         ff = [f]
 
         length_parser = EncodedSeqLengthParser(conform_to=10)

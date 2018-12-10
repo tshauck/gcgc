@@ -27,6 +27,9 @@ class EncodingAlphabet(ABC):
         self.encoding_index = {letter: idx for idx, letter in enumerate(self.letters_and_tokens)}
         self.decoding_index = {idx: letter for letter, idx in self.encoding_index.items()}
 
+    def __len__(self):
+        return len(self.letters_and_tokens)
+
     def encode_token(self, token: str) -> int:
         """
         Given a particular token, return the integer representation.

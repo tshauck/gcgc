@@ -3,6 +3,7 @@ name = "gcgc"
 version = "0.2.2"
 description = "GCGC is a preprocessing library for biological sequence model development."
 authors = ["Trent Hauck <trent@trenthauck.com>"]
+include = ["./gcgc/data/splice/*.fasta"]
 
 [tool.poetry.dependencies]
 python = "^3.6"

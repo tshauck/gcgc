@@ -2,7 +2,7 @@
 # All Rights Reserved
 
 from pathlib import Path
-from typing import Dict, Generator
+from typing import Dict, Sequence
 
 import torch
 import torch.utils.data
@@ -63,7 +63,7 @@ class GenomicDataset(torch.utils.data.Dataset):
         super().__init__()
 
     @classmethod
-    def init_from_path(
+    def from_path(
         cls,
         path: Path,
         parser: SequenceParser,
@@ -72,31 +72,27 @@ class GenomicDataset(torch.utils.data.Dataset):
     ) -> "GenomicDataset":
         """
         Init from a single file. This is a convience method that delegates to
-        init_from_path_generator.
+        from_paths.
         """
-
-        def yield_path() -> Generator[Path, None, None]:
-            yield path
-
-        return cls.init_from_path_generator(yield_path(), parser, file_format, alphabet)
+        return cls.init_from_path_generator([path], parser, file_format, alphabet)
 
     @classmethod
-    def init_from_path_generator(
+    def from_paths(
         cls,
-        file_generator: Generator[Path, None, None],
+        path_sequence: Sequence[Path],
         parser: SequenceParser,
         file_format="fasta",
         alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
     ) -> "GenomicDataset":
         """
-        Initialize the GenomicDataset from a pathlib.Path generator. For example, the
+        Initialize the GenomicDataset from a pathlib.Path sequence. For example, the
         pathlib.Path.glob returns a Path generator.
         """
 
         file_index = {}
         si = _SequenceIndexer()
 
-        for f in sorted(file_generator):
+        for f in sorted(path_sequence):
             file_index[f] = SeqIO.index(str(f), file_format, key_function=si, alphabet=alphabet)
 
         return cls(file_index, parser=parser, file_format=file_format)

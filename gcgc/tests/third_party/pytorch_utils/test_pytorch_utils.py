@@ -6,6 +6,7 @@ import unittest
 from gcgc.parser import SequenceParser
 from gcgc.tests.fixtures import ECOLI_PATH, P53_HUMAN
 from gcgc.third_party.pytorch_utils.data import GenomicDataset
+from gcgc.alphabet.iupac import IUPACProteinEncoding
 
 
 class TestPyTorchUtils(unittest.TestCase):
@@ -16,14 +17,15 @@ class TestPyTorchUtils(unittest.TestCase):
         def yielder():
             yield P53_HUMAN
 
-        test_dataset = GenomicDataset.init_from_path_generator(yielder(), self.sp, "fasta")
+        test_dataset = GenomicDataset.from_paths(yielder(), self.sp, "fasta")
         self.assertEqual(len(test_dataset), 1)
 
     def test_index_multiple_files(self):
 
         glob = ECOLI_PATH.glob("*.fasta")
 
-        test_dataset = GenomicDataset.init_from_path_generator(glob, self.sp, "fasta")
+        pe = IUPACProteinEncoding()
+        test_dataset = GenomicDataset.from_paths(glob, self.sp, "fasta", pe)
         self.assertEqual(len(test_dataset), 25)
 
         test_sequences = {
