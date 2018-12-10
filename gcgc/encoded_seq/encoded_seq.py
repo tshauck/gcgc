@@ -3,12 +3,12 @@
 
 from typing import Sequence
 
-from Bio.Seq import Seq
 import numpy as np
+from Bio.Seq import Seq
 
 from gcgc.alphabet.base import EncodingAlphabet
-from gcgc.exceptions import GCGCAlphabetException
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
+from gcgc.exceptions import GCGCAlphabetException
 
 
 class EncodedSeq(Seq):
@@ -60,7 +60,7 @@ class EncodedSeq(Seq):
         return self.alphabet.integer_encode(self)
 
     @property
-    def one_hot_encode_sequence(self) -> Sequence[Sequence[int]]:
+    def one_hot_encoded(self) -> Sequence[Sequence[int]]:
         """
         Encodes D x N where D is the size of the alphabet and N is the padding.
 

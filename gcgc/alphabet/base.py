@@ -1,8 +1,10 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from typing import Sequence
 from abc import ABC
+from typing import Sequence
+
+from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
 
 class EncodingAlphabet(ABC):
@@ -24,6 +26,9 @@ class EncodingAlphabet(ABC):
 
         self.encoding_index = {letter: idx for idx, letter in enumerate(self.letters_and_tokens)}
         self.decoding_index = {idx: letter for letter, idx in self.encoding_index.items()}
+
+    def __len__(self):
+        return len(self.letters_and_tokens)
 
     def encode_token(self, token: str) -> int:
         """
@@ -62,7 +67,10 @@ class EncodingAlphabet(ABC):
             The integer sequence representation of the sequence.
         """
 
-        return [self.encoding_index[s] for s in seq]
+        try:
+            return [self.encoding_index[s] for s in seq]
+        except KeyError:
+            raise GCGCAlphabetLetterEncodingException(f"{seq} not in {self.encoding_index}")
 
     def integer_decode(self, int_seq: Sequence[int]) -> str:
         """

@@ -4,5 +4,9 @@ theme:
   logo:
     icon: "bug_report"
   palette:
-    primary: "light blue"
+    primary: "dark blue"
     accent: "white"
+  font:
+    code: "PT Mono"
+markdown_extensions:
+  - codehilite

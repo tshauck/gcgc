@@ -5,8 +5,8 @@ import unittest
 
 from Bio.Alphabet import IUPAC
 
-from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
 from gcgc.alphabet import IUPACUnambiguousDNAEncoding
+from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
 
 
 class TestUtils(unittest.TestCase):

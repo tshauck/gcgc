@@ -3,12 +3,12 @@
 
 import unittest
 
-from numpy.testing import assert_array_equal
-from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
+from Bio.Seq import Seq
+from numpy.testing import assert_array_equal
 
-from gcgc.encoded_seq import EncodedSeq
 from gcgc.alphabet.iupac import ExtendedIUPACDNAEncoding
+from gcgc.encoded_seq import EncodedSeq
 from gcgc.exceptions import GCGCAlphabetException
 
 
@@ -68,7 +68,7 @@ class TestEncodedSeq(unittest.TestCase):
         ]
 
         es = EncodedSeq("ATCG", ExtendedIUPACDNAEncoding())
-        assert_array_equal(es.one_hot_encode_sequence, expected)
+        assert_array_equal(es.one_hot_encoded, expected)
 
     def test_from_seq_bad_alphabet(self):
         seq = Seq("ATCG", None)
