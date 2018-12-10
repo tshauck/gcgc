@@ -13,7 +13,7 @@ important to understand where these are because during splicing introns are remo
 pre-mRNA to form mRNA which is translated into proteins. Put another way, understanding where the
 splice sites are helps determine which parts of DNA become proteins.
 
-From an ML perspective, this is a classification where the sequence is a feature and there is an
+From an ML perspective, this is a classification where the sequence is a feature and there is a
 label, one of:
 
 - Intron to exon (IE)
@@ -37,8 +37,8 @@ files = list(SPLICE_DATA_PATH.glob("*.fasta"))
 file_feature = FileMetaDataField.from_paths("splice_site", files)
 ```
 
-`file_feature` is one of many possible features someone might want to model. Therefore, a
-`SequenceParser` object can be used to hold many possible features.
+`file_feature` is one possible features someone might want to model. A `SequenceParser` object can
+be holds possible features.
 
 ```python
 from gcgc.parser import SequenceParser
@@ -46,12 +46,11 @@ from gcgc.parser import SequenceParser
 parser = SequenceParser(file_features=[file_feature])
 ```
 
-The `SequenceParser` can also be used to configure how GCGC will deal with sequences of difference
-length.
+The `SequenceParser` can also configure how GCGC will deal with sequences of difference length.
 
 There is one more preparatory step needed before the PyTorch compatible `Dataset` can be created,
-and that is to make a GCGC Alphabet. These Alphabet's are subclasses of BioPython Alphabet's
-however, they support padding, tokenizing and other options relevant for ML applications.
+and that is to make a GCGC Alphabet. These Alphabet's are subclasses of BioPython Alphabet's class
+that support padding, tokenizing and other options relevant for ML applications.
 
 In this case, the `IUPACAmbiguousDNAEncoding` will be used, which is relevant for DNA with the
 standard letters plus additional characters to deal with ambiguous bases.
@@ -116,7 +115,7 @@ class SplicePrediction(nn.Module):
         return x
 ```
 
-Finally, it's a matter of training the model by passing it data from the loader. Importantly, the
+Now, it's a matter of training the model by passing it data from the loader. Importantly, the
 object iterated through via `data_loader` has access to a set of keys that are PyTorch tensor
 object.
 
