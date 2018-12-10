@@ -8,6 +8,14 @@ There are two main points of entry to GCGC. First, it can be imported as a Pytho
 second, used as a command line tool for specific types of transformations. In this case, the ideas
 is for the tools to be integrated into a larger processing pipeline.
 
+## Installation
+
+GCGC can be installed via pip:
+
+```sh
+$ pip install gcgc
+```
+
 ## Python Package
 
 In general, operations that would modify the sequence return a new `EncodedSeq` object, which is a subclass of `Bio.Seq.Seq`.
