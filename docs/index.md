@@ -1,16 +1,19 @@
 # Homepage
 
-GCGC is a package written in Python to facilitate feature pre-processing for biological sequences.
-Think of it like a Natural Language Processing pre-processing toolkit with design choices oriented
-towards the differences the sequences found in natural language vs biology.
+GCGC is a package written in Python for pre-processing for biological sequences. Think of it like a
+Natural Language Processing pre-processing toolkit with design choices oriented towards the
+differences the sequences found in natural language vs biology.
 
-There are two main points of entry to GCGC. First, it can be imported as a Python package, and,
+GCGC has two main points of entry. First, imported as a Python package, and,
 second, used as a command line tool for specific types of transformations. In this case, the ideas
-is for the tools to be integrated into a larger processing pipeline.
+is to integrate GCGC into a larger data processing pipeline.
+
+!!! warning
+    GCGC is alpha grade software.
 
 ## Installation
 
-GCGC can be installed via pip:
+Install GCGC via pip:
 
 ```bash
 $ pip install gcgc

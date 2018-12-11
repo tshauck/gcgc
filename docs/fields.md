@@ -29,7 +29,7 @@ paths = [Path("a/f1.fasta"), Path("a/f2.fasta"), Path("b/f3.fasta")]
 
 In this case there are two files, f1 and f2, that are under label "a" and f3 is under label b. In
 order to create a `FileMetaDataField` we'll write a function that takes in a `Path` and returns a
-string.
+string (the label).
 
 ```python
 def preprocess(p: Path) -> str:

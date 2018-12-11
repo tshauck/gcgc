@@ -44,3 +44,7 @@ clean_docs:
 .PHONY: docs_upload
 docs_upload:
 	aws s3 cp --recursive ./site s3://gcgc.trenthauck.com/
+
+.PHONY: docs_write_good
+docs_write_good:
+	write-good ./docs/**/*.md
