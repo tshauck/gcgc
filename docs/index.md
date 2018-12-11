@@ -35,4 +35,4 @@ The GCGC development board is hosted on [notion](https://www.notion.so/3649815c5
 
 ## Documentation Version
 
-The documentation you're reading was build for version: 0.2.4-dev.
+The documentation you're reading was build for version: 0.2.4.
