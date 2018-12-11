@@ -9,6 +9,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
+from gcgc.parser.gcgc_record import GCGCRecord
 from gcgc.fields import FileMetaDataField
 from gcgc.parser.base import EncodedSeqLengthParser, SequenceParser
 
@@ -34,5 +35,6 @@ class TestTorchSequenceParser(unittest.TestCase):
         ]
 
         for i, p, es in test_values:
-            resp = sp.parse_record(i, p)
+            r = GCGCRecord(path=p, seq_record=i)
+            resp = sp.parse_record(r)
             self.assertEqual(resp["species"], es)

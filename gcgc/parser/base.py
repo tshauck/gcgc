@@ -8,6 +8,7 @@ from typing import Dict, List, Optional
 from Bio.SeqRecord import SeqRecord
 
 from gcgc.encoded_seq import EncodedSeq
+from gcgc.parser.gcgc_record import GCGCRecord
 from gcgc.exceptions import EncodedSeqLengthParserException
 from gcgc.fields import FileMetaDataField
 
@@ -44,7 +45,7 @@ class SequenceParser:
     seq_length_parser: Optional[EncodedSeqLengthParser] = None
     file_features: Optional[List[FileMetaDataField]] = None
 
-    def parse_record(self, input_seq: SeqRecord, path: Path) -> Dict:
+    def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
         """
         Convert the incoming SeqRecord to a dictionary of features.
         """
@@ -52,14 +53,14 @@ class SequenceParser:
         parsed_features: Dict = {}
 
         if self.encapsulate:
-            es = EncodedSeq.from_seq(input_seq.seq).encapsulate()
+            es = EncodedSeq.from_seq(gcgc_record.seq_record.seq).encapsulate()
 
         if self.seq_length_parser:
             es = self.seq_length_parser.parse_encoded_seq_record(es)
 
-        parsed_features["id"] = input_seq.id
+        parsed_features["id"] = gcgc_record.seq_record.id
         parsed_features["seq_tensor"] = es.integer_encoded
-        parsed_features.update(self._generate_file_features(path))
+        parsed_features.update(self._generate_file_features(gcgc_record.path))
 
         return parsed_features
 
