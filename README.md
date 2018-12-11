@@ -7,7 +7,7 @@
 
 ## Installation
 
-GCGC can be installed via pip:
+Install GCGC via pip:
 
 ```sh
 $ pip install gcgc
@@ -15,4 +15,8 @@ $ pip install gcgc
 
 ## Documentation
 
-The GCGC documentation is located at [gcgc.trenthauck.com](http://gcgc.trenthauck.com).
+The GCGC documentation is at [gcgc.trenthauck.com](http://gcgc.trenthauck.com).
+
+## Development Board
+
+The GCGC development board is hosted on [notion](https://www.notion.so/3649815c53324f01ae03abc99707dc68?v=98d8b29c39544dca9cde8ddc0dd8c98b).
