@@ -33,6 +33,18 @@ alpha.decode_token(1)
 # "A"
 ```
 
+## Possible Letters
+
+In addition to the standard `.letters` supplied by the BioPython Alphabet, GCGC adds `START`, `END`,
+and `PADDING` characters for processing applications. There also exists a `.letters_and_tokens`
+property which contains the regular letters and the special tokens.
+
+The length of the alphabet is equal to the number of the BioPython alphabet characters plus the
+special characters, or the length of `.letters_and_tokens`.
+
+This is relevant for ML applications, for instance, where the size of the vocabulary is needed to
+create the initial embedding lookup table.
+
 ## Custom Alphabets
 
 Currently GCGC does not provide direct support for user defined Alphabets, though it is on the
