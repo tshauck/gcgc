@@ -32,3 +32,19 @@ pyre_check:
 .PHONY: isort
 isort:
 	isort
+
+.PHONY: docs
+docs:
+	mkdocs build
+
+.PHONY: clean_docs
+clean_docs:
+	rm -rf site
+
+.PHONY: docs_upload
+docs_upload:
+	aws s3 cp --recursive ./site s3://gcgc.trenthauck.com/
+
+.PHONY: docs_write_good
+docs_write_good:
+	write-good ./docs/**/*.md

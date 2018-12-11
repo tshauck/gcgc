@@ -3,30 +3,36 @@
 GCGC implements a `torch.utils.data.Dataset` that loads data from common bioinformatics file
 formats via BioPython.
 
-## Example
+## Splice Site Example
 
 As an example of the PyTorch integration this example will use the UCI Splice-junction Gene
 Sequences dataset on [UCI][uci].
 
-In short, splice sites are locations where the introns and exons are connected on pre-mRNA. It's
-important to understand where these are because during splicing introns are removed from the
-pre-mRNA to form mRNA which is translated into proteins. Put another way, understanding where the
-splice sites are helps determine which parts of DNA become proteins.
+In short, splice sites are locations where the introns and exons connect on pre-mRNA. It's important
+to understand where these are because the process of splicing removes introns so the exons
+from the pre-mRNA form mRNA. And mRNA becomes proteins.
+
+Put another way, understanding where the splice sites are helps determine which parts of DNA become
+proteins.
+
+This is a great 1m37s video from the DNA Learning Center for more context.
+
+[![DNA Learning Video](https://img.youtube.com/vi/aVgwr0QpYNE/0.jpg)](https://www.youtube.com/watch?v=aVgwr0QpYNE)
 
 From an ML perspective, this is a classification where the sequence is a feature and there is a
 label, one of:
 
-- Intron to exon (IE)
-- Exon to intron (EI)
-- Neither (N)
+- Intron to exon (IE) -- Does this sequence contain an intron to exon junction.
+- Exon to intron (EI) -- Does this sequence contain an exon to intron junction.
+- Neither (N) -- Does this sequence contain neither.
 
 ### Loading Data
 
 To help load data GCGC contains a `FileMetaDataField` class that can help turn files into labels.
 
-In this example, the easiest path is to use the `SPLICE_DATA_PATH` constant, which assuming `gcgc`
-is installed, will point to the path containing the files EI.fasta, IE.fasta, and N.fasta. The
-labels for the dataset will become those files names due to the field.
+In this example, the easiest path is to use the `SPLICE_DATA_PATH` constant, which will point to the
+path containing the files EI.fasta, IE.fasta, and N.fasta. The labels for the dataset will become
+those files names due to the field.
 
 ```python
 from pathlib import Path
@@ -37,8 +43,8 @@ files = list(SPLICE_DATA_PATH.glob("*.fasta"))
 file_feature = FileMetaDataField.from_paths("splice_site", files)
 ```
 
-`file_feature` is one possible features someone might want to model. A `SequenceParser` object can
-be holds possible features.
+`file_feature` is one possible features someone might want to model -- in this case the splice
+classification. A `SequenceParser` object can be holds possible features.
 
 ```python
 from gcgc.parser import SequenceParser
@@ -48,12 +54,13 @@ parser = SequenceParser(file_features=[file_feature])
 
 The `SequenceParser` can also configure how GCGC will deal with sequences of difference length.
 
-There is one more preparatory step needed before the PyTorch compatible `Dataset` can be created,
+There is one more preparatory step needed before creating the PyTorch compatible `Dataset`,
 and that is to make a GCGC Alphabet. These Alphabet's are subclasses of BioPython Alphabet's class
 that support padding, tokenizing and other options relevant for ML applications.
 
-In this case, the `IUPACAmbiguousDNAEncoding` will be used, which is relevant for DNA with the
-standard letters plus additional characters to deal with ambiguous bases.
+In this case, `IUPACAmbiguousDNAEncoding` is relevant for DNA with the standard letters plus
+extra to deal with ambiguous bases. One example of an ambiguous base letter is that "R" is Purine,
+which can be either Adenine ("A") or Guanine ("G").
 
 ```python
 from gcgc.alphabet import IUPACAmbiguousDNAEncoding
@@ -61,8 +68,7 @@ from gcgc.alphabet import IUPACAmbiguousDNAEncoding
 alphabet = IUPACAmbiguousDNAEncoding()
 ```
 
-And now with those ingredients, a `GenomicDataset` object can be created. This implements the
-necessary functionality to be used as a PyTorch `Dataset`.
+Those ingredients set the stage to create the `GenomicDataset` object
 
 ```python
 from gcgc.third_party.pytorch_utils.data import GenomicDataset
@@ -81,6 +87,7 @@ shuffling, batching, and other common data utilities.
 
 ```python
 from torch.utils.data import DataLoader
+
 data_loader = DataLoader(dataset, batch_size=128, shuffle=True)
 ```
 
