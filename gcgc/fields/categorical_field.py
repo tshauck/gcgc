@@ -45,7 +45,7 @@ class LabelField(Field):
         encoding_dict = {}
         decoding_dict = {}
 
-        for i, s in enumerate(vocab):
+        for i, s in enumerate(sorted(set(vocab))):
             encoding_dict[s] = i
             decoding_dict[i] = s
 
