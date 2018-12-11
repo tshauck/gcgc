@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
 
-import torch
 from Bio.SeqRecord import SeqRecord
 
 from gcgc.encoded_seq import EncodedSeq
@@ -58,9 +57,8 @@ class SequenceParser:
         if self.seq_length_parser:
             es = self.seq_length_parser.parse_encoded_seq_record(es)
 
-        parsed_features["seq_tensor"] = torch.LongTensor(es.integer_encoded)
         parsed_features["id"] = input_seq.id
-
+        parsed_features["seq_tensor"] = es.integer_encoded
         parsed_features.update(self._generate_file_features(path))
 
         return parsed_features
@@ -74,6 +72,6 @@ class SequenceParser:
 
         if self.has_file_features:
             for ff in self.file_features:
-                file_features[ff.name] = ff.torch_tensor(path)
+                file_features[ff.name] = ff.encode(path)
 
         return file_features

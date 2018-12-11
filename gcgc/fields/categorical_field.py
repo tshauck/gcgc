@@ -5,8 +5,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Dict, List
 
-import torch
-
 from gcgc.fields.field import Field
 
 
@@ -32,13 +30,6 @@ class LabelField(Field):
         """
 
         return self.decoding_dict[label_int]
-
-    def torch_tensor(self, label):
-        """
-        Encode the label, then return the integer representation.
-        """
-        encoded_label = self.encode(label)
-        return torch.tensor(encoded_label)
 
     @classmethod
     def from_vocabulary(cls, name: str, vocab: List[str]):

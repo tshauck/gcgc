@@ -19,19 +19,23 @@ Install GCGC via pip:
 $ pip install gcgc
 ```
 
-## Getting Started
+If you'd like to use one of the third party tools, install the related "extras".
 
-For a full example of using GCGC with a classification model, see the [splice site
-example](./third_party_integrations/pytorch_utils.md).
+```bash
+$ pip install gcgc -E torch
+```
 
-## Getting Help or Filing a Bug
+## Helpful Links
 
-Please [file an issue](https://github.com/tshauck/gcgc/issues) if you're running into issues for
-some reason.
+- __Getting Started__ For a full example of using GCGC with a classification model, see the [splice site
+  example](./third_party_integrations/pytorch_utils.md).
 
-## Development Board
+- __Bugs or Help__ Please [file an issue](https://github.com/tshauck/gcgc/issues) if you're running into issues for
+  some reason.
 
-The GCGC development board is hosted on [notion](https://www.notion.so/3649815c53324f01ae03abc99707dc68?v=98d8b29c39544dca9cde8ddc0dd8c98b).
+- __Development Roadmap__ The GCGC development board is hosted on [notion](https://www.notion.so/3649815c53324f01ae03abc99707dc68?v=98d8b29c39544dca9cde8ddc0dd8c98b).
+
+- __Source Code__ [GitHub Repo](https://github.com/tshauck/gcgc)
 
 ## Documentation Version
 
