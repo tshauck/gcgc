@@ -1,8 +1,8 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from typing import Dict
 from pathlib import Path
+from typing import Dict
 
 import torch
 from Bio.SeqRecord import SeqRecord
