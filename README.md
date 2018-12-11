@@ -13,6 +13,12 @@ Install GCGC via pip:
 $ pip install gcgc
 ```
 
+If you'd like to use one of the third party tools, install the related "extras".
+
+```bash
+$ pip install gcgc -E torch
+```
+
 ## Documentation
 
 The GCGC documentation is at [gcgc.trenthauck.com](http://gcgc.trenthauck.com).

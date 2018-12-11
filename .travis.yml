@@ -2,7 +2,7 @@ jobs:
   include:
   - install:
     - pip install poetry
-    - poetry install
+    - poetry install -E torch
     script: make test
     language: python
     dist: xenial
@@ -11,7 +11,7 @@ jobs:
     - '3.7'
   - install:
     - pip install poetry
-    - poetry install
+    - poetry install -E torch
     script: make docs docs_upload
     language: python
     dist: xenial
