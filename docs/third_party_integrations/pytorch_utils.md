@@ -35,7 +35,6 @@ path containing the files EI.fasta, IE.fasta, and N.fasta. The labels for the da
 those files names due to the field.
 
 ```python
-from pathlib import Path
 from gcgc.fields.categorical_field import FileMetaDataField
 from gcgc.data import SPLICE_DATA_PATH
 
@@ -44,12 +43,15 @@ file_feature = FileMetaDataField.from_paths("splice_site", files)
 ```
 
 `file_feature` is one possible features someone might want to model -- in this case the splice
-classification. A `SequenceParser` object can be holds possible features.
+classification. A `SequenceParser` object can be holds possible features, and in this case the
+`TorchSequenceParser` will go one step further by converting the outputs of the SequenceParser into
+native torch objects. See the documentation on sequence parsers for more info.
 
 ```python
 from gcgc.parser import SequenceParser
+from gcgc.third_party.pytorch_utils.parser import TorchSequenceParser
 
-parser = SequenceParser(file_features=[file_feature])
+parser = TorchSequenceParser(file_features=[file_feature])
 ```
 
 The `SequenceParser` can also configure how GCGC will deal with sequences of difference length.
@@ -113,10 +115,11 @@ class SplicePrediction(nn.Module):
 
     def forward(self, inputs):
         embed = self.embed(inputs).permute(0, 2, 1)
+
         x = self.conv(embed)
         x = x.view(x.size()[0], -1)
         x = self.fc1(F.relu(x))
-        x = F.relu(self.fc2(x))
+        x = self.fc2(F.relu(x))
         x = self.fc3(x)
 
         return x
