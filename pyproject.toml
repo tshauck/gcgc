@@ -21,6 +21,7 @@ aiohttp = "^3.4"
 structlog = "^18.2"
 
 torch = { version = "=1.0.0", optional = true }
+click = "^7.0"
 
 [tool.poetry.extras]
 torch = ["torch"]
