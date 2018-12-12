@@ -1,4 +1,4 @@
-# Splice Site Example
+# Splice Site Classification
 
 As an example of the PyTorch integration this example will use the UCI Splice-junction Gene
 Sequences dataset on [UCI][uci].
