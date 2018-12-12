@@ -39,4 +39,4 @@ $ pip install gcgc -E torch
 
 ## Documentation Version
 
-The documentation you're reading was build for version: 0.3.0-dev.
+The documentation you're reading was build for version: 0.3.0.
