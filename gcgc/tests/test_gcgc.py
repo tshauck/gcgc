@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""Tests for `gcgc` package."""
+# (c) Copyright 2018 Trent Hauck
+# All Rights Reserved
 
 
 import unittest
@@ -13,15 +11,6 @@ from gcgc import cli
 
 class TestGcgc(unittest.TestCase):
     """Tests for `gcgc` package."""
-
-    def setUp(self):
-        """Set up test fixtures, if any."""
-
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
-
-    def test_000_something(self):
-        """Test something."""
 
     def test_command_line_interface(self):
         """Test the CLI."""

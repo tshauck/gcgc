@@ -10,7 +10,7 @@ from Bio import File, SeqIO
 
 from gcgc.alphabet import ExtendedIUPACDNAEncoding
 from gcgc.alphabet.base import EncodingAlphabet
-from gcgc.parser import SequenceParser
+from gcgc.third_party.pytorch_utils.parser import TorchSequenceParser
 from gcgc.parser.gcgc_record import GCGCRecord
 
 
@@ -41,7 +41,7 @@ class GenomicDataset(torch.utils.data.Dataset):
     def __init__(
         self,
         file_index: Dict[Path, File._IndexedSeqFileDict],
-        parser: SequenceParser,
+        parser: TorchSequenceParser,
         file_format: str = "fasta",
     ):
         """
@@ -67,7 +67,7 @@ class GenomicDataset(torch.utils.data.Dataset):
     def from_path(
         cls,
         path: Path,
-        parser: SequenceParser,
+        parser: TorchSequenceParser,
         file_format: str = "fasta",
         alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
     ) -> "GenomicDataset":
@@ -81,7 +81,7 @@ class GenomicDataset(torch.utils.data.Dataset):
     def from_paths(
         cls,
         path_sequence: Sequence[Path],
-        parser: SequenceParser,
+        parser: TorchSequenceParser,
         file_format="fasta",
         alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
     ) -> "GenomicDataset":
