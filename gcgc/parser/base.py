@@ -5,10 +5,9 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 from gcgc.encoded_seq import EncodedSeq
-from gcgc.parser.gcgc_record import GCGCRecord
 from gcgc.exceptions import EncodedSeqLengthParserException
-from gcgc.fields import FileMetaDataField
-from gcgc.fields import AnnotationField
+from gcgc.fields import AnnotationField, FileMetaDataField
+from gcgc.parser.gcgc_record import GCGCRecord
 
 
 @dataclass

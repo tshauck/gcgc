@@ -2,8 +2,8 @@
 # All Rights Reserved
 
 from dataclasses import dataclass
-
 from pathlib import Path
+
 from Bio.SeqRecord import SeqRecord
 
 

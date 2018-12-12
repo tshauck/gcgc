@@ -9,9 +9,10 @@ from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from gcgc.parser.gcgc_record import GCGCRecord
 from gcgc.fields import FileMetaDataField
-from gcgc.parser.base import EncodedSeqLengthParser, SequenceParser
+from gcgc.parser.base import EncodedSeqLengthParser
+from gcgc.third_party.pytorch_utils.parser import TorchSequenceParser
+from gcgc.parser.gcgc_record import GCGCRecord
 
 
 class TestTorchSequenceParser(unittest.TestCase):
@@ -23,7 +24,9 @@ class TestTorchSequenceParser(unittest.TestCase):
 
         length_parser = EncodedSeqLengthParser(conform_to=10)
 
-        sp = SequenceParser(encapsulate=True, seq_length_parser=length_parser, file_features=ff)
+        sp = TorchSequenceParser(
+            encapsulate=True, seq_length_parser=length_parser, file_features=ff
+        )
 
         dna = IUPAC.IUPACUnambiguousDNA()
         input_seq = SeqRecord(Seq("ATCG", alphabet=dna))

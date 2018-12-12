@@ -1,12 +1,11 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-from typing import Dict
 import unittest
 from pathlib import Path
+from typing import Dict
 
-from gcgc.fields.categorical_field import FileMetaDataField
-from gcgc.fields.categorical_field import AnnotationField
+from gcgc.fields.categorical_field import AnnotationField, FileMetaDataField
 
 
 class TestFields(unittest.TestCase):

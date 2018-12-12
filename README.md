@@ -16,7 +16,7 @@ $ pip install gcgc
 If you'd like to use one of the third party tools, install the related "extras".
 
 ```bash
-$ pip install gcgc -E torch
+$ pip install gcgc[torch]
 ```
 
 ## Documentation
