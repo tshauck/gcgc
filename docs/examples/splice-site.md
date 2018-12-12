@@ -34,6 +34,11 @@ from gcgc.fields.categorical_field import FileMetaDataField
 from gcgc.data import SPLICE_DATA_PATH
 
 files = list(SPLICE_DATA_PATH.glob("*.fasta"))
+# [PosixPath('/home/tshauck/gcgc/gcgc/data/splice/EI.fasta'),
+#  PosixPath('/home/tshauck/gcgc/gcgc/data/splice/IE.fasta'),
+#  PosixPath('/home/tshauck/gcgc/gcgc/data/splice/N.fasta')]
+# Each class is a file.
+
 file_feature = FileMetaDataField.from_paths("splice_site", files)
 ```
 

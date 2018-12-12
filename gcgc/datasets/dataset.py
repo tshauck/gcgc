@@ -1,5 +1,6 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""A set of Datasets which are comprised of DataFiles."""
 
 import asyncio
 import logging
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class DataFile:
     """
-    A an external file download and place at the local path.
+    An external file download and place at the local path.
     """
 
     url: Optional[str]
@@ -78,21 +79,12 @@ class UniprotDataset(object):
 
 
 class TaxonDataset(UniprotDataset):
-    """
-    Download a set of taxons IDs from uniprot.
-    """
+    """Download a set of taxons IDs from uniprot."""
 
     def __init__(
         self, taxon_ids: Sequence[int], data_directory: Path = Path("."), file_format: str = "fasta"
     ):
-        """
-        Initialize the TaxonDataset object.
-
-        Args:
-            taxon_ids: A list of integers representing taxon ids.
-            data_directory: The data directory path for the taxon.
-            file_format: The file format to use for the downloaded data.
-        """
+        """Initialize the TaxonDataset object."""
 
         self.taxon_ids = taxon_ids
         files_to_download: DataFiles = []

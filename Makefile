@@ -25,10 +25,6 @@ dev_version:
 .PHONY: dev_release
 dev_release: dev_version build publish
 
-.PHONY: pyre_check
-pyre_check:
-	pyre check
-
 .PHONY: isort
 isort:
 	isort
@@ -48,3 +44,15 @@ docs_upload:
 .PHONY: docs_write_good
 docs_write_good:
 	write-good ./docs/**/*.md
+
+.PHONY: vulture
+vulture:
+	vulture gcgc
+
+.PHONY: pydocstyle
+pydocstyle:
+	pydocstyle gcgc
+
+.PHONY: mypy
+mypy:
+	mypy gcgc

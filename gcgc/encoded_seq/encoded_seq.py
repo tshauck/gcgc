@@ -1,5 +1,6 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""Contains the EncodedSeq object."""
 
 from typing import Sequence
 
@@ -12,28 +13,29 @@ from gcgc.exceptions import GCGCAlphabetException
 
 
 class EncodedSeq(Seq):
+    """A wrapper around Bio.Seq.Seq."""
+
     def __init__(self, data, alphabet) -> None:
+        """Initialize the EncodedSeq object with sequence data and an alphabet."""
+
         if not isinstance(alphabet, EncodingAlphabet):
             raise GCGCAlphabetException(f"Cannot use alphabet of type {type(alphabet)}.")
 
         super().__init__(data, alphabet)
 
     @classmethod
-    def from_seq(cls, seq: Seq):
-        """
-        Instantiate an EncodedSeq object from a Seq object.
-        """
+    def from_seq(cls, seq: Seq) -> "EncodedSeq":
+        """Instantiate an EncodedSeq object from a Seq object."""
 
         gcgc_alphabet = biopython_alphabet_to_gcgc_alphabet(seq.alphabet)
         return cls(str(seq), gcgc_alphabet)
 
     def encapsulate(self) -> "EncodedSeq":
+        """Return a sequence with the alphabet start and end token applied to the start and end."""
         return self.alphabet.START + self + self.alphabet.END
 
     def pad(self, pad_to: int = 50) -> "EncodedSeq":
-        """
-        Pad a sequence up to `pad_to` characters.
-        """
+        """Pad a sequence up to `pad_to` characters."""
 
         seq_len = len(self)
 
@@ -46,6 +48,8 @@ class EncodedSeq(Seq):
         return self + extra_chars
 
     def conform(self, conform_to: int = 50) -> "EncodedSeq":
+        """Return a exactly equal to the conform_to value."""
+
         seq_len = len(self)
 
         if seq_len == conform_to:
@@ -57,16 +61,12 @@ class EncodedSeq(Seq):
 
     @property
     def integer_encoded(self):
+        """Return the underlying sequence in its integer representation."""
         return self.alphabet.integer_encode(self)
 
     @property
     def one_hot_encoded(self) -> Sequence[Sequence[int]]:
-        """
-        Encodes D x N where D is the size of the alphabet and N is the padding.
-
-        Returns:
-            A one hot encoded matrix representing the sequence.
-        """
+        """Encode into D x N matrix where D is the size of the alphabet and N is the padding."""
 
         encoded_sequence = self.alphabet.integer_encode(self)
         encoded_len = len(encoded_sequence)
@@ -77,14 +77,15 @@ class EncodedSeq(Seq):
 
         return one_hot_seq.tolist()
 
-    def __add__(self, other) -> "EncodedSeq":
-        """
-        Add two enccoded sequences together.
-        """
+    def __add__(self, other: "EncodedSeq") -> "EncodedSeq":
+        """Add two enccoded sequences together."""
+
         added_seq = super().__add__(other)
         return self.from_seq(added_seq)
 
-    def __getitem__(self, index) -> "EncodedSeq":
+    def __getitem__(self, index: int) -> "EncodedSeq":
+        """Given the input index for the entire datset, return the associated EncodedSeq."""
+
         got_item = super().__getitem__(index)
         if isinstance(index, int):
             return got_item

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gcgc"
-version = "0.3.2"
+version = "0.3.3"
 description = "GCGC is a preprocessing library for biological sequence model development."
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 include = ["./gcgc/data/splice/*.fasta"]
@@ -41,10 +41,11 @@ mkdocs-material = "^3.0"
 bumpversion = "^0.5.3"
 pudb = "^2018.1"
 pygments = "^2.3"
-pyre-check = "^0.0.18"
 isort = "^4.3"
 pre-commit = "^1.12"
 awscli = "^1.16"
+vulture = "^1.0"
+pydocstyle = "^3.0"
 
 [tool.poetry.plugins."console_scripts"]
 "gcgc" = "gcgc.cli:main"
