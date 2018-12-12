@@ -22,7 +22,6 @@ structlog = "^18.2"
 
 torch = { version = "=1.0.0", optional = true }
 click = "^7.0"
-pydocstyle = "^3.0"
 
 [tool.poetry.extras]
 torch = ["torch"]
@@ -42,11 +41,11 @@ mkdocs-material = "^3.0"
 bumpversion = "^0.5.3"
 pudb = "^2018.1"
 pygments = "^2.3"
-pyre-check = "^0.0.18"
 isort = "^4.3"
 pre-commit = "^1.12"
 awscli = "^1.16"
 vulture = "^1.0"
+pydocstyle = "^3.0"
 
 [tool.poetry.plugins."console_scripts"]
 "gcgc" = "gcgc.cli:main"
