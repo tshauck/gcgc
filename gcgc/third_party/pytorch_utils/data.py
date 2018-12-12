@@ -39,10 +39,7 @@ class GenomicDataset(torch.utils.data.Dataset):
     """
 
     def __init__(
-        self,
-        file_index: Dict[Path, File._IndexedSeqFileDict],
-        parser: TorchSequenceParser,
-        file_format: str = "fasta",
+        self, file_index: Dict[Path, File._IndexedSeqFileDict], parser: TorchSequenceParser
     ):
         """
         Initialize the GenomicDataset object.
@@ -53,13 +50,10 @@ class GenomicDataset(torch.utils.data.Dataset):
         Args:
             file_index: A dictionary mapping the Path of the file to its index.
             parser: The parser object which specifies how the input sequence should be parsed.
-            file_format: The format of the file to parse. This should be one understood by
-                Biopython.
         """
 
         self._file_index = file_index
         self._parser = parser
-        self._file_format = file_format
 
         super().__init__()
 
@@ -96,7 +90,7 @@ class GenomicDataset(torch.utils.data.Dataset):
         for f in sorted(path_sequence):
             file_index[f] = SeqIO.index(str(f), file_format, key_function=si, alphabet=alphabet)
 
-        return cls(file_index, parser=parser, file_format=file_format)
+        return cls(file_index, parser)
 
     def __len__(self) -> int:
         """

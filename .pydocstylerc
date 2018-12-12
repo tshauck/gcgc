@@ -1,0 +1,5 @@
+[pydocstyle]
+# D203: 1 blank line required before class docstring (found 0)
+ignore = D202,D203
+match = (?!test_*).*\.py
+inherit = false

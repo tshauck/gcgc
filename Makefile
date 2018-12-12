@@ -48,3 +48,11 @@ docs_upload:
 .PHONY: docs_write_good
 docs_write_good:
 	write-good ./docs/**/*.md
+
+.PHONY: vulture
+vulture:
+	vulture gcgc
+
+.PHONY: pydocstyle
+pydocstyle:
+	pydocstyle gcgc
