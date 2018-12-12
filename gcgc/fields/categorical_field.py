@@ -37,7 +37,7 @@ class LabelField(Field):
             encoding_dict[s] = i
             decoding_dict[i] = s
 
-        return cls(name, encoding_dict, decoding_dict)
+        return LabelField(name, encoding_dict, decoding_dict)
 
 
 def default_preprocess(p: Path) -> str:
@@ -84,7 +84,7 @@ class AnnotationField(LabelField):
     @classmethod
     def from_annotations(
         cls, name: str, annotations: List[Dict], preprocess: Callable[[Dict], str]
-    ):
+    ) -> "AnnotationField":
         """Given a set of exemplar annotations, create the encoding dict and return the field."""
 
         str_vocab = [preprocess(a) for a in annotations]
