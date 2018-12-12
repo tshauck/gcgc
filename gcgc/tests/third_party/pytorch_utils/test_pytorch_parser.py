@@ -11,8 +11,8 @@ from Bio.SeqRecord import SeqRecord
 
 from gcgc.fields import FileMetaDataField
 from gcgc.parser.base import EncodedSeqLengthParser
-from gcgc.third_party.pytorch_utils.parser import TorchSequenceParser
 from gcgc.parser.gcgc_record import GCGCRecord
+from gcgc.third_party.pytorch_utils.parser import TorchSequenceParser
 
 
 class TestTorchSequenceParser(unittest.TestCase):

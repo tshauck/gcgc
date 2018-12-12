@@ -5,9 +5,9 @@ import unittest
 
 from Bio.Alphabet import IUPAC
 
-from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 from gcgc.alphabet import IUPACUnambiguousDNAEncoding
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
+from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
 
 class TestAlphabet(unittest.TestCase):
