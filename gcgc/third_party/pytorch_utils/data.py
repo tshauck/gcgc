@@ -11,6 +11,7 @@ from Bio import File, SeqIO
 from gcgc.alphabet import ExtendedIUPACDNAEncoding
 from gcgc.alphabet.base import EncodingAlphabet
 from gcgc.parser import SequenceParser
+from gcgc.parser.gcgc_record import GCGCRecord
 
 
 class _SequenceIndexer(object):
@@ -110,7 +111,8 @@ class GenomicDataset(torch.utils.data.Dataset):
 
         for k, v in self._file_index.items():
             try:
-                return self._parser.parse_record(v[i], k)
+                r = GCGCRecord(path=k, seq_record=v[i])
+                return self._parser.parse_record(r)
             except KeyError:
                 pass
 

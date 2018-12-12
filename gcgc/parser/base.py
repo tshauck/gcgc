@@ -2,14 +2,13 @@
 # All Rights Reserved
 
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Dict, List, Optional
 
-from Bio.SeqRecord import SeqRecord
-
 from gcgc.encoded_seq import EncodedSeq
+from gcgc.parser.gcgc_record import GCGCRecord
 from gcgc.exceptions import EncodedSeqLengthParserException
 from gcgc.fields import FileMetaDataField
+from gcgc.fields import AnnotationField
 
 
 @dataclass
@@ -43,8 +42,9 @@ class SequenceParser:
     encapsulate: bool = True
     seq_length_parser: Optional[EncodedSeqLengthParser] = None
     file_features: Optional[List[FileMetaDataField]] = None
+    annotation_features: Optional[List[AnnotationField]] = None
 
-    def parse_record(self, input_seq: SeqRecord, path: Path) -> Dict:
+    def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
         """
         Convert the incoming SeqRecord to a dictionary of features.
         """
@@ -52,14 +52,14 @@ class SequenceParser:
         parsed_features: Dict = {}
 
         if self.encapsulate:
-            es = EncodedSeq.from_seq(input_seq.seq).encapsulate()
+            es = EncodedSeq.from_seq(gcgc_record.seq_record.seq).encapsulate()
 
         if self.seq_length_parser:
             es = self.seq_length_parser.parse_encoded_seq_record(es)
 
-        parsed_features["id"] = input_seq.id
+        parsed_features["id"] = gcgc_record.seq_record.id
         parsed_features["seq_tensor"] = es.integer_encoded
-        parsed_features.update(self._generate_file_features(path))
+        parsed_features.update(self._generate_file_features(gcgc_record.path))
 
         return parsed_features
 
@@ -75,3 +75,16 @@ class SequenceParser:
                 file_features[ff.name] = ff.encode(path)
 
         return file_features
+
+    @property
+    def has_annotation_features(self) -> bool:
+        return bool(self.annotation_features)
+
+    def _generate_annotation_features(self, seq_record):
+        seq_records_features = {}
+
+        if self.has_seq_records_features:
+            for ff in self.seq_records_features:
+                seq_records_features[ff.name] = ff.encode(seq_record.annotations)
+
+        return seq_records_features
