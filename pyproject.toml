@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gcgc"
-version = "0.3.1"
+version = "0.3.2"
 description = "GCGC is a preprocessing library for biological sequence model development."
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 include = ["./gcgc/data/splice/*.fasta"]
@@ -21,6 +21,7 @@ aiohttp = "^3.4"
 structlog = "^18.2"
 
 torch = { version = "=1.0.0", optional = true }
+click = "^7.0"
 
 [tool.poetry.extras]
 torch = ["torch"]

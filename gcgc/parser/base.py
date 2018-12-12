@@ -59,6 +59,7 @@ class SequenceParser:
         parsed_features["id"] = gcgc_record.seq_record.id
         parsed_features["seq_tensor"] = es.integer_encoded
         parsed_features.update(self._generate_file_features(gcgc_record.path))
+        parsed_features.update(self._generate_annotation_features(gcgc_record.seq_record))
 
         return parsed_features
 
@@ -82,8 +83,8 @@ class SequenceParser:
     def _generate_annotation_features(self, seq_record):
         seq_records_features = {}
 
-        if self.has_seq_records_features:
-            for ff in self.seq_records_features:
+        if self.has_annotation_features:
+            for ff in self.annotation_features:
                 seq_records_features[ff.name] = ff.encode(seq_record.annotations)
 
         return seq_records_features

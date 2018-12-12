@@ -1,4 +1,4 @@
-!!! Development Warning
+!!! Caution
     GCGC is in active development.
 
 # Homepage
@@ -22,13 +22,13 @@ $ pip install gcgc
 If you'd like to use one of the third party tools, install the related "extras".
 
 ```bash
-$ pip install gcgc -E torch
+$ pip install gcgc[torch]
 ```
 
 ## Helpful Links
 
 - __Getting Started__ For a full example of using GCGC with a classification model, see the [splice site
-  example](./third_party_integrations/pytorch_utils.md).
+  example](./examples/splice-site.md).
 
 - __Bugs or Help__ Please [file an issue](https://github.com/tshauck/gcgc/issues) if you're running into issues for
   some reason.
@@ -39,4 +39,4 @@ $ pip install gcgc -E torch
 
 ## Documentation Version
 
-The documentation you're reading was build for version: 0.3.1.
+The documentation you're reading was build for version: 0.3.2.

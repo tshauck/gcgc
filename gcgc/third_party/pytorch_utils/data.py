@@ -10,8 +10,8 @@ from Bio import File, SeqIO
 
 from gcgc.alphabet import ExtendedIUPACDNAEncoding
 from gcgc.alphabet.base import EncodingAlphabet
-from gcgc.third_party.pytorch_utils.parser import TorchSequenceParser
 from gcgc.parser.gcgc_record import GCGCRecord
+from gcgc.third_party.pytorch_utils.parser import TorchSequenceParser
 
 
 class _SequenceIndexer(object):
