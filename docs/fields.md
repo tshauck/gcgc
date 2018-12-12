@@ -51,3 +51,33 @@ corresponding integer encoded class to the dataset.
 label.encoding_dict
 {'a': 0, 'b': 1}
 ```
+
+### `AnnotationField`
+
+On the `SeqRecord` BioPython object exists an `.annotations` property, which potentially contains
+labels that contain labels or other features. To help access these the `AnnotationField` works in a
+similar fashion to the `FileMetaDataField`: write a processing function and create an exemplar
+dataset.
+
+`.annotations` is just a dictionary, so this is the simplest example.
+
+```python
+annotations = [{"a": "a"}, {"a": "b"}]
+```
+
+Because `.annotations` is a Dict, the `preprocess` signature is slightly different than `FileMetaDataField`.
+
+```python
+def preprocess(a: Dict) -> str:
+    return a["a"]
+```
+
+After this, the field behaves similarly to the other fields.
+
+```python
+from gcgc.fields import AnnotationField
+
+af = AnnotationField.from_annotations("a", annotations, preprocess)
+af.encoding_dict
+# {"a": 0, "b": 1}
+```
