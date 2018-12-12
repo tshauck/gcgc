@@ -47,17 +47,12 @@ def default_preprocess(p: Path) -> str:
     return str(p)
 
 
-def default_postprocess(s: str) -> Path:
-    return Path(s)
-
-
 @dataclass
 class FileMetaDataField(LabelField):
     """
     """
 
     preprocess: Callable[[Path], str] = default_preprocess
-    postprocess: Callable[[str], Path] = default_postprocess
 
     def encode(self, file: Path) -> int:
         """
@@ -66,20 +61,9 @@ class FileMetaDataField(LabelField):
         label = self.preprocess(file)
         return super().encode(label)
 
-    def decode(self, label_int: int) -> Path:
-        """
-        Decode the integer, then post process the label into a Path.
-        """
-        raw_str = super().decode(label_int)
-        return self.postprocess(raw_str)
-
     @classmethod
     def from_paths(
-        cls,
-        name: str,
-        paths: List[Path],
-        preprocess: Callable[[Path], str] = default_preprocess,
-        postprocess: Callable[[str], Path] = default_postprocess,
+        cls, name: str, paths: List[Path], preprocess: Callable[[Path], str] = default_preprocess
     ):
         """
         Given a set of exemplar paths, create the (d-)encoding dict and return the field.
@@ -88,6 +72,32 @@ class FileMetaDataField(LabelField):
         str_vocab = [preprocess(p) for p in paths]
         label_field = super().from_vocabulary(name, str_vocab)
 
-        return FileMetaDataField(
-            name, label_field.encoding_dict, label_field.decoding_dict, preprocess, postprocess
-        )
+        return cls(name, label_field.encoding_dict, label_field.decoding_dict, preprocess)
+
+
+@dataclass
+class AnnotationField(LabelField):
+    """
+    """
+
+    preprocess: Callable[[Dict], str]
+
+    def encode(self, file: Path) -> int:
+        """
+        Preprocess the file path, then encode the resultant label.
+        """
+        label = self.preprocess(file)
+        return super().encode(label)
+
+    @classmethod
+    def from_annotations(
+        cls, name: str, annotations: List[Dict], preprocess: Callable[[Dict], str]
+    ):
+        """
+        Given a set of exemplar annotations, create the (d-)encoding dict and return the field.
+        """
+
+        str_vocab = [preprocess(a) for a in annotations]
+        label_field = super().from_vocabulary(name, str_vocab)
+
+        return cls(name, label_field.encoding_dict, label_field.decoding_dict, preprocess)
