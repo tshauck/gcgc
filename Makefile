@@ -52,3 +52,7 @@ vulture:
 .PHONY: pydocstyle
 pydocstyle:
 	pydocstyle gcgc
+
+.PHONY: mypy
+mypy:
+	mypy gcgc
