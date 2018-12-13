@@ -1,4 +1,4 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-__version__ = "0.3.3"
+__version__ = "0.3.4-dev"
