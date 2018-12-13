@@ -4,11 +4,13 @@
 import tempfile
 import unittest
 from pathlib import Path
+import pytest
 
 from gcgc.datasets import dataset
 
 
 class TestDataset(unittest.TestCase):
+    @pytest.mark.integration
     def test_uniprot_dataset(self):
 
         with tempfile.TemporaryDirectory() as tmpdirname:

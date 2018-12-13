@@ -1,15 +1,13 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""Utils for working with alphabets."""
 
 from gcgc import alphabet
 from gcgc.exceptions import GCGCAlphabetException
 
 
 def biopython_alphabet_to_gcgc_alphabet(biopython_alphabet_instance):
-    """
-    Args:
-        biopython_alphabet_instance
-    """
+    """Convert the BioPython Alphabet to the associated GCGC Alphabet."""
 
     # Might also try just creating the type on the fly.
 

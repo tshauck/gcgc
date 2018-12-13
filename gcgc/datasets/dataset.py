@@ -4,7 +4,6 @@
 
 import asyncio
 import logging
-from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Sequence
 
@@ -13,25 +12,17 @@ import aiohttp
 logger = logging.getLogger(__name__)
 
 
-@dataclass
 class DataFile:
-    """
-    An external file download and place at the local path.
-    """
+    """An external file download and place at the local path."""
 
-    url: Optional[str]
-    local_path: Path
+    def __init__(self, url: Optional[str], local_path: Path) -> None:
+        """Initalize the DataFile object."""
+
+        self.url = url
+        self.local_path = local_path
 
     async def download(self, session):
-        """
-        Given a session, query the url.
-
-        Args:
-            session: The asyncio session.
-
-        Returns:
-            The released response.
-        """
+        """Given a session, query the url."""
 
         async with session.get(self.url) as response:
             with open(self.local_path, "wb") as f_handle:
@@ -49,18 +40,10 @@ DataFiles = List[DataFile]
 
 
 class UniprotDataset(object):
-    """
-    A base class that loads data from Uniprot.
-    """
+    """A base class that loads data from Uniprot."""
 
     def __init__(self, data_files: DataFiles, file_format: str = "fasta"):
-        """
-        Initialize the UniprotDataset object.
-
-        Args:
-            data_files: The list for FileToDownload object.
-            file_format: The file format to use.
-        """
+        """Initialize the UniprotDataset object."""
 
         self.data_files = data_files
         self.file_format = file_format
@@ -70,7 +53,10 @@ class UniprotDataset(object):
         return f"https://www.uniprot.org/uniprot/?{query_str}&format={file_format}"
 
     def download_files(self):
-        asyncio.run(self._download())
+        """Download the files."""
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(asyncio.wait([self._download()]))
+        loop.close()
 
     async def _download(self):
         async with aiohttp.ClientSession() as session:

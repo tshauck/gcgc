@@ -49,7 +49,7 @@ native torch objects. See the documentation on sequence parsers for more info.
 
 ```python
 from gcgc.parser import SequenceParser
-from gcgc.third_party.pytorch_utils.parser import TorchSequenceParser
+from gcgc.ml.pytorch_utils.parser import TorchSequenceParser
 
 parser = TorchSequenceParser(file_features=[file_feature])
 ```
@@ -73,7 +73,7 @@ alphabet = IUPACAmbiguousDNAEncoding()
 Those ingredients set the stage to create the `GenomicDataset` object
 
 ```python
-from gcgc.third_party.pytorch_utils.data import GenomicDataset
+from gcgc.ml.pytorch_utils.data import GenomicDataset
 
 dataset = GenomicDataset.from_paths(files, parser, alphabet=alphabet)
 ```

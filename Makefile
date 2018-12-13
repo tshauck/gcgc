@@ -56,3 +56,11 @@ pydocstyle:
 .PHONY: mypy
 mypy:
 	mypy gcgc
+
+.PHONY: test_integration
+test_integration:
+	pytest -m 'integration'
+
+.PHONY: test_unit
+test_unit:
+	pytest --cov-report term-missing --cov=gcgc -m 'not integration'

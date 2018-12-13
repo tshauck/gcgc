@@ -1,5 +1,6 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""CLI Functions for GCGC."""
 
 import logging
 import pathlib
@@ -22,6 +23,7 @@ def main(args=None):
 
 @main.command()
 def version():
+    """Print the version and exit."""
     print(__version__)
 
 
@@ -29,6 +31,8 @@ def version():
 @click.argument("organism_id", nargs=-1)
 @click.argument("data_directory", nargs=1)
 def download_organism(organism_id, data_directory):
+    """Download the organisms into the data directory."""
+
     path = pathlib.Path(data_directory)
     taxon_dataset = dataset.TaxonDataset(organism_id, path)
     taxon_dataset.download_files()

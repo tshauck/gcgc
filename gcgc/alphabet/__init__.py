@@ -1,5 +1,6 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""GCGC Alphabets."""
 
 from gcgc.alphabet.iupac import ExtendedIUPACProteinEncoding
 from gcgc.alphabet.iupac import ExtendedIUPACDNAEncoding
