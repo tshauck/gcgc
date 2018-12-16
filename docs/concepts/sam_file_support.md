@@ -14,4 +14,6 @@ def parse_description(d: str): str:
     for di in d.split("\t"):
         if di.startswith("RG"):
             return di
+    else:
+        raise RuntimeError("No RG tag found.")
 ```
