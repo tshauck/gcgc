@@ -25,8 +25,12 @@ isort:
 	isort
 
 .PHONY: docs
-docs:
+docs: clean_docs
+	mkdir docs/github
+	cp ./CHANGELOG.md ./docs/github
+	sed 's/# GCGC/# README/g' README.md > ./docs/github/README.md
 	mkdocs build
+	rm -rf ./docs/github/
 
 .PHONY: clean_docs
 clean_docs:
