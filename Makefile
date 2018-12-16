@@ -17,11 +17,6 @@ build: clean
 publish:
 	poetry publish
 
-.PHONY: dev_version
-dev_version:
-	bumpversion prerelversion
-	git push --tags
-
 .PHONY: dev_release
 dev_release: dev_version build publish
 
