@@ -4,6 +4,7 @@
 
 [![](https://img.shields.io/pypi/v/gcgc.svg)](https://pypi.python.org/pypi/gcgc)
 [![](https://img.shields.io/travis/tshauck/gcgc.svg)](https://travis-ci.org/tshauck/gcgc)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2329966.svg)](https://doi.org/10.5281/zenodo.2329966)
 
 ## Installation
 
