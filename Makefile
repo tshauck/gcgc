@@ -17,11 +17,6 @@ build: clean
 publish:
 	poetry publish
 
-.PHONY: dev_version
-dev_version:
-	bumpversion prerelversion
-	git push --tags
-
 .PHONY: dev_release
 dev_release: dev_version build publish
 
@@ -56,3 +51,11 @@ pydocstyle:
 .PHONY: mypy
 mypy:
 	mypy gcgc
+
+.PHONY: test_integration
+test_integration:
+	pytest -m 'integration'
+
+.PHONY: test_unit
+test_unit:
+	pytest --cov-report term-missing --cov=gcgc -m 'not integration'

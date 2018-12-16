@@ -12,6 +12,15 @@ jobs:
   - install:
     - pip install poetry
     - poetry install -E torch
+    script: make test
+    language: python
+    dist: xenial
+    sudo: required
+    python:
+    - '3.6'
+  - install:
+    - pip install poetry
+    - poetry install -E torch
     script: make docs docs_upload
     language: python
     dist: xenial

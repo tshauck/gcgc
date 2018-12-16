@@ -1,13 +1,15 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""A GCGC Record object."""
 
-from dataclasses import dataclass
 from pathlib import Path
 
 from Bio.SeqRecord import SeqRecord
 
 
-@dataclass
 class GCGCRecord:
-    path: Path
-    seq_record: SeqRecord
+    """A class for holding the Path of the file and a SeqRecord."""
+
+    def __init__(self, path: Path, seq_record: SeqRecord) -> None:
+        self.path = path
+        self.seq_record = seq_record

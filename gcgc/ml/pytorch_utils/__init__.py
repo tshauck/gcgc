@@ -1,3 +1,3 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
-"""Tests for the Alphabet."""
+"""Contains PyTorch related code."""

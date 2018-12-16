@@ -6,7 +6,7 @@ import unittest
 from gcgc.alphabet.iupac import IUPACProteinEncoding
 from gcgc.parser import SequenceParser
 from gcgc.tests.fixtures import ECOLI_PATH, P53_HUMAN
-from gcgc.third_party.pytorch_utils.data import GenomicDataset
+from gcgc.ml.pytorch_utils.data import GenomicDataset
 
 
 class TestPyTorchUtils(unittest.TestCase):

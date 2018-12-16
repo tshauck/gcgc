@@ -1,5 +1,6 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""PyTorch specific parser."""
 
 from typing import Dict
 
@@ -10,10 +11,10 @@ from gcgc.parser.gcgc_record import GCGCRecord
 
 
 class TorchSequenceParser(SequenceParser):
+    """A PyTorch Sequence Parser."""
+
     def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
-        """
-        Convert the incoming SeqRecord to a dictionary of features.
-        """
+        """Convert the incoming SeqRecord to a dictionary of features."""
 
         parsed_features = super().parse_record(gcgc_record)
         parsed_features["seq_tensor"] = torch.LongTensor(parsed_features["seq_tensor"])

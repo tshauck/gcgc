@@ -2,19 +2,24 @@
 # All Rights Reserved
 """Categorical Fields such as a class value."""
 
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Dict, List, Set
 
 from gcgc.fields.field import Field
 
 
-@dataclass
 class LabelField(Field):
     """A type of Field that can work with label values -- creates integers to represent strings."""
 
-    encoding_dict: Dict[str, int]
-    decoding_dict: Dict[int, str]
+    def __init__(
+        self, name: str, encoding_dict: Dict[str, int], decoding_dict: Dict[int, str]
+    ) -> None:
+        """Initalize the LabelField object."""
+
+        super().__init__(name=name)
+
+        self.encoding_dict = encoding_dict
+        self.decoding_dict = decoding_dict
 
     def encode(self, label: str) -> int:
         """Look up the label in the encoding dict and return it."""
@@ -27,7 +32,7 @@ class LabelField(Field):
         return self.decoding_dict[label_int]
 
     @classmethod
-    def from_vocabulary(cls, name: str, vocab: Set[str]) -> "LabelField":
+    def from_vocabulary(cls, name: str, vocab: List[str]) -> "LabelField":
         """From a set of strings create the encoding dict."""
 
         encoding_dict = {}
@@ -45,11 +50,20 @@ def default_preprocess(p: Path) -> str:
     return str(p)
 
 
-@dataclass
 class FileMetaDataField(LabelField):
     """A Field that is transformed from the input Path object associated with the file."""
 
-    preprocess: Callable[[Path], str] = default_preprocess
+    def __init__(
+        self,
+        name: str,
+        encoding_dict: Dict[str, int],
+        decoding_dict: Dict[int, str],
+        preprocess: Callable[[Path], str] = default_preprocess,
+    ) -> None:
+        """Initalize the FileMetaDataField object."""
+
+        super().__init__(name=name, encoding_dict=encoding_dict, decoding_dict=decoding_dict)
+        self.preprocess = preprocess
 
     def encode(self, file: Path) -> int:
         """Preprocess the file path, then encode the resultant label."""
@@ -69,16 +83,25 @@ class FileMetaDataField(LabelField):
         return cls(name, label_field.encoding_dict, label_field.decoding_dict, preprocess)
 
 
-@dataclass
 class AnnotationField(LabelField):
     """A Field that is pulled from the annotation dict."""
 
-    preprocess: Callable[[Dict], str]
+    def __init__(
+        self,
+        name: str,
+        encoding_dict: Dict[str, int],
+        decoding_dict: Dict[int, str],
+        preprocess: Callable[[Dict], str],
+    ) -> None:
+        """Initalize the AnnotationField object."""
 
-    def encode(self, file: Path) -> int:
+        super().__init__(name=name, encoding_dict=encoding_dict, decoding_dict=decoding_dict)
+        self.preprocess = preprocess
+
+    def encode(self, annotations: Dict) -> int:
         """Preprocess the file path, then encode the resultant label."""
 
-        label = self.preprocess(file)
+        label = self.preprocess(annotations)
         return super().encode(label)
 
     @classmethod
@@ -88,6 +111,39 @@ class AnnotationField(LabelField):
         """Given a set of exemplar annotations, create the encoding dict and return the field."""
 
         str_vocab = [preprocess(a) for a in annotations]
+        label_field = super().from_vocabulary(name, str_vocab)
+
+        return cls(name, label_field.encoding_dict, label_field.decoding_dict, preprocess)
+
+
+class DescriptionField(LabelField):
+    """A Field created from the sequence description str."""
+
+    def __init__(
+        self,
+        name: str,
+        encoding_dict: Dict[str, int],
+        decoding_dict: Dict[int, str],
+        preprocess: Callable[[str], str],
+    ) -> None:
+        """Initalize the DescriptionField object."""
+
+        super().__init__(name=name, encoding_dict=encoding_dict, decoding_dict=decoding_dict)
+        self.preprocess = preprocess
+
+    def encode(self, d: str) -> int:
+        """Preprocess the descriptin, then encode the resultant label."""
+
+        label = self.preprocess(d)
+        return super().encode(label)
+
+    @classmethod
+    def from_descriptions(
+        cls, name: str, descriptions: List[str], preprocess: Callable[[str], str]
+    ) -> "DescriptionField":
+        """Given a set of exemplar descriptions, create the encoding dict and return the field."""
+
+        str_vocab = [preprocess(d) for d in descriptions]
         label_field = super().from_vocabulary(name, str_vocab)
 
         return cls(name, label_field.encoding_dict, label_field.decoding_dict, preprocess)
