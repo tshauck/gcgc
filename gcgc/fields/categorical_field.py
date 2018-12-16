@@ -16,14 +16,11 @@ class LabelField(Field):
     ) -> None:
         """Initalize the LabelField object."""
 
-<<<<<<< HEAD
         super().__init__(name=name)
 
         self.encoding_dict = encoding_dict
         self.decoding_dict = decoding_dict
 
-=======
->>>>>>> master
     def encode(self, label: str) -> int:
         """Look up the label in the encoding dict and return it."""
 
@@ -35,11 +32,7 @@ class LabelField(Field):
         return self.decoding_dict[label_int]
 
     @classmethod
-<<<<<<< HEAD
     def from_vocabulary(cls, name: str, vocab: List[str]) -> "LabelField":
-=======
-    def from_vocabulary(cls, name: str, vocab: Set[str]) -> "LabelField":
->>>>>>> master
         """From a set of strings create the encoding dict."""
 
         encoding_dict = {}
@@ -102,7 +95,6 @@ class AnnotationField(LabelField):
     ) -> None:
         """Initalize the AnnotationField object."""
 
-<<<<<<< HEAD
         super().__init__(name=name, encoding_dict=encoding_dict, decoding_dict=decoding_dict)
         self.preprocess = preprocess
 
@@ -110,12 +102,6 @@ class AnnotationField(LabelField):
         """Preprocess the file path, then encode the resultant label."""
 
         label = self.preprocess(annotations)
-=======
-    def encode(self, file: Path) -> int:
-        """Preprocess the file path, then encode the resultant label."""
-
-        label = self.preprocess(file)
->>>>>>> master
         return super().encode(label)
 
     @classmethod
