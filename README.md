@@ -27,3 +27,18 @@ The GCGC documentation is at [gcgc.trenthauck.com](http://gcgc.trenthauck.com).
 ## Development Board
 
 The GCGC development board is hosted on [notion](https://www.notion.so/3649815c53324f01ae03abc99707dc68?v=98d8b29c39544dca9cde8ddc0dd8c98b).
+
+## Citing GCGC
+
+If you use GCGC in your research, cite it with the following:
+
+```
+@misc{trent_hauck_2018_2329966,
+  author       = {Trent Hauck},
+  title        = {GCGC},
+  month        = dec,
+  year         = 2018,
+  doi          = {10.5281/zenodo.2329966},
+  url          = {https://doi.org/10.5281/zenodo.2329966}
+}
+```
