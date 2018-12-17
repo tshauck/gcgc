@@ -2,6 +2,7 @@
 # All Rights Reserved
 
 import unittest
+from typing import NamedTuple, Dict, List, Tuple
 
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
@@ -57,6 +58,49 @@ class TestEncodedSeq(unittest.TestCase):
         new_es = es.encapsulate().conform(length)
         self.assertEqual(len(new_es), length)
         self.assertIsInstance(new_es, EncodedSeq)
+
+    def test_kmer_rollout(self):
+        class KMerTestSet(NamedTuple):
+            name: str
+            encoded_seq: EncodedSeq
+            rollout_options: Dict[str, int]
+            expected_seqs: List[Tuple[str, str, str]]
+
+        test_table = [
+            KMerTestSet(
+                name="Test length of kmer",
+                encoded_seq=EncodedSeq("ATCGATCG", ExtendedIUPACDNAEncoding()),
+                rollout_options={"kmer_length": 4},
+                expected_seqs=[
+                    ("ATCG", "", "A"),
+                    ("TCGA", "", "T"),
+                    ("CGAT", "", "C"),
+                    ("GATC", "", "G"),
+                ],
+            ),
+            KMerTestSet(
+                name="Test length and prior length.",
+                encoded_seq=EncodedSeq("ATCGATCG", ExtendedIUPACDNAEncoding()),
+                rollout_options={"kmer_length": 4, "prior_length": 2},
+                expected_seqs=[("CGAT", "AT", "C"), ("GATC", "TC", "G")],
+            ),
+            KMerTestSet(
+                name="Test Window",
+                encoded_seq=EncodedSeq("ATCGATCGATCG", ExtendedIUPACDNAEncoding()),
+                rollout_options={"kmer_length": 4, "prior_length": 2, "window": 2},
+                expected_seqs=[("CGAT", "AT", "C"), ("ATCG", "CG", "A"), ("CGAT", "AT", "C")],
+            ),
+        ]
+
+        for test_set in test_table:
+            rollout_iters = test_set.encoded_seq.rollout_kmers(**test_set.rollout_options)
+            for i, rk in enumerate(rollout_iters):
+
+                expected_kmer, expected_prior, expected_next = test_set.expected_seqs[i]
+
+                self.assertEqual(str(expected_kmer), rk.kmer)
+                self.assertEqual(str(expected_prior), rk.prior_kmer)
+                self.assertEqual(str(expected_next), rk.next_kmer)
 
     def test_one_hot_encoding(self):
 

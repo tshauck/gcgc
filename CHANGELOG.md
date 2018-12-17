@@ -1,8 +1,9 @@
 # Change Log
 
-## Unreleased
+## 0.4.0 (Unreleased)
 
 ### Added
 
-* GCGC is citable.
-* GCGC now has a change log.
+- `EncodedSeq` now supports iterating through kmers, see `EncodedSeq.rollout_kmers` for options.
+- GCGC is citable.
+- GCGC now has a CHANGELOG.md.

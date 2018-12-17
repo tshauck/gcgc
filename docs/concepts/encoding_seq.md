@@ -28,7 +28,7 @@ es.encapsulate()
 # EncodedSeq('>ATCG<', IUPACUnambiguousDNAEncoding())
 ```
 
-The `EncodedSeq` object also support chaining.
+The `EncodedSeq` object also supports chaining.
 
 ```python
 es.encapsulate().conform(7)
@@ -49,3 +49,30 @@ es.one_hot_encoded
 es.integer_encoded
 # [1, 2, 3, 0]
 ```
+
+## Rolling-out Kmers
+
+Often sequences are broken up into "kmers", where "k" refers to a fixed length of the sequence. This
+is somewhat analogous to ngrams in the NLP context.
+
+For example, given an encoded sequence:
+
+```python
+encoded_seq = EncodedSeq("ATCGATCG", IUPACUnambiguousDNAEncoding())
+```
+
+It is "rolled-out" with:
+
+```python
+rollout_iters = encoded_seq.rollout_kmers(kmer_length=4)
+for rollout_kmer in rollout_iters:
+    print(rollout_kmer)
+
+# RolledOutKmer(kmer=EncodedSeq('ATCG', IUPACUnambiguousDNAEncoding()), prior_kmer=EncodedSeq('', IUPACUnambiguousDNAEncoding()), next_kmer=EncodedSeq('A', IUPACUnambiguousDNAEncoding()))
+# RolledOutKmer(kmer=EncodedSeq('TCGA', IUPACUnambiguousDNAEncoding()), prior_kmer=EncodedSeq('', IUPACUnambiguousDNAEncoding()), next_kmer=EncodedSeq('T', IUPACUnambiguousDNAEncoding()))
+# RolledOutKmer(kmer=EncodedSeq('CGAT', IUPACUnambiguousDNAEncoding()), prior_kmer=EncodedSeq('', IUPACUnambiguousDNAEncoding()), next_kmer=EncodedSeq('C', IUPACUnambiguousDNAEncoding()))
+# RolledOutKmer(kmer=EncodedSeq('GATC', IUPACUnambiguousDNAEncoding()), prior_kmer=EncodedSeq('', IUPACUnambiguousDNAEncoding()), next_kmer=EncodedSeq('G', IUPACUnambiguousDNAEncoding()))
+```
+
+The sequence is of size 8 and the desired length is 4, so 4 sequences are produced. Also note that
+optionally larger sizes of prior and next kmers can be included.
