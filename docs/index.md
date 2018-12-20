@@ -1,5 +1,5 @@
 !!! Caution
-    GCGC is in active development.
+GCGC is in active development.
 
 # Homepage
 
@@ -27,16 +27,16 @@ $ pip install gcgc[torch]
 
 ## Helpful Links
 
-- __Getting Started__ For a full example of using GCGC with a classification model, see the [splice site
+- **Getting Started** For a full example of using GCGC with a classification model, see the [splice site
   example](./examples/splice-site.md).
 
-- __Bugs or Help__ Please [file an issue](https://github.com/tshauck/gcgc/issues) if you're running into issues for
+- **Bugs or Help** Please [file an issue](https://github.com/tshauck/gcgc/issues) if you're running into issues for
   some reason.
 
-- __Development Roadmap__ The GCGC development board is hosted on [notion](https://www.notion.so/3649815c53324f01ae03abc99707dc68?v=98d8b29c39544dca9cde8ddc0dd8c98b).
+- **Development Roadmap** The GCGC development board is hosted on [notion](https://www.notion.so/3649815c53324f01ae03abc99707dc68?v=98d8b29c39544dca9cde8ddc0dd8c98b).
 
-- __Source Code__ [GitHub Repo](https://github.com/tshauck/gcgc)
+- **Source Code** [GitHub Repo](https://github.com/tshauck/gcgc)
 
 ## Documentation Version
 
-The documentation you're reading was build for version: 0.5.0-dev.
+The documentation you're reading was build for version: `0.5.0-dev.2`.

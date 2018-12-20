@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gcgc"
-version = "0.5.0-dev"
+version = "0.5.0-dev.2"
 description = "GCGC is a preprocessing library for biological sequence model development."
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 include = ["./gcgc/data/splice/*.fasta"]
@@ -38,7 +38,6 @@ flake8 = "^3.6"
 pytest-cov = "^2.6"
 mkdocs = "^1.0"
 mkdocs-material = "^3.0"
-bumpversion = "^0.5.3"
 pudb = "^2018.1"
 pygments = "^2.3"
 isort = "^4.3"

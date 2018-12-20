@@ -3,7 +3,7 @@
 """Holds the base EncodingAlphabet."""
 
 from abc import ABC
-from typing import Sequence
+from typing import Optional, Sequence, Set
 
 from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
@@ -15,10 +15,23 @@ class EncodingAlphabet(ABC):
     END: str = "<"
     PADDING: str = "|"
 
-    def __init__(self):
+    # Convince linting that EncodingAlphabet will have a letters attribute.
+    letters: str
+
+    def __init__(
+        self, gap_characters: Optional[Set[str]] = None, add_lower_case_for_inserts: bool = False
+    ):
         """Create the EncodingAlphabet object."""
 
-        self.letters_and_tokens = self.letters + self.START + self.END + self.PADDING
+        self._gap_characters = gap_characters or set([])
+        self._add_lower_case_for_inserts = add_lower_case_for_inserts
+
+        self.letters_and_tokens = (
+            self.letters + self.START + self.END + self.PADDING + "".join(self._gap_characters)
+        )
+
+        if self._add_lower_case_for_inserts:
+            self.letters_and_tokens = self.letters_and_tokens + self.letters.lower()
 
         self.encoding_index = {letter: idx for idx, letter in enumerate(self.letters_and_tokens)}
         self.decoding_index = {idx: letter for letter, idx in self.encoding_index.items()}
@@ -41,9 +54,13 @@ class EncodingAlphabet(ABC):
         """Integer encode the sequence."""
 
         try:
-            return [self.encoding_index[s] for s in seq]
+            encoded = []
+            for s in seq:
+                encoded.append(self.encoding_index[s])
+            return encoded
+
         except KeyError:
-            raise GCGCAlphabetLetterEncodingException(f"{seq} not in {self.encoding_index}")
+            raise GCGCAlphabetLetterEncodingException(f"{s} not in {self.encoding_index}")
 
     def integer_decode(self, int_seq: Sequence[int]) -> str:
         """Given a sequence of integers, convert it to a string."""

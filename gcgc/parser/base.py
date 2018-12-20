@@ -58,18 +58,21 @@ class SequenceParser:
         self.description_features = description_features
 
     def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
-        """Convert the incoming SeqRecord to a dictionary of features."""
+        """Convert the incoming GCGCRecord to a dictionary of features."""
 
         parsed_features: Dict = {}
 
+        es = gcgc_record.encoded_seq
+
         if self.encapsulate:
-            es = EncodedSeq.from_seq(gcgc_record.seq_record.seq).encapsulate()
+            es = es.encapsulate()
 
         if self.seq_length_parser:
             es = self.seq_length_parser.parse_encoded_seq_record(es)
 
         parsed_features["id"] = gcgc_record.seq_record.id
         parsed_features["seq_tensor"] = es.integer_encoded
+        parsed_features["seq_tensor_one_hot"] = es.one_hot_encoded
 
         parsed_features.update(self._generate_file_features(gcgc_record.path))
         parsed_features.update(self._generate_annotation_features(gcgc_record.seq_record))

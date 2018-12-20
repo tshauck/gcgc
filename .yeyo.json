@@ -1,0 +1,9 @@
+{
+    "files": [
+        "VERSION",
+        "pyproject.toml",
+        "gcgc/__init__.py",
+        "docs/index.md"
+    ],
+    "version": "0.5.0-dev.2"
+}

@@ -48,7 +48,6 @@ classification. A `SequenceParser` object can be holds possible features, and in
 native torch objects. See the documentation on sequence parsers for more info.
 
 ```python
-from gcgc.parser import SequenceParser
 from gcgc.ml.pytorch_utils.parser import TorchSequenceParser
 
 parser = TorchSequenceParser(file_features=[file_feature])
