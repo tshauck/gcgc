@@ -3,7 +3,7 @@
 """Categorical Fields such as a class value."""
 
 from pathlib import Path
-from typing import Callable, Dict, List, Set
+from typing import Callable, Dict, List
 
 from gcgc.fields.field import Field
 

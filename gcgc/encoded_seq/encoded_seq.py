@@ -3,6 +3,10 @@
 """Contains the EncodedSeq object."""
 
 from typing import Sequence
+from typing import NamedTuple
+from typing import Optional
+from typing import Generator
+from typing import Union
 
 import numpy as np
 from Bio.Seq import Seq
@@ -10,6 +14,12 @@ from Bio.Seq import Seq
 from gcgc.alphabet.base import EncodingAlphabet
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
 from gcgc.exceptions import GCGCAlphabetException
+
+
+class RolledOutKmer(NamedTuple):
+    kmer: "EncodedSeq"
+    prior_kmer: Optional["EncodedSeq"]
+    next_kmer: Optional["EncodedSeq"]
 
 
 class EncodedSeq(Seq):
@@ -59,6 +69,28 @@ class EncodedSeq(Seq):
         else:
             return self[:conform_to]
 
+    def rollout_kmers(
+        self,
+        kmer_length: int = 5,
+        prior_length: int = 0,
+        next_kmer_length: int = 1,
+        window: int = 1,
+    ) -> Generator[RolledOutKmer, None, None]:
+
+        seq_length = len(self)
+
+        rollout_start = prior_length
+        rollout_to = seq_length - kmer_length
+
+        for i in range(rollout_start, rollout_to, window):
+            prior_kmer = self[(i - prior_length) : i]
+            kmer = self[i : i + kmer_length]
+            next_kmer = self[i + kmer_length : i + kmer_length + next_kmer_length]
+
+            rollout_kmer = RolledOutKmer(kmer, prior_kmer, next_kmer)
+
+            yield rollout_kmer
+
     @property
     def integer_encoded(self):
         """Return the underlying sequence in its integer representation."""
@@ -83,7 +115,7 @@ class EncodedSeq(Seq):
         added_seq = super().__add__(other)
         return self.from_seq(added_seq)
 
-    def __getitem__(self, index: int) -> "EncodedSeq":
+    def __getitem__(self, index: Union[int, slice]) -> "EncodedSeq":
         """Given the input index for the entire datset, return the associated EncodedSeq."""
 
         got_item = super().__getitem__(index)

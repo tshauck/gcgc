@@ -1,4 +1,4 @@
-# SAM (BAM) Tools Support
+# SAMtools Support
 
 At present, GCGC does not support working with BAM/SAM files directly. Instead one can pre-process
 the files by using `samtools fasta` or `samtools fastq`, for example. In particular, see the parsing
@@ -14,4 +14,6 @@ def parse_description(d: str): str:
     for di in d.split("\t"):
         if di.startswith("RG"):
             return di
+    else:
+        raise RuntimeError("No RG tag found.")
 ```
