@@ -1,5 +1,5 @@
 !!! Caution
-GCGC is in active development.
+  GCGC is in active development.
 
 # Homepage
 
