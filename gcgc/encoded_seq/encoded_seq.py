@@ -2,11 +2,7 @@
 # All Rights Reserved
 """Contains the EncodedSeq object."""
 
-from typing import Sequence
-from typing import NamedTuple
-from typing import Optional
-from typing import Generator
-from typing import Union
+from typing import Sequence, Union
 
 import numpy as np
 from Bio.Seq import Seq
@@ -14,12 +10,6 @@ from Bio.Seq import Seq
 from gcgc.alphabet.base import EncodingAlphabet
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
 from gcgc.exceptions import GCGCAlphabetException
-
-
-class RolledOutKmer(NamedTuple):
-    kmer: "EncodedSeq"
-    prior_kmer: Optional["EncodedSeq"]
-    next_kmer: Optional["EncodedSeq"]
 
 
 class EncodedSeq(Seq):
@@ -34,15 +24,18 @@ class EncodedSeq(Seq):
         super().__init__(data, alphabet)
 
     @classmethod
-    def from_seq(cls, seq: Seq) -> "EncodedSeq":
+    def from_seq(cls, seq: Seq, gcgc_alphabet=None, *args, **kwargs) -> "EncodedSeq":
         """Instantiate an EncodedSeq object from a Seq object."""
 
-        gcgc_alphabet = biopython_alphabet_to_gcgc_alphabet(seq.alphabet)
+        if gcgc_alphabet and isinstance(gcgc_alphabet, EncodingAlphabet):
+            return cls(str(seq), gcgc_alphabet)
+
+        gcgc_alphabet = biopython_alphabet_to_gcgc_alphabet(seq.alphabet, *args, **kwargs)
         return cls(str(seq), gcgc_alphabet)
 
     def encapsulate(self) -> "EncodedSeq":
         """Return a sequence with the alphabet start and end token applied to the start and end."""
-        return self.alphabet.START + self + self.alphabet.END
+        return EncodedSeq.from_seq(self.alphabet.START + self + self.alphabet.END, self.alphabet)
 
     def pad(self, pad_to: int = 50) -> "EncodedSeq":
         """Pad a sequence up to `pad_to` characters."""
@@ -69,28 +62,6 @@ class EncodedSeq(Seq):
         else:
             return self[:conform_to]
 
-    def rollout_kmers(
-        self,
-        kmer_length: int = 5,
-        prior_length: int = 0,
-        next_kmer_length: int = 1,
-        window: int = 1,
-    ) -> Generator[RolledOutKmer, None, None]:
-
-        seq_length = len(self)
-
-        rollout_start = prior_length
-        rollout_to = seq_length - kmer_length
-
-        for i in range(rollout_start, rollout_to, window):
-            prior_kmer = self[(i - prior_length) : i]
-            kmer = self[i : i + kmer_length]
-            next_kmer = self[i + kmer_length : i + kmer_length + next_kmer_length]
-
-            rollout_kmer = RolledOutKmer(kmer, prior_kmer, next_kmer)
-
-            yield rollout_kmer
-
     @property
     def integer_encoded(self):
         """Return the underlying sequence in its integer representation."""
@@ -113,7 +84,7 @@ class EncodedSeq(Seq):
         """Add two enccoded sequences together."""
 
         added_seq = super().__add__(other)
-        return self.from_seq(added_seq)
+        return self.from_seq(added_seq, self.alphabet)
 
     def __getitem__(self, index: Union[int, slice]) -> "EncodedSeq":
         """Given the input index for the entire datset, return the associated EncodedSeq."""

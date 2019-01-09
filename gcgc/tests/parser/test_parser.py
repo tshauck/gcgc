@@ -9,7 +9,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from gcgc.fields import AnnotationField, FileMetaDataField, DescriptionField
+from gcgc.fields import AnnotationField, DescriptionField, FileMetaDataField
 from gcgc.parser.base import EncodedSeqLengthParser, SequenceParser
 from gcgc.parser.gcgc_record import GCGCRecord
 

@@ -11,8 +11,8 @@ from Bio import File, SeqIO
 
 from gcgc.alphabet import ExtendedIUPACDNAEncoding
 from gcgc.alphabet.base import EncodingAlphabet
-from gcgc.parser.gcgc_record import GCGCRecord
 from gcgc.ml.pytorch_utils.parser import TorchSequenceParser
+from gcgc.parser.gcgc_record import GCGCRecord
 
 
 class _SequenceIndexer(object):
@@ -56,7 +56,7 @@ class GenomicDataset(torch.utils.data.Dataset):
     ) -> "GenomicDataset":
         """Init from a single file. This is a convience method that delegates to from_paths."""
 
-        return cls.init_from_path_generator([path], parser, file_format, alphabet)
+        return cls.from_paths([path], parser, file_format, alphabet)
 
     @classmethod
     def from_paths(

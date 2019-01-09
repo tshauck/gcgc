@@ -52,6 +52,10 @@ vulture:
 pydocstyle:
 	pydocstyle gcgc
 
+.PHONY: flake8
+flake8:
+	flake8 gcgc
+
 .PHONY: mypy
 mypy:
 	mypy gcgc
