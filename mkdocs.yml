@@ -11,3 +11,5 @@ theme:
 markdown_extensions:
   - codehilite
   - admonition
+extra_css:
+  - 'stylesheets/extra.css'

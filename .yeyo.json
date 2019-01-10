@@ -1,1 +1,1 @@
-{"files": ["docs/index.md", "VERSION", "pyproject.toml", "gcgc/__init__.py"], "version": "0.5.0", "tag_template": "{{ version }}", "commit_template": "{{ version }}"}
+{"files": ["docs/index.md", "VERSION", "gcgc/__init__.py", "pyproject.toml"], "version": "0.5.1-dev.1", "tag_template": "{{ version }}", "commit_template": "{{ version }}"}

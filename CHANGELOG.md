@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.5.1 (2019-01-09)
+
+### Added
+
+- Add extra css to make underline links in articles.
+
 ## 0.5.0 (2018-12-31)
 
 ### Added
