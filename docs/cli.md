@@ -1,9 +1,10 @@
 # Command Line Interface
 
 GCGC is primarily intended to be used as a library as part of a larger project, however it does ship
-with a CLI to support some use cases. Moreover, as the package matures expect more functionality
-especially as it relates to PyTorch and TensorFlow dataset creation so GCGC can be used as part of a
-larger data processing workflows.
+with a CLI to support some use cases.
+
+Moreover, as the package matures expect more functionality especially as it relates to PyTorch and
+TensorFlow dataset creation so GCGC can be used as part of a larger data processing workflows.
 
 ## Getting Help
 

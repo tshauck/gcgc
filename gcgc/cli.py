@@ -4,7 +4,6 @@
 
 import logging
 import pathlib
-import sys
 
 import click
 
@@ -34,9 +33,11 @@ def download_organism(organism_id, data_directory):
     """Download the organisms into the data directory."""
 
     path = pathlib.Path(data_directory)
+    if not path.exists():
+        raise Exception(f"The directory {path} does not exist.")
+
+    if not path.is_dir():
+        raise Exception(f"Found {path}, but it doesn't appear to be a directory.")
+
     taxon_dataset = dataset.TaxonDataset(organism_id, path)
     taxon_dataset.download_files()
-
-
-if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover

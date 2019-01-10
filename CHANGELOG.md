@@ -5,6 +5,8 @@
 ### Added
 
 - Add extra css to make underline links in articles.
+- Exit if the download directory doesn't exist in the call to download organism.
+- Wording improvements in docs.
 
 ## 0.5.0 (2018-12-31)
 
