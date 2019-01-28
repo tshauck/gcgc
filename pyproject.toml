@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gcgc"
-version = "0.5.1-dev.1"
+version = "0.5.1-dev.2"
 description = "GCGC is a preprocessing library for biological sequence model development."
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 include = ["./gcgc/data/splice/*.fasta"]
@@ -14,7 +14,7 @@ license = "MIT"
 
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = ">=3.6,<4.0"
 biopython = "=1.72"
 numpy = "=1.15.2"
 aiohttp = "^3.4"
@@ -27,7 +27,7 @@ idna_ssl = "^1.1"
 torch = ["torch"]
 
 [tool.poetry.dev-dependencies]
-pytest = "^3.0"
+pytest = ">=4.0,<5.0"
 black = "=18.9b0"
 mypy = "=0.641"
 mypy-extensions = "=0.4.1"
