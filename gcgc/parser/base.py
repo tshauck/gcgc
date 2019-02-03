@@ -2,7 +2,7 @@
 # All Rights Reserved
 """A Parser that converts GCGCRecords into data suitible for ML training."""
 
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from gcgc.encoded_seq import EncodedSeq
 from gcgc.exceptions import EncodedSeqLengthParserException
@@ -48,6 +48,7 @@ class SequenceParser:
         file_features: Optional[List[FileMetaDataField]] = None,
         annotation_features: Optional[List[AnnotationField]] = None,
         description_features: Optional[List[DescriptionField]] = None,
+        sequence_offset: Optional[int] = None,
     ) -> None:
         """Create the SequenceParser object."""
 
@@ -56,24 +57,35 @@ class SequenceParser:
         self.file_features = file_features
         self.annotation_features = annotation_features
         self.description_features = description_features
+        self.sequence_offset = sequence_offset
 
-    def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
-        """Convert the incoming GCGCRecord to a dictionary of features."""
-
-        parsed_features: Dict = {}
-
-        es = gcgc_record.encoded_seq
-
+    def _preprocess_record(self, es: EncodedSeq):
         if self.encapsulate:
             es = es.encapsulate()
 
         if self.seq_length_parser:
             es = self.seq_length_parser.parse_encoded_seq_record(es)
 
-        parsed_features["id"] = gcgc_record.seq_record.id
-        parsed_features["seq_tensor"] = es.integer_encoded
-        parsed_features["seq_tensor_one_hot"] = es.one_hot_encoded
+        return es
 
+    def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
+        """Convert the incoming GCGCRecord to a dictionary of features."""
+
+        es = gcgc_record.encoded_seq
+        processed_seq = self._preprocess_record(es)
+
+        parsed_features: Dict[str, Any] = {}
+
+        parsed_features["seq_tensor"] = processed_seq.integer_encoded
+        parsed_features["seq_tensor_one_hot"] = processed_seq.one_hot_encoded
+
+        if self.has_offset:
+            offset_seq = processed_seq.shift(self.sequence_offset)
+
+            parsed_features["offset_seq_tensor"] = offset_seq.integer_encoded
+            parsed_features["offset_seq_tensor_one_hot"] = offset_seq.one_hot_encoded
+
+        parsed_features["id"] = gcgc_record.seq_record.id
         parsed_features.update(self._generate_file_features(gcgc_record.path))
         parsed_features.update(self._generate_annotation_features(gcgc_record.seq_record))
         parsed_features.update(self._generate_description_features(gcgc_record.seq_record))
@@ -85,14 +97,10 @@ class SequenceParser:
         """Return True if this parser has description features."""
         return bool(self.description_features)
 
-    def _generate_description_features(self, seq_record):
-        description_features = {}
-
-        if self.has_description_features:
-            for df in self.description_features:
-                description_features[df.name] = df.encode(seq_record.description)
-
-        return description_features
+    @property
+    def has_offset(self) -> bool:
+        """Return True if this object has an offset."""
+        return self.sequence_offset is not None
 
     @property
     def has_file_features(self) -> bool:
@@ -121,3 +129,12 @@ class SequenceParser:
                 seq_records_features[ff.name] = ff.encode(seq_record.annotations)
 
         return seq_records_features
+
+    def _generate_description_features(self, seq_record):
+        description_features = {}
+
+        if self.has_description_features:
+            for df in self.description_features:
+                description_features[df.name] = df.encode(seq_record.description)
+
+        return description_features

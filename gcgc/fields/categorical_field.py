@@ -14,7 +14,7 @@ class LabelField(Field):
     def __init__(
         self, name: str, encoding_dict: Dict[str, int], decoding_dict: Dict[int, str]
     ) -> None:
-        """Initalize the LabelField object."""
+        """Init the LabelField object."""
 
         super().__init__(name=name)
 
@@ -60,7 +60,7 @@ class FileMetaDataField(LabelField):
         decoding_dict: Dict[int, str],
         preprocess: Callable[[Path], str] = default_preprocess,
     ) -> None:
-        """Initalize the FileMetaDataField object."""
+        """Init the FileMetaDataField object."""
 
         super().__init__(name=name, encoding_dict=encoding_dict, decoding_dict=decoding_dict)
         self.preprocess = preprocess
@@ -93,7 +93,7 @@ class AnnotationField(LabelField):
         decoding_dict: Dict[int, str],
         preprocess: Callable[[Dict], str],
     ) -> None:
-        """Initalize the AnnotationField object."""
+        """Init the AnnotationField object."""
 
         super().__init__(name=name, encoding_dict=encoding_dict, decoding_dict=decoding_dict)
         self.preprocess = preprocess
@@ -126,7 +126,7 @@ class DescriptionField(LabelField):
         decoding_dict: Dict[int, str],
         preprocess: Callable[[str], str],
     ) -> None:
-        """Initalize the DescriptionField object."""
+        """Init the DescriptionField object."""
 
         super().__init__(name=name, encoding_dict=encoding_dict, decoding_dict=decoding_dict)
         self.preprocess = preprocess
