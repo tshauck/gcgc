@@ -22,6 +22,15 @@ class TorchSequenceParser(SequenceParser):
             parsed_features["seq_tensor_one_hot"]
         )
 
+        if self.has_offset:
+            parsed_features["offset_seq_tensor"] = torch.LongTensor(
+                parsed_features["offset_seq_tensor"]
+            )
+
+            parsed_features["offset_seq_tensor_one_hot"] = torch.LongTensor(
+                parsed_features["offset_seq_tensor_one_hot"]
+            )
+
         if self.has_file_features:
             for ff in self.file_features:
                 parsed_features[ff.name] = torch.tensor(parsed_features[ff.name])

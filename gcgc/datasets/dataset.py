@@ -16,7 +16,7 @@ class DataFile:
     """An external file download and place at the local path."""
 
     def __init__(self, url: Optional[str], local_path: Path) -> None:
-        """Initalize the DataFile object."""
+        """Init the DataFile object."""
 
         self.url = url
         self.local_path = local_path
@@ -42,11 +42,10 @@ DataFiles = List[DataFile]
 class UniprotDataset(object):
     """A base class that loads data from Uniprot."""
 
-    def __init__(self, data_files: DataFiles, file_format: str = "fasta"):
+    def __init__(self, data_files: DataFiles):
         """Initialize the UniprotDataset object."""
 
         self.data_files = data_files
-        self.file_format = file_format
 
     @staticmethod
     def _url(query_str, file_format):
@@ -82,4 +81,4 @@ class TaxonDataset(UniprotDataset):
 
             files_to_download.append(DataFile(url, local_path))
 
-        super().__init__(files_to_download, file_format)
+        super().__init__(files_to_download)
