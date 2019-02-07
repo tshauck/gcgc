@@ -1,5 +1,11 @@
 # Change Log
 
+## Development
+
+### Added
+
+- `EncodedSeq.shift`, which will shift sequence by an offset integer.
+
 ## 0.5.1 (2019-01-09)
 
 ### Added

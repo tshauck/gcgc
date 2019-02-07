@@ -3,6 +3,7 @@
 
 import unittest
 
+import pytest
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from numpy.testing import assert_array_equal
@@ -83,3 +84,47 @@ class TestEncodedSeq(unittest.TestCase):
         encoded_seq = EncodedSeq.from_seq(seq)
 
         self.assertEqual(seq, encoded_seq)
+
+
+@pytest.mark.parametrize(
+    "actual_seq,expected_seq,offset",
+    [
+        (
+            EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()),
+            EncodedSeq(">ATC", ExtendedIUPACDNAEncoding()),
+            1,
+        ),
+        (
+            EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()).encapsulate(),
+            EncodedSeq("|>ATCG", ExtendedIUPACDNAEncoding()),
+            1,
+        ),
+        (
+            EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()),
+            EncodedSeq("|>AT", ExtendedIUPACDNAEncoding()),
+            2,
+        ),
+        (
+            EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()),
+            EncodedSeq("TCG<", ExtendedIUPACDNAEncoding()),
+            -1,
+        ),
+        (
+            EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()).encapsulate(),
+            EncodedSeq("ATCG<|", ExtendedIUPACDNAEncoding()),
+            -1,
+        ),
+        (
+            EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()),
+            EncodedSeq("CG<|", ExtendedIUPACDNAEncoding()),
+            -2,
+        ),
+        (
+            EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()),
+            EncodedSeq("ATCG", ExtendedIUPACDNAEncoding()),
+            0,
+        ),
+    ],
+)
+def test_seq_shift(actual_seq, expected_seq, offset):
+    assert actual_seq.shift(offset) == expected_seq
