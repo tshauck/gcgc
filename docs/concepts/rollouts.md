@@ -4,7 +4,7 @@ For some applications the sequence is not of direct interest, but rather some su
 sequence. GCGC supports breaking up the sequence into some subsets then iterating over them, in what
 is termed a rollout.
 
-Right now, GCGC can rollout k-mers and sequence features that exist on the `BioPython.SeqRecord`.
+Right now, GCGC can rollout k-mers and sequence features that exist on the `Bio.SeqRecord.SeqRecord`.
 
 ## Rolling-out Kmers
 
