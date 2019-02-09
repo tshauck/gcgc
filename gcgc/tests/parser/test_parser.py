@@ -39,9 +39,7 @@ def test_parser():
 
     dna = IUPAC.IUPACUnambiguousDNA()
 
-    input_seq = SeqRecord(
-        Seq("ATCG", alphabet=dna), annotations=annotations, description="Test\tA"
-    )
+    input_seq = SeqRecord(Seq("ATCG", alphabet=dna), annotations=annotations, description="Test\tA")
 
     test_values = [
         (input_seq, Path("ecoli"), 0, 0, 0),
