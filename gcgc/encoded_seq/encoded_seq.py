@@ -30,6 +30,9 @@ class EncodedSeq(Seq):
         if gcgc_alphabet and isinstance(gcgc_alphabet, EncodingAlphabet):
             return cls(str(seq), gcgc_alphabet)
 
+        if seq.alphabet and isinstance(seq.alphabet, EncodingAlphabet):
+            return cls(str(seq), seq.alphabet)
+
         gcgc_alphabet = biopython_alphabet_to_gcgc_alphabet(seq.alphabet, *args, **kwargs)
         return cls(str(seq), gcgc_alphabet)
 

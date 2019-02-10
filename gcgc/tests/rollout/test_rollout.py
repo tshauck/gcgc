@@ -29,14 +29,17 @@ class TestRollOuts(unittest.TestCase):
         test_table = [
             SeqFeatureTestSet(
                 name="Test Full Seq",
-                sr=SeqRecord(Seq("ATCG"), features=[SeqFeature(FeatureLocation(0, 4))]),
+                sr=SeqRecord(
+                    Seq("ATCG", ExtendedIUPACDNAEncoding()),
+                    features=[SeqFeature(FeatureLocation(0, 4))],
+                ),
                 expected_seqs=["ATCG"],
                 select_func=lambda sr: True,
             ),
             SeqFeatureTestSet(
                 name="Test Full Seq",
                 sr=SeqRecord(
-                    Seq("ATCG"),
+                    Seq("ATCG", ExtendedIUPACDNAEncoding()),
                     features=[
                         SeqFeature(FeatureLocation(0, 4), type="gene"),
                         SeqFeature(FeatureLocation(0, 4), type="promoter"),

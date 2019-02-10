@@ -127,4 +127,5 @@ class TestEncodedSeq(unittest.TestCase):
     ],
 )
 def test_seq_shift(actual_seq, expected_seq, offset):
-    assert actual_seq.shift(offset) == expected_seq
+    shifted = actual_seq.shift(offset)
+    assert shifted == expected_seq
