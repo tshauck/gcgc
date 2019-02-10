@@ -14,7 +14,7 @@ is somewhat analogous to ngrams in the NLP context.
 For example, given an encoded sequence:
 
 ```python
-from gcgc.rollouts import rollout_kmers
+from gcgc.rollout import rollout_kmers
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
@@ -72,5 +72,4 @@ for rf in rollout_features:
 
 # Note the single output in light of two features.
 # RolledOutEncodedSeqs(encoded_seq=EncodedSeq('ATCG', ExtendedIUPACProteinEncoding()), prior_encoded_seq=None, next_encoded_seq=None)
-
 ```

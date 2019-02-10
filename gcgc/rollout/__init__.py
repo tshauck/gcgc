@@ -37,7 +37,9 @@ def rollout_kmers(
     for i in range(rollout_start, rollout_to, window):
         prior_kmer = es[(i - prior_length) : i]
         kmer = es[i : i + kmer_length]
-        next_kmer = es[i + kmer_length : i + kmer_length + next_kmer_length]
+        next_kmer = es[i + kmer_length : i + kmer_length + next_kmer_length].conform(
+            next_kmer_length
+        )
 
         rollout_kmer = RolledOutEncodedSeqs(kmer, prior_kmer, next_kmer)
 
