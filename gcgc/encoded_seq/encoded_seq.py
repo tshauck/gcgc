@@ -2,7 +2,7 @@
 # All Rights Reserved
 """Contains the EncodedSeq object."""
 
-from typing import Sequence, Union
+from typing import Iterable, Sequence, Union
 
 import numpy as np
 from Bio.Seq import Seq
@@ -81,10 +81,10 @@ class EncodedSeq(Seq):
 
         if seq_len == conform_to:
             return self
-        elif seq_len < conform_to:
+        if seq_len < conform_to:
             return self.pad(pad_to=conform_to)
-        else:
-            return self[:conform_to]
+
+        return self[:conform_to]
 
     def shift(self, offset: int) -> "EncodedSeq":
         """Shift the by the offset and return a new sequence."""
@@ -92,7 +92,7 @@ class EncodedSeq(Seq):
         if offset == 0:
             return self
 
-        elif offset > 0:
+        if offset > 0:
             padding_characters = (offset - 1) * self.alphabet.PADDING
 
             if self.has_start_token:
@@ -103,7 +103,7 @@ class EncodedSeq(Seq):
             starting_characters = padding_characters + start_char
             return starting_characters + self[: (-1 * offset)]
 
-        elif offset < 0:
+        if offset < 0:
             offset_abs = abs(offset)
             padding_characters = (offset_abs - 1) * self.alphabet.PADDING
 
@@ -134,6 +134,15 @@ class EncodedSeq(Seq):
         one_hot_seq[np.arange(encoded_len), encoded_sequence] = 1
 
         return one_hot_seq.tolist()
+
+    @classmethod
+    def from_integer_encoded_seq(
+        cls, integer_encoded_seq: Iterable[int], alphabet: EncodingAlphabet
+    ) -> "EncodedSeq":
+        """Given the encoded seq and alphabet, return the EncodedSeq."""
+
+        seq_str = alphabet.decode_tokens(integer_encoded_seq)
+        return cls(seq_str, alphabet)
 
     def __add__(self, other: "EncodedSeq") -> "EncodedSeq":
         """Add two enccoded sequences together."""

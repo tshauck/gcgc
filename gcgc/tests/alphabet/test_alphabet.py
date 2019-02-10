@@ -2,14 +2,14 @@
 # All Rights Reserved
 
 import unittest
-import pytest
 
+import pytest
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
 from gcgc import alphabet
-from gcgc.encoded_seq import EncodedSeq
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
+from gcgc.encoded_seq import EncodedSeq
 from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
 
@@ -26,7 +26,6 @@ from gcgc.exceptions import GCGCAlphabetLetterEncodingException
     ],
 )
 def test_biopython_alphabet_to_gcgc_alphabet(biopython_class, gcgc_class):
-    gcgc_instance = gcgc_class()
     biopython_instance = biopython_class()
 
     klass = biopython_alphabet_to_gcgc_alphabet(biopython_instance)

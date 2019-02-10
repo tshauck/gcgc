@@ -62,10 +62,10 @@ class TestEncodedSeq(unittest.TestCase):
     def test_one_hot_encoding(self):
 
         expected = [
-            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ]
 
         es = EncodedSeq("ATCG", ExtendedIUPACDNAEncoding())
@@ -84,6 +84,15 @@ class TestEncodedSeq(unittest.TestCase):
         encoded_seq = EncodedSeq.from_seq(seq)
 
         self.assertEqual(seq, encoded_seq)
+
+
+def test_decode_tokens():
+    alphabet = ExtendedIUPACDNAEncoding()
+
+    new_seq = EncodedSeq.from_integer_encoded_seq([0, 4, 4, 1], alphabet)
+    expected_seq = EncodedSeq(">AA<", alphabet)
+
+    assert new_seq == expected_seq
 
 
 @pytest.mark.parametrize(
