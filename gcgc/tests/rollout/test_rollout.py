@@ -84,6 +84,12 @@ class TestRollOuts(unittest.TestCase):
                 rollout_options={"kmer_length": 4, "prior_length": 2, "window": 2},
                 expected_seqs=[("CGAT", "AT", "C"), ("ATCG", "CG", "A"), ("CGAT", "AT", "C")],
             ),
+            KMerTestSet(
+                name="Test Window",
+                sr=SeqRecord(Seq("ATCGATC", ExtendedIUPACDNAEncoding())),
+                rollout_options={"kmer_length": 4, "next_kmer_length": 2},
+                expected_seqs=[("ATCG", "", "AT"), ("TCGA", "", "TC"), ("CGAT", "", "C|")],
+            ),
         ]
 
         for test_set in test_table:

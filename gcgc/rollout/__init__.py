@@ -1,5 +1,6 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""Base rollout module."""
 
 from typing import NamedTuple, Optional, Generator, Callable
 
@@ -10,6 +11,8 @@ from gcgc.encoded_seq import EncodedSeq
 
 
 class RolledOutEncodedSeqs(NamedTuple):
+    """A tuple for holding the rollout context."""
+
     encoded_seq: EncodedSeq
     prior_encoded_seq: Optional[EncodedSeq] = None
     next_encoded_seq: Optional[EncodedSeq] = None
@@ -34,7 +37,9 @@ def rollout_kmers(
     for i in range(rollout_start, rollout_to, window):
         prior_kmer = es[(i - prior_length) : i]
         kmer = es[i : i + kmer_length]
-        next_kmer = es[i + kmer_length : i + kmer_length + next_kmer_length]
+        next_kmer = es[i + kmer_length : i + kmer_length + next_kmer_length].conform(
+            next_kmer_length
+        )
 
         rollout_kmer = RolledOutEncodedSeqs(kmer, prior_kmer, next_kmer)
 
@@ -42,7 +47,7 @@ def rollout_kmers(
 
 
 def default_select_func(sf: SeqFeature) -> bool:
-    """Default func is to pass through."""
+    """Return True by default."""
     return True
 
 

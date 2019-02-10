@@ -1,5 +1,12 @@
 # Change Log
 
+## Development
+
+### Added
+
+- Add Dockerfile and docker-compose.yml for development.
+- `EncodedSeq.shift`, which will shift sequence by an offset integer.
+
 ## 0.5.1 (2019-01-09)
 
 ### Added

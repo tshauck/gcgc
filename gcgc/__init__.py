@@ -2,4 +2,4 @@
 # All Rights Reserved
 """Top-level GCGC module."""
 
-__version__ = "0.5.1-dev.2"
+__version__ = "0.5.1"
