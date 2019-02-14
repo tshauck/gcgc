@@ -16,6 +16,45 @@ from gcgc.encoded_seq import EncodedSeq
 from gcgc.rollout import rollout_kmers
 
 
+def get_encoded_sequences(alphabet):
+
+    files = list(SPLICE_DATA_PATH.glob("*.fasta"))
+
+    seqs = []
+
+    alphabet = IUPAC.IUPACAmbiguousDNA()
+
+    v = lambda x: x.encapsulate()
+
+    for fpath in files:
+        with open(fpath) as fhandle:
+            fasta_seqs = SeqIO.parse(fhandle, format="fasta", alphabet=alphabet)
+
+            for seq in fasta_seqs:
+                rollout_iters = rollout_kmers(
+                    seq, kmer_length=18, next_kmer_length=18, window=3, func=v
+                )
+
+                for rollout_iter in rollout_iters:
+                    seqs.append(rollout_iter)
+
+    return seqs
+
+
+def most_likely_sentences(seq_batch, alphabet):
+
+    batch_size = seq_batch.shape[0]
+
+    ess = []
+    for i in range(batch_size):
+
+        mm = seq_batch[i].tolist()
+        es = EncodedSeq.from_integer_encoded_seq([0] + mm[1:], alphabet)
+        ess.append(es)
+
+    return ess
+
+
 class EncoderRNN(nn.Module):
     def __init__(self, input_size, hid_dim, dropout_rate=0.5):
         super(EncoderRNN, self).__init__()
@@ -48,6 +87,9 @@ class DecoderRNN(nn.Module):
         self.embedding = nn.Embedding(output_dim, emb_dim)
 
         self.rnn = nn.GRU(emb_dim + hid_dim, hid_dim)
+        self.rnn2 = nn.GRU(hid_dim, hid_dim)
+        self.rnn3 = nn.GRU(hid_dim, hid_dim)
+
         self.out = nn.Linear(emb_dim + hid_dim * 2, output_dim)
 
         self.dropout = nn.Dropout(dropout_rate)
@@ -59,6 +101,8 @@ class DecoderRNN(nn.Module):
 
         emb_con = torch.cat((embedded, context), dim=2)
         output, hidden = self.rnn(emb_con, hidden)
+        output, hidden = self.rnn2(output, hidden)
+        output, hidden = self.rnn3(output, hidden)
 
         output = torch.cat((embedded.squeeze(0), hidden.squeeze(0), context.squeeze(0)), dim=1)
 
@@ -131,48 +175,9 @@ class KMerDataset(torch.utils.data.Dataset):
         next_seq = seq.next_encoded_seq
 
         src = torch.LongTensor(current_seq.integer_encoded)
-        target = torch.LongTensor(next_seq.integer_encoded)
+        target = torch.LongTensor(current_seq.integer_encoded)
 
         return src, target
-
-
-def get_encoded_sequences(alphabet):
-
-    files = list(SPLICE_DATA_PATH.glob("*.fasta"))[:1]
-
-    seqs = []
-
-    alphabet = IUPAC.IUPACAmbiguousDNA()
-
-    v = lambda x: x.encapsulate()
-
-    for fpath in files:
-        with open(fpath) as fhandle:
-            fasta_seqs = SeqIO.parse(fhandle, format="fasta", alphabet=alphabet)
-
-            for seq in fasta_seqs:
-                rollout_iters = rollout_kmers(
-                    seq, kmer_length=18, next_kmer_length=18, window=3, func=v
-                )
-
-                for rollout_iter in rollout_iters:
-                    seqs.append(rollout_iter)
-
-    return seqs
-
-
-def most_likely_sentences(seq_batch, alphabet):
-
-    batch_size = seq_batch.shape[0]
-
-    ess = []
-    for i in range(batch_size):
-
-        mm = seq_batch[i].tolist()
-        es = EncodedSeq.from_integer_encoded_seq([0] + mm[1:], alphabet)
-        ess.append(es)
-
-    return ess
 
 
 if __name__ == "__main__":
@@ -184,14 +189,14 @@ if __name__ == "__main__":
     dataset = KMerDataset(seqs)
     data_loader = DataLoader(dataset, batch_size=128, shuffle=True)
 
-    encoder = EncoderRNN(dim, 10)
-    decoder = DecoderRNN(dim, 10, 10, 0.5)
+    encoder = EncoderRNN(dim, 5)
+    decoder = DecoderRNN(dim, 500, 5, 0.5)
     model = Seq2Seq(encoder, decoder, "cpu").to("cpu")
     optimizer = optim.Adam(model.parameters())
 
     criterion = nn.CrossEntropyLoss(ignore_index=alphabet.encode_token(alphabet.PADDING))
 
-    for i in range(20):
+    for i in range(50):
         for j, batch in enumerate(data_loader):
             src, trg = batch
 
@@ -206,11 +211,19 @@ if __name__ == "__main__":
 
             loss = criterion(expected, target)
             loss.backward()
+
+            clip = 10
+            torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
+
             optimizer.step()
             print(f'Loss: {loss.item():.2f}, Epoch: {i}, Batch: {j}')
 
     data_loader = DataLoader(dataset, batch_size=128, shuffle=True)
     seqs = []
+    model.eval()
+    model.encoder.eval()
+    model.decoder.eval()
+
     with torch.no_grad():
         for j, batch in enumerate(data_loader):
 
@@ -222,7 +235,10 @@ if __name__ == "__main__":
             most_likely = torch.transpose(output.argmax(-1), 0, 1)
 
             likely_seqs = most_likely_sentences(most_likely, alphabet)
+            from Bio.SeqRecord import SeqRecord
+
+            likely_seqs = [SeqRecord(l, id='t', description='t') for l in likely_seqs]
             seqs.extend(likely_seqs)
 
-        __import__('ipdb').set_trace()
-        pass
+        with open("file.fasta", "w") as f:
+            SeqIO.write(seqs, f, format="fasta")

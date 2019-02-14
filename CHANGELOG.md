@@ -8,6 +8,7 @@
 - `EncodedSeq.shift`, which will shift sequence by an offset integer.
 - `EncodedSeq.from_integer_encoded_seq` will take a list of integers and an
   alphabet and return an EncodedSeq object.
+- Add the ability to apply a function to the rollout_kmers yielded values.
 
 ### Changed
 

@@ -2,20 +2,37 @@
 # All Rights Reserved
 """Base rollout module."""
 
-from typing import NamedTuple, Optional, Generator, Callable
+from typing import Callable, Generator, Optional
 
-from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature
+from Bio.SeqRecord import SeqRecord
 
 from gcgc.encoded_seq import EncodedSeq
 
 
-class RolledOutEncodedSeqs(NamedTuple):
-    """A tuple for holding the rollout context."""
+class RolledOutEncodedSeqs:
+    """Holds information on the rollout context."""
 
-    encoded_seq: EncodedSeq
-    prior_encoded_seq: Optional[EncodedSeq] = None
-    next_encoded_seq: Optional[EncodedSeq] = None
+    def __init__(
+        self,
+        encoded_seq: EncodedSeq,
+        prior_encoded_seq: Optional[EncodedSeq] = None,
+        next_encoded_seq: Optional[EncodedSeq] = None,
+    ):
+        self.encoded_seq = encoded_seq
+        self.prior_encoded_seq = prior_encoded_seq
+        self.next_encoded_seq = next_encoded_seq
+
+    def apply(self, func: Callable[[EncodedSeq], EncodedSeq]) -> "RolledOutEncodedSeqs":
+        """Apply the callable func to each sequence and return a copy of the object."""
+
+        def g(es: EncodedSeq):
+            """Handle the None case of applied to func."""
+            return func(es) if es is not None else None
+
+        return RolledOutEncodedSeqs(
+            g(self.encoded_seq), g(self.prior_encoded_seq), g(self.next_encoded_seq)
+        )
 
 
 def rollout_kmers(
@@ -24,6 +41,7 @@ def rollout_kmers(
     prior_length: int = 0,
     next_kmer_length: int = 1,
     window: int = 1,
+    func: Optional[Callable[[EncodedSeq], EncodedSeq]] = None,
 ) -> Generator[RolledOutEncodedSeqs, None, None]:
     """Rollout kmers of length k from the sequence as RolledOutEncodedSeqs."""
 
@@ -42,6 +60,8 @@ def rollout_kmers(
         )
 
         rollout_kmer = RolledOutEncodedSeqs(kmer, prior_kmer, next_kmer)
+        if func is not None:
+            rollout_kmer = rollout_kmer.apply(func)
 
         yield rollout_kmer
 
