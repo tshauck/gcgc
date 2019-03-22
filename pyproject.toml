@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gcgc"
-version = "0.5.1"
+version = "0.5.2-dev.1"
 description = "GCGC is a preprocessing library for biological sequence model development."
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 include = ["./gcgc/data/splice/*.fasta"]
