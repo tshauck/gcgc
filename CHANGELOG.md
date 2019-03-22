@@ -1,11 +1,19 @@
 # Change Log
 
-## Development
+## 0.5.2 (2019-03-21)
 
 ### Added
 
 - Add Dockerfile and docker-compose.yml for development.
 - `EncodedSeq.shift`, which will shift sequence by an offset integer.
+- `EncodedSeq.from_integer_encoded_seq` will take a list of integers and an
+  alphabet and return an EncodedSeq object.
+- Add the ability to apply a function to the rollout_kmers yielded values.
+
+### Changed
+
+- Alphabet special characters are now located at the start, rather than the end,
+  of the letters and token sequence.
 
 ## 0.5.1 (2019-01-09)
 

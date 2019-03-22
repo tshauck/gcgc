@@ -32,14 +32,14 @@ class DataFile:
                         break
                     f_handle.write(chunk)
 
-            logger.info(f"Downloaded {self.url} to {self.local_path}.")
+            logger.info("Downloaded %s to %s.local_path}.", self.url, self.local_path)
             return await response.release()
 
 
 DataFiles = List[DataFile]
 
 
-class UniprotDataset(object):
+class UniprotDataset:
     """A base class that loads data from Uniprot."""
 
     def __init__(self, data_files: DataFiles):
