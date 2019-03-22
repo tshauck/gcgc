@@ -3,7 +3,7 @@
 """Holds the base EncodingAlphabet."""
 
 from abc import ABC
-from typing import Optional, Sequence, Set
+from typing import Iterable, Optional, Sequence, Set
 
 from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
@@ -27,7 +27,7 @@ class EncodingAlphabet(ABC):
         self._add_lower_case_for_inserts = add_lower_case_for_inserts
 
         self.letters_and_tokens = (
-            self.letters + self.START + self.END + self.PADDING + "".join(self._gap_characters)
+            self.START + self.END + self.PADDING + "".join(self._gap_characters) + self.letters
         )
 
         if self._add_lower_case_for_inserts:
@@ -49,6 +49,11 @@ class EncodingAlphabet(ABC):
         """Decode a token. This is the inverse of encode_token."""
 
         return self.decoding_index[int_token]
+
+    def decode_tokens(self, int_tokens: Iterable[int]) -> str:
+        """Decode an iterable of integer tokens into a single string."""
+
+        return "".join(self.decode_token(t) for t in int_tokens)
 
     def integer_encode(self, seq: str) -> Sequence[int]:
         """Integer encode the sequence."""

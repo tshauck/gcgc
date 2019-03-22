@@ -33,3 +33,14 @@ class IUPACAmbiguousRNAEncoding(EncodingAlphabet, IUPAC.IUPACAmbiguousRNA):
 
 class IUPACProteinEncoding(EncodingAlphabet, IUPAC.IUPACProtein):
     """Implements an encoding alphabet using the IUPAC protein letters."""
+
+
+_ALPHABET_MAPPING = {
+    IUPAC.ExtendedIUPACProtein: ExtendedIUPACProteinEncoding,
+    IUPAC.ExtendedIUPACDNA: ExtendedIUPACDNAEncoding,
+    IUPAC.IUPACUnambiguousDNA: IUPACUnambiguousDNAEncoding,
+    IUPAC.IUPACUnambiguousRNA: IUPACUnambiguousRNAEncoding,
+    IUPAC.IUPACAmbiguousDNA: IUPACAmbiguousDNAEncoding,
+    IUPAC.IUPACAmbiguousRNA: IUPACAmbiguousRNAEncoding,
+    IUPAC.IUPACProtein: IUPACProteinEncoding,
+}

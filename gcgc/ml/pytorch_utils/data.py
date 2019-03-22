@@ -91,5 +91,4 @@ class GenomicDataset(torch.utils.data.Dataset):
             except KeyError:
                 pass
 
-        else:
-            raise RuntimeError(f"Exausted file index while looking for {i}.")
+        raise RuntimeError(f"Exausted file index while looking for {i}.")
