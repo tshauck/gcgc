@@ -5,9 +5,9 @@
 from pathlib import Path
 from typing import Dict, Sequence
 
+from Bio import File, SeqIO
 import torch
 import torch.utils.data
-from Bio import File, SeqIO
 
 from gcgc.alphabet import ExtendedIUPACDNAEncoding
 from gcgc.alphabet.base import EncodingAlphabet
