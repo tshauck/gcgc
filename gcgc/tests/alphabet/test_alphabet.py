@@ -1,11 +1,12 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
+"""Test the alphabet."""
 
 import unittest
 
-import pytest
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
+import pytest
 
 from gcgc import alphabet
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
@@ -82,3 +83,29 @@ class TestAlphabet(unittest.TestCase):
         actual = dna.integer_decode(code)
 
         self.assertEqual(expected, actual)
+
+    def test_kmer_tokens_size(self):
+        dna = alphabet.IUPACUnambiguousDNAEncoding(kmer_size=2)
+        n_kmers = len(dna.kmers)
+        n_kmers_and_tokens = len(dna.kmers_and_tokens)
+
+        self.assertEqual(n_kmers, 4 ** 2)
+        self.assertEqual(n_kmers_and_tokens, 4 ** 2 + 3)
+
+
+@pytest.mark.parametrize(
+    "seq,kmer_size,expected_kmer",
+    [
+        ("ATCG", 2, ["AT", "TC", "CG"]),
+        ("ATCGAT", 3, ["ATC", "TCG", "CGA", "GAT"]),
+        ("ATCG", 1, ["A", "T", "C", "G"]),
+    ],
+)
+def test_kmer_encoding(seq, kmer_size, expected_kmer):
+
+    dna = alphabet.IUPACUnambiguousDNAEncoding(kmer_size=kmer_size)
+    expected_integers = [dna.encode_token(t) for t in expected_kmer]
+
+    actual = dna.integer_encode(seq)
+
+    assert expected_integers == actual

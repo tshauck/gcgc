@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.6.0 (2019-04-04)
+
+### Added
+
+- Ability for kmer size to be passed to an alphabet.
+
 ## 0.5.2 (2019-03-21)
 
 ### Added

@@ -3,7 +3,8 @@
 """Holds the base EncodingAlphabet."""
 
 from abc import ABC
-from typing import Iterable, Optional, Sequence, Set
+import itertools as it
+from typing import Iterable, Sequence
 
 from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
@@ -18,22 +19,16 @@ class EncodingAlphabet(ABC):
     # Convince linting that EncodingAlphabet will have a letters attribute.
     letters: str
 
-    def __init__(
-        self, gap_characters: Optional[Set[str]] = None, add_lower_case_for_inserts: bool = False
-    ):
+    def __init__(self, kmer_size: int = 1):
         """Create the EncodingAlphabet object."""
 
-        self._gap_characters = gap_characters or set([])
-        self._add_lower_case_for_inserts = add_lower_case_for_inserts
+        self.letters_and_tokens = self.START + self.END + self.PADDING + self.letters
+        self.kmer_size = kmer_size
 
-        self.letters_and_tokens = (
-            self.START + self.END + self.PADDING + "".join(self._gap_characters) + self.letters
-        )
+        self.kmers = ["".join(kmer) for kmer in it.product(self.letters, repeat=self.kmer_size)]
+        self.kmers_and_tokens = list(self.START) + list(self.END) + list(self.PADDING) + self.kmers
 
-        if self._add_lower_case_for_inserts:
-            self.letters_and_tokens = self.letters_and_tokens + self.letters.lower()
-
-        self.encoding_index = {letter: idx for idx, letter in enumerate(self.letters_and_tokens)}
+        self.encoding_index = {letter: idx for idx, letter in enumerate(self.kmers_and_tokens)}
         self.decoding_index = {idx: letter for letter, idx in self.encoding_index.items()}
 
     def __len__(self) -> int:
@@ -55,17 +50,58 @@ class EncodingAlphabet(ABC):
 
         return "".join(self.decode_token(t) for t in int_tokens)
 
-    def integer_encode(self, seq: str) -> Sequence[int]:
-        """Integer encode the sequence."""
-
+    def _kmer_one(self, seq):
         try:
             encoded = []
-            for s in seq:
-                encoded.append(self.encoding_index[s])
+            seq_len = len(seq)
+
+            for i in range(0, seq_len):
+                kmer = seq[i]
+                encoded.append(self.encoding_index[kmer])
             return encoded
 
         except KeyError:
-            raise GCGCAlphabetLetterEncodingException(f"{s} not in {self.encoding_index}")
+            raise GCGCAlphabetLetterEncodingException(f"{kmer} not in {self.encoding_index}")
+
+    def _kmer_n(self, seq: str) -> Sequence[int]:
+        try:
+            encoded = []
+
+            seq_len = len(seq)
+            iterations = seq_len - self.kmer_size + 1
+
+            for i in range(0, iterations):
+                kmer = seq[i : i + self.kmer_size]
+                encoded.append(self.encoding_index[kmer])
+            return encoded
+
+        except KeyError:
+            raise GCGCAlphabetLetterEncodingException(f"{kmer} not in {self.encoding_index}")
+
+    def integer_encode(self, seq: str) -> Sequence[int]:
+        """Integer encode the sequence."""
+
+        stripped_seq = "".join(s for s in seq if s not in {self.START, self.END, self.PADDING})
+        seq_len = len(stripped_seq)
+
+        if seq_len < self.kmer_size:
+            raise ValueError(
+                f"seq length {seq_len} cannot be less than the kmer size {self.kmer_size}"
+            )
+
+        if self.kmer_size == 1:
+            encoded_seq = self._kmer_one(stripped_seq)
+        else:
+            encoded_seq = self._kmer_n(stripped_seq)
+
+        if seq[0] == self.START:
+            encoded_seq = [self.encoding_index[self.START]] + encoded_seq
+
+        non_seq_ending = "".join(s for s in seq if s in {self.END, self.PADDING})
+        if non_seq_ending:
+            encoded_seq = encoded_seq + [self.encoding_index[s] for s in non_seq_ending]
+
+        return encoded_seq
 
     def integer_decode(self, int_seq: Sequence[int]) -> str:
         """Given a sequence of integers, convert it to a string."""

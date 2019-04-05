@@ -1,8 +1,8 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-import unittest
 from typing import Callable, Dict, List, NamedTuple, Tuple
+import unittest
 
 from Bio.Seq import Seq
 from Bio.SeqFeature import FeatureLocation, SeqFeature

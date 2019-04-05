@@ -4,8 +4,8 @@
 
 from typing import Iterable, Sequence, Union
 
-import numpy as np
 from Bio.Seq import Seq
+import numpy as np
 
 from gcgc.alphabet.base import EncodingAlphabet
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet

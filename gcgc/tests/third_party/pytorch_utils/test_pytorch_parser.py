@@ -3,10 +3,10 @@
 
 from pathlib import Path
 
-import torch
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+import torch
 
 from gcgc.fields import FileMetaDataField
 from gcgc.ml.pytorch_utils.parser import TorchSequenceParser
