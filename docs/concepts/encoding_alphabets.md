@@ -50,3 +50,36 @@ create the initial embedding lookup table.
 Currently GCGC does not provide direct support for user defined Alphabets, though it is on the
 roadmap. Hopefully, one of the standard [IUPAC](https://iupac.org/)'s Alphabets will work. See
 the module `gcgc.alphabet.iupac` for more info.
+
+## Kmer Alphabets
+
+You won't always want to have an alphabet that encodes single residuals.
+Therefore you can specify the kmer_size of the `Alphabet` which will create an
+alphabet of kmers from the original letters.
+
+For example, if you have the `IUPACUnambiguousDNAEncoding` passing a kmer of
+size two will use an encoding index under the hood of...
+
+```python
+>>> a = IUPACUnambiguousDNAEncoding(kmer_size=2)
+>>> a.encoding_index
+{'>': 0,
+ '<': 1,
+ '|': 2,
+ 'GG': 3,
+ 'GA': 4,
+ 'GT': 5,
+ 'GC': 6,
+ 'AG': 7,
+ 'AA': 8,
+ 'AT': 9,
+ 'AC': 10,
+ 'TG': 11,
+ 'TA': 12,
+ 'TT': 13,
+ 'TC': 14,
+ 'CG': 15,
+ 'CA': 16,
+ 'CT': 17,
+ 'CC': 18}
+```

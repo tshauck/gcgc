@@ -1,9 +1,9 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-import unittest
 from pathlib import Path
 from typing import Dict
+import unittest
 
 from gcgc.fields.categorical_field import AnnotationField, FileMetaDataField
 
