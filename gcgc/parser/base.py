@@ -54,9 +54,11 @@ class SequenceParser:
 
         self.encapsulate = encapsulate
         self.seq_length_parser = seq_length_parser
-        self.file_features = file_features
-        self.annotation_features = annotation_features
-        self.description_features = description_features
+
+        self.file_features = file_features if file_features is not None else []
+        self.annotation_features = annotation_features if annotation_features is not None else []
+        self.description_features = description_features if description_features is not None else []
+
         self.sequence_offset = sequence_offset
 
     def _preprocess_record(self, es: EncodedSeq):
@@ -111,8 +113,8 @@ class SequenceParser:
         file_features = {}
 
         if self.has_file_features:
-            for ff in self.file_features:
-                file_features[ff.name] = ff.encode(path)
+            for file_feature in self.file_features:
+                file_features[file_feature.name] = file_feature.encode(path)
 
         return file_features
 
