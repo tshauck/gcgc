@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gcgc"
-version = "0.6.0"
+version = "0.6.1"
 description = "GCGC is a preprocessing library for biological sequence model development."
 authors = ["Trent Hauck <trent@trenthauck.com>"]
 include = ["./gcgc/data/splice/*.fasta"]
@@ -15,36 +15,36 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.6,<4.0"
-biopython = "=1.72"
-numpy = "=1.15.2"
-aiohttp = "^3.4"
+biopython = ">=1.72"
+numpy = ">=1.15.2"
+aiohttp = ">=3.4"
 
-torch = { version = "=1.0.0", optional = true }
-click = "^7.0"
-idna_ssl = "^1.1"
+torch = { version = ">=1.1.0", optional = true }
+click = ">=7.0"
+idna_ssl = ">=1.1"
 
 [tool.poetry.extras]
 torch = ["torch"]
 
 [tool.poetry.dev-dependencies]
 pytest = ">=4.0,<5.0"
-black = "=18.9b0"
-mypy = "=0.641"
-mypy-extensions = "=0.4.1"
-pycodestyle = "=2.4.0"
-python-language-server = "=0.21.2"
-ipdb = "^0.11.0"
-flake8 = "^3.6"
-pytest-cov = "^2.6"
-mkdocs = "^1.0"
-mkdocs-material = "^3.0"
-pudb = "^2018.1"
-pygments = "^2.3"
-isort = "^4.3"
-pre-commit = "^1.12"
-awscli = "^1.16"
-vulture = "^1.0"
-pydocstyle = "^3.0"
+black = ">=18.9b0"
+mypy = ">=0.641"
+mypy-extensions = ">=0.4.1"
+pycodestyle = ">=2.4.0"
+python-language-server = ">=0.21.2"
+ipdb = ">=0.11.0"
+flake8 = ">=3.6"
+pytest-cov = ">=2.6"
+mkdocs = ">=1.0"
+mkdocs-material = ">=3.0"
+pudb = ">=2018.1"
+pygments = ">=2.3"
+isort = ">=4.3"
+pre-commit = ">=1.12"
+awscli = ">=1.16.175"
+vulture = ">=1.0"
+pydocstyle = ">=3.0"
 
 [tool.poetry.plugins."console_scripts"]
 "gcgc" = "gcgc.cli:main"

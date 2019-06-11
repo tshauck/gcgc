@@ -32,7 +32,9 @@ class TorchSequenceParser(SequenceParser):
             )
 
         if self.has_file_features:
-            for ff in self.file_features:
-                parsed_features[ff.name] = torch.tensor(parsed_features[ff.name])
+            for file_feature in self.file_features:
+                parsed_features[file_feature.name] = torch.tensor(
+                    parsed_features[file_feature.name]
+                )
 
         return parsed_features

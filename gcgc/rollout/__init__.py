@@ -19,6 +19,7 @@ class RolledOutEncodedSeqs:
         prior_encoded_seq: Optional[EncodedSeq] = None,
         next_encoded_seq: Optional[EncodedSeq] = None,
     ):
+        """Create the rolled out encoded sequence object."""
         self.encoded_seq = encoded_seq
         self.prior_encoded_seq = prior_encoded_seq
         self.next_encoded_seq = next_encoded_seq
@@ -26,12 +27,14 @@ class RolledOutEncodedSeqs:
     def apply(self, func: Callable[[EncodedSeq], EncodedSeq]) -> "RolledOutEncodedSeqs":
         """Apply the callable func to each sequence and return a copy of the object."""
 
-        def g(es: EncodedSeq):
+        def if_null(es: Optional[EncodedSeq] = None):
             """Handle the None case of applied to func."""
             return func(es) if es is not None else None
 
         return RolledOutEncodedSeqs(
-            g(self.encoded_seq), g(self.prior_encoded_seq), g(self.next_encoded_seq)
+            if_null(self.encoded_seq),
+            if_null(self.prior_encoded_seq),
+            if_null(self.next_encoded_seq),
         )
 
 
