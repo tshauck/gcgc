@@ -2,14 +2,14 @@
 # All Rights Reserved
 """Holds the base EncodingAlphabet."""
 
-from abc import ABC
 import itertools as it
-from typing import Iterable, Sequence
+from typing import Iterable
+from typing import Sequence
 
 from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
 
-class EncodingAlphabet(ABC):
+class EncodingAlphabet:
     """The Encoding Alphabet is meant to be a baseclass for other alphabets."""
 
     START: str = ">"
@@ -31,23 +31,35 @@ class EncodingAlphabet(ABC):
         self.encoding_index = {letter: idx for idx, letter in enumerate(self.kmers_and_tokens)}
         self.decoding_index = {idx: letter for letter, idx in self.encoding_index.items()}
 
+    @property
+    def encoded_padding(self):
+        """Get the integer for the padding character."""
+        return self.encode_token(self.PADDING)
+
+    @property
+    def encoded_start(self):
+        """Get the integer for the start character."""
+        return self.encode_token(self.START)
+
+    @property
+    def encoded_end(self):
+        """Get the integer for the end character."""
+        return self.encode_token(self.END)
+
     def __len__(self) -> int:
         """Get the lenght of the Alphabet."""
         return len(self.letters_and_tokens)
 
     def encode_token(self, token: str) -> int:
         """Given a particular token, return the integer representation."""
-
         return self.encoding_index[token]
 
     def decode_token(self, int_token: int) -> str:
         """Decode a token. This is the inverse of encode_token."""
-
         return self.decoding_index[int_token]
 
     def decode_tokens(self, int_tokens: Iterable[int]) -> str:
         """Decode an iterable of integer tokens into a single string."""
-
         return "".join(self.decode_token(t) for t in int_tokens)
 
     def _kmer_one(self, seq):

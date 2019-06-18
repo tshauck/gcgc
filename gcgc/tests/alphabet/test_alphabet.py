@@ -109,3 +109,12 @@ def test_kmer_encoding(seq, kmer_size, expected_kmer):
     actual = dna.integer_encode(seq)
 
     assert expected_integers == actual
+
+
+def test_special_token_integer_encoding():
+    """Test the special characters encode to integers correctly."""
+    dna = alphabet.IUPACUnambiguousDNAEncoding()
+
+    assert dna.encoded_start == dna.encode_token(dna.START)
+    assert dna.encoded_end == dna.encode_token(dna.END)
+    assert dna.encoded_padding == dna.encode_token(dna.PADDING)

@@ -1,5 +1,21 @@
 # Change Log
 
+## Development
+
+### Added
+
+- Properties to access the integer encodings of special tokens.
+  - `Alphabet.encoded_start`
+  - `Alphabet.encoded_end`
+  - `Alphabet.encoded_padding`
+
+## 0.6.1 (2019-06-10)
+
+### Added
+
+- Updated package management so gcgc is easier to use with other version of
+  torch.
+
 ## 0.6.0 (2019-04-04)
 
 ### Added
