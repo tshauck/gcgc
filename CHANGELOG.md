@@ -1,4 +1,4 @@
-# Change Log
+# Changelog
 
 ## Development
 
@@ -8,6 +8,7 @@
   - `Alphabet.encoded_start`
   - `Alphabet.encoded_end`
   - `Alphabet.encoded_padding`
+- Remove uniprot dataset creation.
 
 ## 0.6.1 (2019-06-10)
 
