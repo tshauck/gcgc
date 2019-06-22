@@ -9,6 +9,7 @@
   - `Alphabet.encoded_end`
   - `Alphabet.encoded_padding`
 - Remove uniprot dataset creation.
+- Simplify index handling for GenomicDataset.
 
 ## 0.6.1 (2019-06-10)
 
