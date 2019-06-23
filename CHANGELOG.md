@@ -1,4 +1,22 @@
-# Change Log
+# Changelog
+
+## Development
+
+### Added
+
+- Properties to access the integer encodings of special tokens. (35cae2a)
+  - `Alphabet.encoded_start`
+  - `Alphabet.encoded_end`
+  - `Alphabet.encoded_padding`
+- Remove uniprot dataset creation. (e233162)
+- Simplify index handling for GenomicDataset. (3213a9e)
+
+## 0.6.1 (2019-06-10)
+
+### Added
+
+- Updated package management so gcgc is easier to use with other version of
+  torch.
 
 ## 0.6.0 (2019-04-04)
 

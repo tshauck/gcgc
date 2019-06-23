@@ -1,32 +1,37 @@
 # (c) Copyright 2018 Trent Hauck
 # All Rights Reserved
 
-import unittest
+import tempfile
+import pathlib
 
 from gcgc.alphabet.iupac import IUPACProteinEncoding
 from gcgc.ml.pytorch_utils.data import GenomicDataset
 from gcgc.parser import SequenceParser
-from gcgc.tests.fixtures import ECOLI_PATH, P53_HUMAN
+from gcgc.tests.fixtures import ECOLI_PATH
+from gcgc.tests.fixtures import P53_HUMAN
+
+SP = SequenceParser()
 
 
-class TestPyTorchUtils(unittest.TestCase):
-    def setUp(self) -> None:
-        self.sp = SequenceParser()
+def test_load_dataset():
+    def yielder():
+        yield P53_HUMAN
 
-    def test_load_dataset(self):
-        def yielder():
-            yield P53_HUMAN
+    test_dataset = GenomicDataset.from_paths(yielder(), SP, "fasta")
+    assert len(test_dataset) == 1
 
-        test_dataset = GenomicDataset.from_paths(yielder(), self.sp, "fasta")
-        self.assertEqual(len(test_dataset), 1)
 
-    def test_index_multiple_files(self):
+def test_index_multiple_files():
 
-        glob = ECOLI_PATH.glob("*.fasta")
+    glob = ECOLI_PATH.glob("*.fasta")
 
-        pe = IUPACProteinEncoding()
-        test_dataset = GenomicDataset.from_paths(glob, self.sp, "fasta", pe)
-        self.assertEqual(len(test_dataset), 25)
+    pe = IUPACProteinEncoding()
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        db_path = pathlib.Path(tmpdir) / 'test.db'
+        test_dataset = GenomicDataset.from_paths(glob, SP, "fasta", pe, str(db_path))
+
+        assert len(test_dataset) == 25
 
         test_sequences = {
             0: "sp|C5A0C3|ARGE_ECOBW",
@@ -36,4 +41,4 @@ class TestPyTorchUtils(unittest.TestCase):
 
         for idx, expected_id in test_sequences.items():
             actual_record = test_dataset[idx]
-            self.assertEqual(actual_record["id"], expected_id)
+            assert actual_record["id"] == expected_id

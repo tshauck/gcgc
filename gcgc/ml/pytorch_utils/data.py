@@ -3,9 +3,10 @@
 """Objects and methods for dealing with PyTorch data."""
 
 from pathlib import Path
-from typing import Dict, Sequence
+from typing import Sequence
 
-from Bio import File, SeqIO
+from Bio import File
+from Bio import SeqIO
 import torch
 import torch.utils.data
 
@@ -15,30 +16,10 @@ from gcgc.ml.pytorch_utils.parser import TorchSequenceParser
 from gcgc.parser.gcgc_record import GCGCRecord
 
 
-class _SequenceIndexer(object):
-    """A helper object that is used to index multiple files at ones."""
-
-    def __init__(self):
-        """Initialize the _SequenceIndexer object."""
-        self._record_index = {}
-        self._counter = -1
-
-    def __call__(self, sid):
-        """Return the record index if it's known, otherwise generate a new one."""
-        try:
-            return self._record_index[sid]
-        except KeyError:
-            self._counter = self._counter + 1
-            self._record_index[sid] = self._counter
-            return self._record_index[sid]
-
-
 class GenomicDataset(torch.utils.data.Dataset):
     """GenomicDataset can be used to load sequence information into a format aminable to PyTorch."""
 
-    def __init__(
-        self, file_index: Dict[Path, File._IndexedSeqFileDict], parser: TorchSequenceParser
-    ):
+    def __init__(self, file_index: File._SQLiteManySeqFilesDict, parser: TorchSequenceParser):
         """Initialize the GenomicDataset object."""
 
         self._file_index = file_index
@@ -63,32 +44,29 @@ class GenomicDataset(torch.utils.data.Dataset):
         cls,
         path_sequence: Sequence[Path],
         parser: TorchSequenceParser,
-        file_format="fasta",
+        file_format: str = "fasta",
         alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
+        index_db: str = ":memory:",
+        **kwargs,
     ) -> "GenomicDataset":
         """Initialize the GenomicDataset from a pathlib.Path sequence."""
 
-        file_index = {}
-        si = _SequenceIndexer()
-
-        for f in sorted(path_sequence):
-            file_index[f] = SeqIO.index(str(f), file_format, key_function=si, alphabet=alphabet)
-
+        file_index = SeqIO.index_db(
+            index_db, [str(p) for p in path_sequence], file_format, alphabet=alphabet, **kwargs
+        )
         return cls(file_index, parser)
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
 
-        return sum(len(v) for v in self._file_index.values())
+        return len(self._file_index)
 
     def __getitem__(self, i: int):
         """Get the record from the index."""
 
-        for k, v in self._file_index.items():
-            try:
-                r = GCGCRecord(path=k, seq_record=v[i])
-                return self._parser.parse_record(r)
-            except KeyError:
-                pass
+        qry = "SELECT key, file_number FROM offset_data LIMIT 1 OFFSET ?;"
+        key, file_number = self._file_index._con.execute(qry, (i,)).fetchone()
+        file_name = Path(self._file_index._filenames[file_number])
 
-        raise RuntimeError(f"Exausted file index while looking for {i}.")
+        r = GCGCRecord(path=file_name, seq_record=self._file_index[key])
+        return self._parser.parse_record(r)
