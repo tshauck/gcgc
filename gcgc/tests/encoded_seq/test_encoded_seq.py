@@ -89,7 +89,7 @@ class TestEncodedSeq(unittest.TestCase):
 def test_decode_tokens():
     alphabet = ExtendedIUPACDNAEncoding()
 
-    new_seq = EncodedSeq.from_integer_encoded_seq([0, 4, 4, 1], alphabet)
+    new_seq = EncodedSeq.from_integer_encoded_seq([1, 4, 4, 2], alphabet)
     expected_seq = EncodedSeq(">AA<", alphabet)
 
     assert new_seq == expected_seq
@@ -141,7 +141,7 @@ def test_seq_shift(actual_seq, expected_seq, offset):
 
 
 @pytest.mark.parametrize(
-    "seq,kmer_size,integer_encoding", [(">ATCG<||", 2, [0, 13, 22, 27, 1, 2, 2])]
+    "seq,kmer_size,integer_encoding", [(">ATCG<||", 2, [1, 13, 22, 27, 2, 0, 0])]
 )
 def test_kmer_size_encoding(seq, kmer_size, integer_encoding):
     encoded_seq = EncodedSeq(seq, ExtendedIUPACDNAEncoding(kmer_size=kmer_size))
