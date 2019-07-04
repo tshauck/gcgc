@@ -4,6 +4,12 @@
 
 ### Added
 
+- User can specify to use start or end tokens optionally.
+
+## 0.7.0 (2019-06-22)
+
+### Added
+
 - Properties to access the integer encodings of special tokens. (35cae2a)
   - `Alphabet.encoded_start`
   - `Alphabet.encoded_end`
