@@ -2,6 +2,8 @@
 
 ## Development
 
+## 0.8.0 (2019-07-04)
+
 ### Added
 
 - User can specify to use start or end tokens optionally.
