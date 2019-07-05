@@ -28,7 +28,7 @@ def test_index_multiple_files():
     pe = IUPACProteinEncoding()
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        db_path = pathlib.Path(tmpdir) / 'test.db'
+        db_path = pathlib.Path(tmpdir) / "test.db"
         test_dataset = GenomicDataset.from_paths(glob, SP, "fasta", pe, str(db_path))
 
         assert len(test_dataset) == 25

@@ -70,8 +70,8 @@ class EncodingAlphabet:
         return self.encode_token(self.END)
 
     def __len__(self) -> int:
-        """Get the lenght of the Alphabet."""
-        return len(self.letters_and_tokens)
+        """Get the length of the Alphabet."""
+        return len(self.encoding_index)
 
     def encode_token(self, token: str) -> int:
         """Given a particular token, return the integer representation."""

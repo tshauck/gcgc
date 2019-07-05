@@ -52,14 +52,15 @@ def test_biopython_from_seq(biopython_class, gcgc_class):
     assert isinstance(es.alphabet, gcgc_class)
 
 
-class TestAlphabet(unittest.TestCase):
-    def test_len(self):
-        dna = alphabet.IUPACUnambiguousDNAEncoding()
-        self.assertEqual(len(dna), len(dna.letters_and_tokens))
+@pytest.mark.parametrize("kmer_size,start,expected_len", [(1, True, 7), (2, False, 18)])
+def test_len(kmer_size, start, expected_len):
+    dna = alphabet.IUPACUnambiguousDNAEncoding(kmer_size=kmer_size, start_token=start)
+    assert len(dna) == expected_len
 
+
+class TestAlphabet(unittest.TestCase):
     def test_decoding_index(self):
         dna = alphabet.IUPACUnambiguousDNAEncoding()
-
         self.assertEqual(dna.decode_token(0), dna.decoding_index[0])
 
     def test_encoding_index(self):
