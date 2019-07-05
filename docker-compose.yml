@@ -5,3 +5,8 @@ services:
     build:
       context: .
     image: tshauck/gcgc
+  yeyo:
+    image: docker.io/thauck/yeyo:0.3.0-dev.2
+    volumes:
+      - $PWD:/project
+      - $HOME/.gitconfig:/etc/gitconfig
