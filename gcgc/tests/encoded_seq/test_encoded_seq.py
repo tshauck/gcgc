@@ -59,30 +59,6 @@ class TestEncodedSeq(unittest.TestCase):
         self.assertEqual(len(new_es), length)
         self.assertIsInstance(new_es, EncodedSeq)
 
-    def test_one_hot_encoding(self):
-        expected = [
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-        ]
-
-        es = EncodedSeq("ATCG", ExtendedIUPACDNAEncoding())
-        assert_array_equal(es.one_hot_encoded, expected)
-
-    def test_one_hot_encoding_kmer(self):
-        expected = [
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-        ]
-
-        alphabet = ExtendedIUPACDNAEncoding(kmer_size=2)
-        es = EncodedSeq("ATCG", alphabet)
-        assert len(es.one_hot_encoded) == len(es) - 1
-        assert len(es.one_hot_encoded[0]) == len(alphabet)
-
     def test_from_seq_bad_alphabet(self):
         seq = Seq("ATCG", None)
 

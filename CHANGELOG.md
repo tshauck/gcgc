@@ -7,7 +7,11 @@
 ### Added
 
 - User can specify to use start or end tokens optionally.
-- Fixed bug in one_hot_encoded property due to dimensionality difference
+
+### Removed
+
+- Removed one_hot_encoding. The user can do that pretty easily if needed. E.g.
+  see `scatter` in PyTorch.
 
 ## 0.7.0 (2019-06-22)
 
