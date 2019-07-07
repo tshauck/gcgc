@@ -7,6 +7,7 @@
 ### Added
 
 - User can specify to use start or end tokens optionally.
+- Fixed bug in one_hot_encoded property due to dimensionality difference
 
 ## 0.7.0 (2019-06-22)
 

@@ -128,9 +128,9 @@ class EncodedSeq(Seq):
 
         encoded_sequence = self.alphabet.integer_encode(self)
         encoded_len = len(encoded_sequence)
-        letters_len = len(self.alphabet.letters_and_tokens)
+        n_tokens = len(self.alphabet)
 
-        one_hot_seq = np.zeros((encoded_len, letters_len), dtype=np.int)
+        one_hot_seq = np.zeros((encoded_len, n_tokens), dtype=np.int)
         one_hot_seq[np.arange(encoded_len), encoded_sequence] = 1
 
         return one_hot_seq.tolist()
