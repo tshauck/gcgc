@@ -2,6 +2,10 @@
 
 ## Development
 
+### Fixed
+
+- Broken test due to platform differences in `Path.glob` sorting.
+
 ### Added
 
 - User can specify to use start or end tokens optionally.
