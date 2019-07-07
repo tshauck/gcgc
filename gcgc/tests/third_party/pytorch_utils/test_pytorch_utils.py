@@ -23,7 +23,7 @@ def test_load_dataset():
 
 def test_index_multiple_files():
 
-    glob = ECOLI_PATH.glob("*.fasta")
+    glob = sorted(ECOLI_PATH.glob("*.fasta"))
 
     pe = IUPACProteinEncoding()
 

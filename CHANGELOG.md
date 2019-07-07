@@ -4,6 +4,10 @@
 
 ## 0.8.0 (2019-07-04)
 
+### Fixed
+
+- Broken test due to platform differences in `Path.glob` sorting.
+
 ### Added
 
 - User can specify to use start or end tokens optionally.
