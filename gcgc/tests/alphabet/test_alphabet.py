@@ -52,14 +52,15 @@ def test_biopython_from_seq(biopython_class, gcgc_class):
     assert isinstance(es.alphabet, gcgc_class)
 
 
-class TestAlphabet(unittest.TestCase):
-    def test_len(self):
-        dna = alphabet.IUPACUnambiguousDNAEncoding()
-        self.assertEqual(len(dna), len(dna.letters_and_tokens))
+@pytest.mark.parametrize("kmer_size,start,expected_len", [(1, True, 7), (2, False, 18)])
+def test_len(kmer_size, start, expected_len):
+    dna = alphabet.IUPACUnambiguousDNAEncoding(kmer_size=kmer_size, start_token=start)
+    assert len(dna) == expected_len
 
+
+class TestAlphabet(unittest.TestCase):
     def test_decoding_index(self):
         dna = alphabet.IUPACUnambiguousDNAEncoding()
-
         self.assertEqual(dna.decode_token(0), dna.decoding_index[0])
 
     def test_encoding_index(self):
@@ -102,7 +103,7 @@ class TestAlphabet(unittest.TestCase):
     ],
 )
 def test_kmer_encoding(seq, kmer_size, expected_kmer):
-
+    """Test the kemrs are encoded as expected."""
     dna = alphabet.IUPACUnambiguousDNAEncoding(kmer_size=kmer_size)
     expected_integers = [dna.encode_token(t) for t in expected_kmer]
 
@@ -117,4 +118,16 @@ def test_special_token_integer_encoding():
 
     assert dna.encoded_start == dna.encode_token(dna.START)
     assert dna.encoded_end == dna.encode_token(dna.END)
+
     assert dna.encoded_padding == dna.encode_token(dna.PADDING)
+    assert dna.encoded_padding == 0
+
+
+@pytest.mark.parametrize(
+    "start_token,end_token,expected_tokens",
+    [(False, True, "|<"), (False, False, "|"), (True, False, "|>")],
+)
+def test_alphabet_configuration(start_token, end_token, expected_tokens):
+    """Test that we can selectively use start and end tokens."""
+    dna = alphabet.IUPACUnambiguousDNAEncoding(start_token=start_token, end_token=end_token)
+    assert dna.tokens == expected_tokens

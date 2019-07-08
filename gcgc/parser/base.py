@@ -79,15 +79,13 @@ class SequenceParser:
         parsed_features: Dict[str, Any] = {}
 
         parsed_features["seq_tensor"] = processed_seq.integer_encoded
-        parsed_features["seq_tensor_one_hot"] = processed_seq.one_hot_encoded
 
         if self.has_offset:
             offset_seq = processed_seq.shift(self.sequence_offset)
-
             parsed_features["offset_seq_tensor"] = offset_seq.integer_encoded
-            parsed_features["offset_seq_tensor_one_hot"] = offset_seq.one_hot_encoded
 
         parsed_features["id"] = gcgc_record.seq_record.id
+
         parsed_features.update(self._generate_file_features(gcgc_record.path))
         parsed_features.update(self._generate_annotation_features(gcgc_record.seq_record))
         parsed_features.update(self._generate_description_features(gcgc_record.seq_record))

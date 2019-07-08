@@ -39,13 +39,6 @@ es.encapsulate().conform(7)
 
 After the sequence has been modified, integer encodings are available as properties.
 
-```python
-es.one_hot_encoded
-# [[0, 1, 0, 0, 0, 0, 0],
-#  [0, 0, 1, 0, 0, 0, 0],
-#  [0, 0, 0, 1, 0, 0, 0],
-#  [1, 0, 0, 0, 0, 0, 0]]
-
 es.integer_encoded
 # [1, 2, 3, 0]
 ```

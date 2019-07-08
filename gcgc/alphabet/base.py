@@ -12,24 +12,47 @@ from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 class EncodingAlphabet:
     """The Encoding Alphabet is meant to be a baseclass for other alphabets."""
 
+    PADDING: str = "|"
     START: str = ">"
     END: str = "<"
-    PADDING: str = "|"
 
     # Convince linting that EncodingAlphabet will have a letters attribute.
     letters: str
 
-    def __init__(self, kmer_size: int = 1):
+    def __init__(self, kmer_size: int = 1, start_token: bool = True, end_token: bool = True):
         """Create the EncodingAlphabet object."""
 
-        self.letters_and_tokens = self.START + self.END + self.PADDING + self.letters
+        self.start = start_token
+        self.end = end_token
         self.kmer_size = kmer_size
-
-        self.kmers = ["".join(kmer) for kmer in it.product(self.letters, repeat=self.kmer_size)]
-        self.kmers_and_tokens = list(self.START) + list(self.END) + list(self.PADDING) + self.kmers
 
         self.encoding_index = {letter: idx for idx, letter in enumerate(self.kmers_and_tokens)}
         self.decoding_index = {idx: letter for letter, idx in self.encoding_index.items()}
+
+    @property
+    def letters_and_tokens(self):
+        """Return the letters and tokens combined into a single string."""
+        return self.tokens + self.letters
+
+    @property
+    def tokens(self):
+        """Returns the token string given the start and end configuration."""
+        append_string = [self.PADDING]
+        if self.start:
+            append_string.append(self.START)
+        if self.end:
+            append_string.append(self.END)
+
+        return "".join(append_string)
+
+    @property
+    def kmers(self):
+        """Return the possible kmers given the letters and kmer size."""
+        return ["".join(kmer) for kmer in it.product(self.letters, repeat=self.kmer_size)]
+
+    @property
+    def kmers_and_tokens(self):
+        return list(self.tokens) + self.kmers
 
     @property
     def encoded_padding(self):
@@ -47,8 +70,8 @@ class EncodingAlphabet:
         return self.encode_token(self.END)
 
     def __len__(self) -> int:
-        """Get the lenght of the Alphabet."""
-        return len(self.letters_and_tokens)
+        """Get the length of the Alphabet."""
+        return len(self.encoding_index)
 
     def encode_token(self, token: str) -> int:
         """Given a particular token, return the integer representation."""

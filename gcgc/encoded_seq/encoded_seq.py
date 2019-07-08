@@ -122,19 +122,6 @@ class EncodedSeq(Seq):
         """Return the underlying sequence in its integer representation."""
         return self.alphabet.integer_encode(self)
 
-    @property
-    def one_hot_encoded(self) -> Sequence[Sequence[int]]:
-        """Encode into D x N matrix where D is the size of the alphabet and N is the padding."""
-
-        encoded_sequence = self.alphabet.integer_encode(self)
-        encoded_len = len(encoded_sequence)
-        letters_len = len(self.alphabet.letters_and_tokens)
-
-        one_hot_seq = np.zeros((encoded_len, letters_len), dtype=np.int)
-        one_hot_seq[np.arange(encoded_len), encoded_sequence] = 1
-
-        return one_hot_seq.tolist()
-
     @classmethod
     def from_integer_encoded_seq(
         cls, integer_encoded_seq: Iterable[int], alphabet: EncodingAlphabet

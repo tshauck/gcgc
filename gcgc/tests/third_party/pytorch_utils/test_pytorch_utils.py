@@ -23,12 +23,12 @@ def test_load_dataset():
 
 def test_index_multiple_files():
 
-    glob = ECOLI_PATH.glob("*.fasta")
+    glob = sorted(ECOLI_PATH.glob("*.fasta"))
 
     pe = IUPACProteinEncoding()
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        db_path = pathlib.Path(tmpdir) / 'test.db'
+        db_path = pathlib.Path(tmpdir) / "test.db"
         test_dataset = GenomicDataset.from_paths(glob, SP, "fasta", pe, str(db_path))
 
         assert len(test_dataset) == 25
