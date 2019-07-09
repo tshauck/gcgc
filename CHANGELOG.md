@@ -2,6 +2,8 @@
 
 ## Development
 
+## 0.8.0 (2019-07-04)
+
 ### Fixed
 
 - Broken test due to platform differences in `Path.glob` sorting.
