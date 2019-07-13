@@ -8,6 +8,9 @@
   value.
 - Renames EncodedSeq.integer_encoded to EncodedSeq.get_integer_encoding which
   takes a kmer_step_size to specify how large of steps to take when encoding.
+- Add parsed_seq_len to the SequenceParser object to control how much padding to
+  apply to the end of the integer encoded sequence. This is useful since a batch
+  of tensors is expected to have the same size.
 
 ## 0.8.0 (2019-07-04)
 

@@ -9,6 +9,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 from gcgc.fields import AnnotationField, DescriptionField, FileMetaDataField
+from gcgc.alphabet import IUPACUnambiguousDNAEncoding
 from gcgc.parser.base import EncodedSeqLengthParser, SequenceParser
 from gcgc.parser.gcgc_record import GCGCRecord
 
@@ -19,6 +20,8 @@ def test_parser():
 
     d = DescriptionField.from_descriptions("desc_field", ["Test\tA", "Test\tB"], preprocess)
 
+    kmer_step_size = 2
+
     vocab = [Path("ecoli"), Path("human")]
     f = FileMetaDataField.from_paths("species", vocab)
 
@@ -27,7 +30,9 @@ def test_parser():
         "annotation", [annotations], preprocess=itemgetter("annotation")
     )
 
-    length_parser = EncodedSeqLengthParser(conform_to=10)
+    length_parser = EncodedSeqLengthParser(conform_to=5)
+
+    dna = IUPACUnambiguousDNAEncoding(kmer_size=kmer_step_size)
 
     sp = SequenceParser(
         encapsulate=True,
@@ -35,21 +40,20 @@ def test_parser():
         file_features=[f],
         annotation_features=[af],
         description_features=[d],
+        kmer_step_size=kmer_step_size,
     )
 
-    dna = IUPAC.IUPACUnambiguousDNA()
-
-    input_seq = SeqRecord(Seq("ATCG", alphabet=dna), annotations=annotations, description="Test\tA")
-
     test_values = [
-        (input_seq, Path("ecoli"), 0, 0, 0, [1, 4, 5, 6, 3, 2, 0, 0, 0, 0]),
-        (input_seq, Path("human"), 1, 0, 0, [1, 4, 5, 6, 3, 2, 0, 0, 0, 0]),
-        (input_seq, Path("human"), 1, 0, 0, [1, 4, 5, 6, 3, 2, 0, 0, 0, 0]),
+        ("ATCGATCG", Path("ecoli"), 0, 0, 0, [1, 9, 15, 0, 0]),
+        ("ACT", Path("human"), 1, 0, 0, [1, 10, 2, 0, 0]),
+        ("ATCGATGG", Path("human"), 1, 0, 0, [1, 9, 15, 0, 0]),
     ]
 
-    for i, p, es, annotation_label, description_label, expected_seq in test_values:
+    for s, p, es, annotation_label, description_label, expected_seq in test_values:
+
+        i = SeqRecord(Seq(s, alphabet=dna), annotations=annotations, description="Test\tA")
         r = GCGCRecord(path=p, seq_record=i)
-        resp = sp.parse_record(r)
+        resp = sp.parse_record(r, parsed_seq_len=5)
 
         assert resp["species"] == es
         assert resp["annotation"] == annotation_label

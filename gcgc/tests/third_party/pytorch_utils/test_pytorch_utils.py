@@ -11,17 +11,9 @@ from gcgc.alphabet.iupac import IUPACProteinEncoding
 from gcgc.ml.pytorch_utils.data import GenomicDataset
 from gcgc.parser import SequenceParser
 from gcgc.tests.fixtures import ECOLI_PATH
-from gcgc.tests.fixtures import P53_HUMAN
 
 SP = SequenceParser()
-
-
-def test_load_dataset():
-    def yielder():
-        yield P53_HUMAN
-
-    test_dataset = GenomicDataset.from_paths(yielder(), SP, "fasta")
-    assert len(test_dataset) == 1
+POST_PAD_LENGTH = 1000
 
 
 @pytest.yield_fixture
@@ -32,7 +24,7 @@ def genomic_dataset():
 
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = pathlib.Path(tmpdir) / "test.db"
-        yield GenomicDataset.from_paths(glob, SP, "fasta", pe, str(db_path))
+        yield GenomicDataset.from_paths(glob, SP, "fasta", pe, str(db_path), POST_PAD_LENGTH)
 
 
 def test_index_multiple_files(genomic_dataset):
@@ -48,6 +40,7 @@ def test_index_multiple_files(genomic_dataset):
     for idx, expected_id in test_sequences.items():
         actual_record = genomic_dataset[idx]
         assert actual_record["id"] == expected_id
+        assert len(actual_record['seq_tensor']) == POST_PAD_LENGTH
 
 
 @pytest.mark.skip("Skipping this until it can be fixed, issue with random access to files.")

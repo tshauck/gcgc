@@ -99,7 +99,7 @@ class EncodingAlphabet:
         except KeyError:
             raise GCGCAlphabetLetterEncodingException(f"{kmer} not in {self.encoding_index}")
 
-    def _kmer_n(self, seq: str, kmer_step_size: int = 1) -> Sequence[int]:
+    def _kmer_n(self, seq: str, kmer_step_size: int) -> Sequence[int]:
         try:
             encoded = []
 

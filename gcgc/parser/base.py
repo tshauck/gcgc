@@ -72,15 +72,30 @@ class SequenceParser:
 
         return es
 
-    def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
+    def _pad_to_len(self, seq_tensor, parsed_len: int, pad_value: int):
+
+        seq_tensor_len = len(seq_tensor)
+
+        if seq_tensor_len == parsed_len:
+            return seq_tensor
+        elif seq_tensor_len > parsed_len:
+            return seq_tensor[:parsed_len]
+
+        # Handle the case seq_tensor_len < parsed_len
+        return seq_tensor + ([pad_value] * (parsed_len - seq_tensor_len))
+
+    def parse_record(self, gcgc_record: GCGCRecord, parsed_seq_len: Optional[int] = None) -> Dict:
         """Convert the incoming GCGCRecord to a dictionary of features."""
 
         es = gcgc_record.encoded_seq
         processed_seq = self._preprocess_record(es)
 
-        parsed_features: Dict[str, Any] = {}
+        seq_tensor = processed_seq.get_integer_encoding(self.kmer_step_size)
+        if parsed_seq_len is not None:
+            seq_tensor = self._pad_to_len(seq_tensor, parsed_seq_len, es.alphabet.encoded_padding)
 
-        parsed_features["seq_tensor"] = processed_seq.get_integer_encoding(self.kmer_step_size)
+        parsed_features: Dict[str, Any] = {}
+        parsed_features["seq_tensor"] = seq_tensor
 
         if self.has_offset:
             offset_seq = processed_seq.shift(self.sequence_offset)

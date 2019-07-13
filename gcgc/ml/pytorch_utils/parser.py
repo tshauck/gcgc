@@ -2,7 +2,7 @@
 # All Rights Reserved
 """PyTorch specific parser."""
 
-from typing import Dict
+from typing import Dict, Optional
 
 import torch
 
@@ -13,7 +13,7 @@ from gcgc.parser.gcgc_record import GCGCRecord
 class TorchSequenceParser(SequenceParser):
     """A PyTorch Sequence Parser."""
 
-    def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
+    def parse_record(self, gcgc_record: GCGCRecord, parsed_seq_len: Optional[int] = None) -> Dict:
         """Convert the incoming SeqRecord to a dictionary of features."""
 
         parsed_features = super().parse_record(gcgc_record)
