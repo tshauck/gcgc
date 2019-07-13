@@ -69,4 +69,5 @@ class GenomicDataset(torch.utils.data.Dataset):
         file_name = Path(self._file_index._filenames[file_number])
 
         r = GCGCRecord(path=file_name, seq_record=self._file_index[key])
+
         return self._parser.parse_record(r)

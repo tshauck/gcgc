@@ -2,10 +2,9 @@
 # All Rights Reserved
 """Contains the EncodedSeq object."""
 
-from typing import Iterable, Sequence, Union
+from typing import Iterable, Union, Optional
 
 from Bio.Seq import Seq
-import numpy as np
 
 from gcgc.alphabet.base import EncodingAlphabet
 from gcgc.alphabet.utils import biopython_alphabet_to_gcgc_alphabet
@@ -117,10 +116,9 @@ class EncodedSeq(Seq):
 
         raise ValueError(f"Unsure how to handle {offset}.")
 
-    @property
-    def integer_encoded(self):
+    def get_integer_encoding(self, kmer_step_size: Optional[int] = None):
         """Return the underlying sequence in its integer representation."""
-        return self.alphabet.integer_encode(self)
+        return self.alphabet.integer_encode(self, kmer_step_size)
 
     @classmethod
     def from_integer_encoded_seq(

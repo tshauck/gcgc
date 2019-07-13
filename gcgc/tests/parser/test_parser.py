@@ -42,15 +42,16 @@ def test_parser():
     input_seq = SeqRecord(Seq("ATCG", alphabet=dna), annotations=annotations, description="Test\tA")
 
     test_values = [
-        (input_seq, Path("ecoli"), 0, 0, 0),
-        (input_seq, Path("human"), 1, 0, 0),
-        (input_seq, Path("human"), 1, 0, 0),
+        (input_seq, Path("ecoli"), 0, 0, 0, [1, 4, 5, 6, 3, 2, 0, 0, 0, 0]),
+        (input_seq, Path("human"), 1, 0, 0, [1, 4, 5, 6, 3, 2, 0, 0, 0, 0]),
+        (input_seq, Path("human"), 1, 0, 0, [1, 4, 5, 6, 3, 2, 0, 0, 0, 0]),
     ]
 
-    for i, p, es, annotation_label, description_label in test_values:
+    for i, p, es, annotation_label, description_label, expected_seq in test_values:
         r = GCGCRecord(path=p, seq_record=i)
         resp = sp.parse_record(r)
 
         assert resp["species"] == es
         assert resp["annotation"] == annotation_label
         assert resp["desc_field"] == description_label
+        assert resp["seq_tensor"] == expected_seq
