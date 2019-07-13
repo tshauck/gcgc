@@ -49,6 +49,7 @@ class SequenceParser:
         annotation_features: Optional[List[AnnotationField]] = None,
         description_features: Optional[List[DescriptionField]] = None,
         sequence_offset: Optional[int] = None,
+        kmer_step_size: Optional[int] = None,
     ) -> None:
         """Create the SequenceParser object."""
 
@@ -60,6 +61,7 @@ class SequenceParser:
         self.description_features = description_features if description_features is not None else []
 
         self.sequence_offset = sequence_offset
+        self.kmer_step_size = kmer_step_size
 
     def _preprocess_record(self, es: EncodedSeq):
         if self.encapsulate:
@@ -78,11 +80,13 @@ class SequenceParser:
 
         parsed_features: Dict[str, Any] = {}
 
-        parsed_features["seq_tensor"] = processed_seq.integer_encoded
+        parsed_features["seq_tensor"] = processed_seq.get_integer_encoding(self.kmer_step_size)
 
         if self.has_offset:
             offset_seq = processed_seq.shift(self.sequence_offset)
-            parsed_features["offset_seq_tensor"] = offset_seq.integer_encoded
+            parsed_features["offset_seq_tensor"] = offset_seq.get_integer_encoding(
+                self.kmer_step_size
+            )
 
         parsed_features["id"] = gcgc_record.seq_record.id
 

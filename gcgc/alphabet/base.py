@@ -5,6 +5,7 @@
 import itertools as it
 from typing import Iterable
 from typing import Sequence
+from typing import Optional
 
 from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
@@ -98,14 +99,14 @@ class EncodingAlphabet:
         except KeyError:
             raise GCGCAlphabetLetterEncodingException(f"{kmer} not in {self.encoding_index}")
 
-    def _kmer_n(self, seq: str) -> Sequence[int]:
+    def _kmer_n(self, seq: str, kmer_step_size: int = 1) -> Sequence[int]:
         try:
             encoded = []
 
             seq_len = len(seq)
             iterations = seq_len - self.kmer_size + 1
 
-            for i in range(0, iterations):
+            for i in range(0, iterations, kmer_step_size):
                 kmer = seq[i : i + self.kmer_size]
                 encoded.append(self.encoding_index[kmer])
             return encoded
@@ -113,8 +114,16 @@ class EncodingAlphabet:
         except KeyError:
             raise GCGCAlphabetLetterEncodingException(f"{kmer} not in {self.encoding_index}")
 
-    def integer_encode(self, seq: str) -> Sequence[int]:
-        """Integer encode the sequence."""
+    def integer_encode(self, seq: str, kmer_step_size: Optional[int] = None) -> Sequence[int]:
+        """Integer encode the sequence.
+
+        Args:
+            seq: The sequence to encode.
+            kmer_step_size: The size of the kmer step, if None uses self.kmer
+
+        Returns:
+            The list of integers that represent the sequence.
+        """
 
         stripped_seq = "".join(s for s in seq if s not in {self.START, self.END, self.PADDING})
         seq_len = len(stripped_seq)
@@ -127,10 +136,11 @@ class EncodingAlphabet:
         if self.kmer_size == 1:
             encoded_seq = self._kmer_one(stripped_seq)
         else:
-            encoded_seq = self._kmer_n(stripped_seq)
+            passed_kmer_step_size = kmer_step_size if kmer_step_size is not None else self.kmer_size
+            encoded_seq = self._kmer_n(stripped_seq, passed_kmer_step_size)
 
-        if seq[0] == self.START:
-            encoded_seq = [self.encoding_index[self.START]] + encoded_seq
+        if seq.startswith(self.START):
+            encoded_seq = [self.encoded_start] + encoded_seq
 
         non_seq_ending = "".join(s for s in seq if s in {self.END, self.PADDING})
         if non_seq_ending:

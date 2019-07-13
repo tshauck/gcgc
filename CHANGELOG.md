@@ -2,6 +2,13 @@
 
 ## Development
 
+### Changed
+
+- Can now specify how large of kmer step size to generate when supplying a kmer
+  value.
+- Renames EncodedSeq.integer_encoded to EncodedSeq.get_integer_encoding which
+  takes a kmer_step_size to specify how large of steps to take when encoding.
+
 ## 0.8.0 (2019-07-04)
 
 ### Fixed
