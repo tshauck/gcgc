@@ -16,7 +16,7 @@ class TorchSequenceParser(SequenceParser):
     def parse_record(self, gcgc_record: GCGCRecord, parsed_seq_len: Optional[int] = None) -> Dict:
         """Convert the incoming SeqRecord to a dictionary of features."""
 
-        parsed_features = super().parse_record(gcgc_record)
+        parsed_features = super().parse_record(gcgc_record, parsed_seq_len)
         parsed_features["seq_tensor"] = torch.LongTensor(parsed_features["seq_tensor"])
 
         if self.has_offset:
