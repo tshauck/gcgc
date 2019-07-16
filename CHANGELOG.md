@@ -2,6 +2,11 @@
 
 ## Development
 
+### Added
+
+- Parser now outputs the length of the tensor not including padding. This is
+  useful for packing and length based iteration.
+
 ### Changed
 
 - Can now specify how large of kmer step size to generate when supplying a kmer

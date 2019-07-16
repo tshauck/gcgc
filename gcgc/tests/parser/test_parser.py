@@ -30,7 +30,7 @@ def test_parser():
         "annotation", [annotations], preprocess=itemgetter("annotation")
     )
 
-    length_parser = EncodedSeqLengthParser(conform_to=5)
+    length_parser = EncodedSeqLengthParser(conform_to=10)
 
     dna = IUPACUnambiguousDNAEncoding(kmer_size=kmer_step_size)
 
@@ -44,12 +44,12 @@ def test_parser():
     )
 
     test_values = [
-        ("ATCGATCG", Path("ecoli"), 0, 0, 0, [1, 9, 15, 0, 0]),
-        ("ACT", Path("human"), 1, 0, 0, [1, 10, 2, 0, 0]),
-        ("ATCGATGG", Path("human"), 1, 0, 0, [1, 9, 15, 0, 0]),
+        ("ATCGATCGATCGATCGATCG", Path("ecoli"), 0, 0, 0, [1, 9, 15, 9, 15], 5),
+        ("ACT", Path("human"), 1, 0, 0, [1, 10, 2, 0, 0], 3),
+        ("ATCGATGG", Path("human"), 1, 0, 0, [1, 9, 15, 9, 3], 5),
     ]
 
-    for s, p, es, annotation_label, description_label, expected_seq in test_values:
+    for s, p, es, annotation_label, description_label, expected_seq, expected_len in test_values:
 
         i = SeqRecord(Seq(s, alphabet=dna), annotations=annotations, description="Test\tA")
         r = GCGCRecord(path=p, seq_record=i)
@@ -59,3 +59,4 @@ def test_parser():
         assert resp["annotation"] == annotation_label
         assert resp["desc_field"] == description_label
         assert resp["seq_tensor"] == expected_seq
+        assert resp["seq_len"] == expected_len

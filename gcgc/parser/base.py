@@ -90,12 +90,19 @@ class SequenceParser:
         es = gcgc_record.encoded_seq
         processed_seq = self._preprocess_record(es)
 
+        parsed_features: Dict[str, Any] = {}
+
         seq_tensor = processed_seq.get_integer_encoding(self.kmer_step_size)
+
         if parsed_seq_len is not None:
             seq_tensor = self._pad_to_len(seq_tensor, parsed_seq_len, es.alphabet.encoded_padding)
+            parsed_features["seq_tensor"] = seq_tensor
+        else:
+            parsed_features["seq_tensor"] = seq_tensor
 
-        parsed_features: Dict[str, Any] = {}
-        parsed_features["seq_tensor"] = seq_tensor
+        parsed_features["seq_len"] = len(
+            [s for s in seq_tensor if s != es.alphabet.encoded_padding]
+        )
 
         if self.has_offset:
             offset_seq = processed_seq.shift(self.sequence_offset)
