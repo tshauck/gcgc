@@ -18,6 +18,7 @@ class TorchSequenceParser(SequenceParser):
 
         parsed_features = super().parse_record(gcgc_record, parsed_seq_len)
         parsed_features["seq_tensor"] = torch.LongTensor(parsed_features["seq_tensor"])
+        parsed_features["seq_len"] = torch.tensor(parsed_features["seq_len"])
 
         if self.has_offset:
             parsed_features["offset_seq_tensor"] = torch.LongTensor(
