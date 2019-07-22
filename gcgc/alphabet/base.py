@@ -4,8 +4,8 @@
 
 import itertools as it
 from typing import Iterable
-from typing import Sequence
 from typing import Optional
+from typing import Sequence
 
 from gcgc.exceptions import GCGCAlphabetLetterEncodingException
 
@@ -16,16 +16,24 @@ class EncodingAlphabet:
     PADDING: str = "|"
     START: str = ">"
     END: str = "<"
+    MASK: str = "#"
 
     # Convince linting that EncodingAlphabet will have a letters attribute.
     letters: str
 
-    def __init__(self, kmer_size: int = 1, start_token: bool = True, end_token: bool = True):
+    def __init__(
+        self,
+        kmer_size: int = 1,
+        start_token: bool = True,
+        end_token: bool = True,
+        masked: bool = False,
+    ):
         """Create the EncodingAlphabet object."""
 
         self.start = start_token
         self.end = end_token
         self.kmer_size = kmer_size
+        self.masked = masked
 
         self.encoding_index = {letter: idx for idx, letter in enumerate(self.kmers_and_tokens)}
         self.decoding_index = {idx: letter for letter, idx in self.encoding_index.items()}
@@ -43,6 +51,8 @@ class EncodingAlphabet:
             append_string.append(self.START)
         if self.end:
             append_string.append(self.END)
+        if self.masked:
+            append_string.append(self.MASK)
 
         return "".join(append_string)
 
@@ -64,6 +74,11 @@ class EncodingAlphabet:
     def encoded_start(self):
         """Get the integer for the start character."""
         return self.encode_token(self.START)
+
+    @property
+    def encoded_mask(self):
+        """Get the integer for the mask character."""
+        return self.encode_token(self.MASK)
 
     @property
     def encoded_end(self):

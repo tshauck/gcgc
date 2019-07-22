@@ -40,7 +40,7 @@ def test_index_multiple_files(genomic_dataset):
     for idx, expected_id in test_sequences.items():
         actual_record = genomic_dataset[idx]
         assert actual_record["id"] == expected_id
-        assert len(actual_record['seq_tensor']) == POST_PAD_LENGTH
+        assert len(actual_record["seq_tensor"]) == POST_PAD_LENGTH
 
 
 @pytest.mark.skip("Skipping this until it can be fixed, issue with random access to files.")
