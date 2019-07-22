@@ -2,7 +2,8 @@
 # All Rights Reserved
 """PyTorch specific parser."""
 
-from typing import Dict, Optional
+from typing import Dict
+from typing import Optional
 
 import torch
 
@@ -18,6 +19,9 @@ class TorchSequenceParser(SequenceParser):
 
         parsed_features = super().parse_record(gcgc_record, parsed_seq_len)
         parsed_features["seq_tensor"] = torch.LongTensor(parsed_features["seq_tensor"])
+        parsed_features["seq_tensor_masked"] = torch.LongTensor(
+            parsed_features["seq_tensor_masked"]
+        )
         parsed_features["seq_len"] = torch.tensor(parsed_features["seq_len"])
 
         if self.has_offset:
