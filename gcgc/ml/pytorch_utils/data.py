@@ -3,7 +3,8 @@
 """Objects and methods for dealing with PyTorch data."""
 
 from pathlib import Path
-from typing import Sequence, Optional
+from typing import Optional
+from typing import Sequence
 
 from Bio import File
 from Bio import SeqIO
@@ -40,11 +41,14 @@ class GenomicDataset(torch.utils.data.Dataset):
         parser: TorchSequenceParser,
         file_format: str = "fasta",
         alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
+        index_db: str = ":memory:",
         parsed_seq_len: Optional[int] = None,
     ) -> "GenomicDataset":
         """Init from a single file. This is a convience method that delegates to from_paths."""
 
-        return cls.from_paths([path], parser, file_format, alphabet, parsed_seq_len)
+        return cls.from_paths(
+            [path], parser, file_format, alphabet, index_db, parsed_seq_len=parsed_seq_len
+        )
 
     @classmethod
     def from_paths(

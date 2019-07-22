@@ -67,3 +67,7 @@ test_integration:
 .PHONY: test_unit
 test_unit:
 	pytest --cov-report term-missing --cov=gcgc -m 'not integration'
+
+.PHONY: fmt
+fmt:
+	black .
