@@ -6,6 +6,8 @@
 
 - Parser now outputs the length of the tensor not including padding. This is
   useful for packing and length based iteration.
+- Generating masked output from the parse_record method is now available.
+- Alphabet can include an optional mask token.
 
 ### Changed
 
