@@ -4,13 +4,15 @@
 from operator import itemgetter
 from pathlib import Path
 
-from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from gcgc.fields import AnnotationField, DescriptionField, FileMetaDataField
 from gcgc.alphabet import IUPACUnambiguousDNAEncoding
-from gcgc.parser.base import EncodedSeqLengthParser, SequenceParser
+from gcgc.fields import AnnotationField
+from gcgc.fields import DescriptionField
+from gcgc.fields import FileMetaDataField
+from gcgc.parser.base import EncodedSeqLengthParser
+from gcgc.parser.base import SequenceParser
 from gcgc.parser.gcgc_record import GCGCRecord
 
 
@@ -60,3 +62,18 @@ def test_parser():
         assert resp["desc_field"] == description_label
         assert resp["seq_tensor"] == expected_seq
         assert resp["seq_len"] == expected_len
+
+
+def test_masked_parser():
+
+    sp = SequenceParser(masked_probability=0.5)
+    test_values = [("ATCGATCGATCGATCGATCG", []), ("ACTATCAATT", []), ("ATCGATGG", [])]
+    dna = IUPACUnambiguousDNAEncoding(masked=True, kmer_size=2)
+
+    for seq, out in test_values:
+        i = SeqRecord(Seq(seq, alphabet=dna))
+        r = GCGCRecord(seq_record=i, path=None)
+        record = sp.parse_record(r)
+
+        assert "seq_tensor_masked" in record
+        assert (record["seq_tensor_masked"] == dna.encoded_mask).sum() > 0
