@@ -95,21 +95,21 @@ class TestAlphabet(unittest.TestCase):
 
 
 @pytest.mark.parametrize(
-    "seq,kmer_size,expected_kmer",
+    "seq,kmer_size,kmer_step_size,expected_encoding",
     [
-        ("ATCG", 2, ["AT", "TC", "CG"]),
-        ("ATCGAT", 3, ["ATC", "TCG", "CGA", "GAT"]),
-        ("ATCG", 1, ["A", "T", "C", "G"]),
+        ("ATCG", 2, 1, [9, 14, 15]),
+        ("ATCGAT", 3, 1, [30, 47, 52, 9]),
+        ("ATCG", 1, 1, [4, 5, 6, 3]),
+        ("ATCG", 2, 2, [9, 15]),
+        ("ATCG", 2, 3, [9]),
     ],
 )
-def test_kmer_encoding(seq, kmer_size, expected_kmer):
+def test_kmer_encoding(seq, kmer_size, kmer_step_size, expected_encoding):
     """Test the kemrs are encoded as expected."""
     dna = alphabet.IUPACUnambiguousDNAEncoding(kmer_size=kmer_size)
-    expected_integers = [dna.encode_token(t) for t in expected_kmer]
+    actual = dna.integer_encode(seq, kmer_step_size)
 
-    actual = dna.integer_encode(seq)
-
-    assert expected_integers == actual
+    assert expected_encoding == actual
 
 
 def test_special_token_integer_encoding():

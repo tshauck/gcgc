@@ -2,11 +2,18 @@
 # All Rights Reserved
 """A Parser that converts GCGCRecords into data suitible for ML training."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+
+import numpy as np
 
 from gcgc.encoded_seq import EncodedSeq
 from gcgc.exceptions import EncodedSeqLengthParserException
-from gcgc.fields import AnnotationField, DescriptionField, FileMetaDataField
+from gcgc.fields import AnnotationField
+from gcgc.fields import DescriptionField
+from gcgc.fields import FileMetaDataField
 from gcgc.parser.gcgc_record import GCGCRecord
 
 
@@ -49,6 +56,8 @@ class SequenceParser:
         annotation_features: Optional[List[AnnotationField]] = None,
         description_features: Optional[List[DescriptionField]] = None,
         sequence_offset: Optional[int] = None,
+        kmer_step_size: Optional[int] = None,
+        masked_probability: float = 0.0,
     ) -> None:
         """Create the SequenceParser object."""
 
@@ -60,6 +69,8 @@ class SequenceParser:
         self.description_features = description_features if description_features is not None else []
 
         self.sequence_offset = sequence_offset
+        self.kmer_step_size = kmer_step_size
+        self.masked_probability = masked_probability
 
     def _preprocess_record(self, es: EncodedSeq):
         if self.encapsulate:
@@ -70,7 +81,19 @@ class SequenceParser:
 
         return es
 
-    def parse_record(self, gcgc_record: GCGCRecord) -> Dict:
+    def _pad_to_len(self, seq_tensor, parsed_len: int, pad_value: int):
+
+        seq_tensor_len = len(seq_tensor)
+
+        if seq_tensor_len == parsed_len:
+            return seq_tensor
+        elif seq_tensor_len > parsed_len:
+            return seq_tensor[:parsed_len]
+
+        # Handle the case seq_tensor_len < parsed_len
+        return seq_tensor + ([pad_value] * (parsed_len - seq_tensor_len))
+
+    def parse_record(self, gcgc_record: GCGCRecord, parsed_seq_len: Optional[int] = None) -> Dict:
         """Convert the incoming GCGCRecord to a dictionary of features."""
 
         es = gcgc_record.encoded_seq
@@ -78,11 +101,27 @@ class SequenceParser:
 
         parsed_features: Dict[str, Any] = {}
 
-        parsed_features["seq_tensor"] = processed_seq.integer_encoded
+        seq_tensor = processed_seq.get_integer_encoding(self.kmer_step_size)
+        if parsed_seq_len is not None:
+            seq_tensor = self._pad_to_len(seq_tensor, parsed_seq_len, es.alphabet.encoded_padding)
+
+        parsed_features["seq_tensor"] = seq_tensor
+
+        if self.masked_probability > 0:
+            mask_len = parsed_seq_len if parsed_seq_len is not None else len(seq_tensor)
+            mask = np.random.binomial(1, self.masked_probability, mask_len)
+            seq_tensor_masked = np.where(mask != 1, seq_tensor, es.alphabet.encoded_mask)
+            parsed_features["seq_tensor_masked"] = seq_tensor_masked
+
+        parsed_features["seq_len"] = len(
+            [s for s in seq_tensor if s != es.alphabet.encoded_padding]
+        )
 
         if self.has_offset:
             offset_seq = processed_seq.shift(self.sequence_offset)
-            parsed_features["offset_seq_tensor"] = offset_seq.integer_encoded
+            parsed_features["offset_seq_tensor"] = offset_seq.get_integer_encoding(
+                self.kmer_step_size
+            )
 
         parsed_features["id"] = gcgc_record.seq_record.id
 

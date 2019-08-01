@@ -5,7 +5,6 @@ import unittest
 
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
-from numpy.testing import assert_array_equal
 import pytest
 
 from gcgc.alphabet.iupac import ExtendedIUPACDNAEncoding
@@ -129,8 +128,8 @@ def test_seq_shift(actual_seq, expected_seq, offset):
 
 
 @pytest.mark.parametrize(
-    "seq,kmer_size,integer_encoding", [(">ATCG<||", 2, [1, 13, 22, 27, 2, 0, 0])]
+    "seq,kmer_size,kmer_step_size,integer_encoding", [(">ATCG<||", 2, 1, [1, 13, 22, 27, 2, 0, 0])]
 )
-def test_kmer_size_encoding(seq, kmer_size, integer_encoding):
+def test_kmer_size_encoding(seq, kmer_size, kmer_step_size, integer_encoding):
     encoded_seq = EncodedSeq(seq, ExtendedIUPACDNAEncoding(kmer_size=kmer_size))
-    assert encoded_seq.integer_encoded == integer_encoding
+    assert encoded_seq.get_integer_encoding(kmer_step_size) == integer_encoding

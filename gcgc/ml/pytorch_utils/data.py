@@ -3,6 +3,7 @@
 """Objects and methods for dealing with PyTorch data."""
 
 from pathlib import Path
+from typing import Optional
 from typing import Sequence
 
 from Bio import File
@@ -19,11 +20,17 @@ from gcgc.parser.gcgc_record import GCGCRecord
 class GenomicDataset(torch.utils.data.Dataset):
     """GenomicDataset can be used to load sequence information into a format aminable to PyTorch."""
 
-    def __init__(self, file_index: File._SQLiteManySeqFilesDict, parser: TorchSequenceParser):
+    def __init__(
+        self,
+        file_index: File._SQLiteManySeqFilesDict,
+        parser: TorchSequenceParser,
+        parsed_seq_len: Optional[int] = None,
+    ):
         """Initialize the GenomicDataset object."""
 
         self._file_index = file_index
         self._parser = parser
+        self._parsed_seq_len = parsed_seq_len
 
         super().__init__()
 
@@ -34,10 +41,14 @@ class GenomicDataset(torch.utils.data.Dataset):
         parser: TorchSequenceParser,
         file_format: str = "fasta",
         alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
+        index_db: str = ":memory:",
+        parsed_seq_len: Optional[int] = None,
     ) -> "GenomicDataset":
         """Init from a single file. This is a convience method that delegates to from_paths."""
 
-        return cls.from_paths([path], parser, file_format, alphabet)
+        return cls.from_paths(
+            [path], parser, file_format, alphabet, index_db, parsed_seq_len=parsed_seq_len
+        )
 
     @classmethod
     def from_paths(
@@ -47,6 +58,7 @@ class GenomicDataset(torch.utils.data.Dataset):
         file_format: str = "fasta",
         alphabet: EncodingAlphabet = ExtendedIUPACDNAEncoding(),
         index_db: str = ":memory:",
+        parsed_seq_len: Optional[int] = None,
         **kwargs,
     ) -> "GenomicDataset":
         """Initialize the GenomicDataset from a pathlib.Path sequence."""
@@ -54,7 +66,7 @@ class GenomicDataset(torch.utils.data.Dataset):
         file_index = SeqIO.index_db(
             index_db, [str(p) for p in path_sequence], file_format, alphabet=alphabet, **kwargs
         )
-        return cls(file_index, parser)
+        return cls(file_index, parser, parsed_seq_len)
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
@@ -69,4 +81,4 @@ class GenomicDataset(torch.utils.data.Dataset):
         file_name = Path(self._file_index._filenames[file_number])
 
         r = GCGCRecord(path=file_name, seq_record=self._file_index[key])
-        return self._parser.parse_record(r)
+        return self._parser.parse_record(r, self._parsed_seq_len)

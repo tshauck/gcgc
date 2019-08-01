@@ -2,6 +2,23 @@
 
 ## Development
 
+### Added
+
+- Parser now outputs the length of the tensor not including padding. This is
+  useful for packing and length based iteration.
+- Generating masked output from the parse_record method is now available.
+- Alphabet can include an optional mask token.
+
+### Changed
+
+- Can now specify how large of kmer step size to generate when supplying a kmer
+  value.
+- Renames EncodedSeq.integer_encoded to EncodedSeq.get_integer_encoding which
+  takes a kmer_step_size to specify how large of steps to take when encoding.
+- Add parsed_seq_len to the SequenceParser object to control how much padding to
+  apply to the end of the integer encoded sequence. This is useful since a batch
+  of tensors is expected to have the same size.
+
 ## 0.8.0 (2019-07-04)
 
 ### Fixed
