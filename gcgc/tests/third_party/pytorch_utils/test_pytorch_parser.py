@@ -7,11 +7,11 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import torch
 
+from gcgc.alphabet import IUPACUnambiguousDNAEncoding
 from gcgc.fields import FileMetaDataField
 from gcgc.ml.pytorch_utils.parser import TorchSequenceParser
 from gcgc.parser.base import EncodedSeqLengthParser
 from gcgc.parser.gcgc_record import GCGCRecord
-from gcgc.alphabet import IUPACUnambiguousDNAEncoding
 
 
 def test_parser():
@@ -23,10 +23,14 @@ def test_parser():
     length_parser = EncodedSeqLengthParser(conform_to=10)
 
     sp = TorchSequenceParser(
-        encapsulate=True, seq_length_parser=length_parser, file_features=ff, sequence_offset=-1
+        encapsulate=True,
+        seq_length_parser=length_parser,
+        file_features=ff,
+        sequence_offset=-1,
+        masked_probability=0.5,
     )
 
-    dna = IUPACUnambiguousDNAEncoding()
+    dna = IUPACUnambiguousDNAEncoding(masked=True)
     input_seq = SeqRecord(Seq("ATCG", alphabet=dna))
 
     test_values = [
@@ -40,3 +44,5 @@ def test_parser():
         resp = sp.parse_record(r)
         assert resp["species"] == es
         assert resp["seq_len"] == expected_len
+
+        assert "seq_tensor_masked" in resp
