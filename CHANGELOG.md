@@ -2,6 +2,8 @@
 
 ## Development
 
+## 0.9.0 (2019-08-05)
+
 ### Added
 
 - Parser now outputs the length of the tensor not including padding. This is
