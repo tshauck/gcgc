@@ -2,6 +2,10 @@
 
 ## Development
 
+- `gcgc` has been revamped quite a bit to better support existing processing
+  pipelines for NLP without trying to do to much. See the docs for more
+  information about how this works.
+
 ## 0.9.0 (2019-08-05)
 
 ### Added

@@ -1,0 +1,20 @@
+name: Run Tests and Lint
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag gcgc:development
+      - name: Run the unittests
+        run: docker run --rm gcgc:development make test
+      - name: Check formatting
+        run: docker run --rm gcgc:development make fmt-check
+      - name: Check pydocstyle
+        run: docker run --rm gcgc:development make pydocstyle
+      - name: Check mypy
+        run: docker run --rm gcgc:development make mypy
