@@ -11,11 +11,12 @@ clean:
 
 .PHONY: build
 build: clean
-	poetry build
+	flit build
 
 .PHONY: publish
 publish:
-	poetry publish
+	python setup.py sdist bdist_wheel
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 .PHONY: dev_release
 dev_release: dev_version build publish
@@ -26,6 +27,7 @@ isort:
 
 .PHONY: docs
 docs: clean_docs
+	rm -rf docs/github
 	mkdir docs/github
 	cp ./CHANGELOG.md ./docs/github
 	sed 's/# GCGC/# README/g' README.md > ./docs/github/README.md
@@ -37,7 +39,7 @@ clean_docs:
 	rm -rf site
 
 .PHONY: docs_upload
-docs_upload:
+docs_upload: docs
 	aws s3 cp --recursive ./site s3://gcgc.trenthauck.com/
 
 .PHONY: docs_write_good
@@ -50,7 +52,7 @@ vulture:
 
 .PHONY: pydocstyle
 pydocstyle:
-	pydocstyle gcgc
+	pydocstyle --convention=google gcgc
 
 .PHONY: flake8
 flake8:
@@ -71,3 +73,7 @@ test_unit:
 .PHONY: fmt
 fmt:
 	black .
+
+.PHONY: fmt-check
+fmt-check:
+	black --check .

@@ -1,0 +1,20 @@
+name: Run Tests and Lint
+
+on:
+  push:
+    tags:
+      - '\d+.\d+.\d+'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag gcgc:development
+      - name: Build and push docs
+        run: docker run -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID --rm gcgc:development make docs_upload
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
