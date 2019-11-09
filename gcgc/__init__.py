@@ -2,6 +2,6 @@
 # All Rights Reserved
 """Top-level GCGC module."""
 
-__version__ = "0.10.0-dev.1"
+__version__ = "0.10.0"
 
 from gcgc.tokenizer import SequenceTokenizer
