@@ -17,7 +17,7 @@ def _get_long_description():
 
 setup(
     name="gcgc",
-    version="0.9.2-dev.1",
+    version="0.10.0",
     description=DESCRIPTION,
     long_description=_get_long_description(),
     long_description_content_type="text/markdown",
