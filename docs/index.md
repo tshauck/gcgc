@@ -67,7 +67,7 @@ window size (`kmer_size`) was two, there was an output token at each step. If
 `kmer_step_size=2` too, then there will be two output tokens.
 
 ```python
-from gcgc.tokenizer import SequenceTokenizer
+from gcgc import SequenceTokenizer
 
 tokenizer = SequenceTokenizer(kmer_size=2, kmer_step_size=2)
 
@@ -95,17 +95,22 @@ It can be loaded using `torchtext`'s `TabularDataset` object, but instead of
 supplying no tokenize function to `Field`, we can supply GCGC's tokenizer.
 
 ```python
+from gcgc import SequenceTokenizer
+from torchtext import data
+
 dna_tokenizer = SequenceTokenizer(kmer_size=2, kmer_step_size=2)
 
-label_field = data.LabelField()
-sequence_field = data.Field(tokenize=dna_tokenizer, batch_first=True, fix_length=40)
+sequence_field = data.Field(
+    tokenize=dna_tokenizer,
+    batch_first=True,
+    fix_length=40,
+)
 
-# The tablular dataset will _not_ do the encoding.
 train = data.TabularDataset(
     path="./data.tsv",
     format="tsv",
     skip_header=True,
-    fields=[("label", label_field), ("sequence", sequence_field)],
+    fields=[("sequence", sequence_field)],
 )
 
 sequence_field.build_vocab(train, min_freq=1)
@@ -180,4 +185,4 @@ defaultdict(<bound method Vocab._default_unk_index of <torchtext.vocab.Vocab obj
 
 ## Documentation Version
 
-The documentation you're reading was build for version: `0.9.2-dev.1`.
+The documentation you're reading was build for version: `0.10.0-dev.1`.

@@ -1,10 +1,10 @@
 # Changelog
 
-## Development
+## 0.10.0 (2019-11-09)
 
-- `gcgc` has been revamped quite a bit to better support existing processing
-  pipelines for NLP without trying to do to much. See the docs for more
-  information about how this works.
+`gcgc` has been revamped quite a bit to better support existing processing
+pipelines for NLP without trying to do to much. See the docs for more
+information about how this works.
 
 ## 0.9.0 (2019-08-05)
 
