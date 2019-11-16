@@ -3,5 +3,6 @@
 """Contains tokenizer level packages."""
 
 from gcgc.tokenizer.base import SequenceTokenizer
+from gcgc.tokenizer.base import SequenceTokenizerSpec
 
-__all__ = ["SequenceTokenizer"]
+__all__ = ["SequenceTokenizer", "SequenceTokenizerSpec"]

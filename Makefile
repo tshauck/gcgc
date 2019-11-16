@@ -16,7 +16,7 @@ build: clean
 .PHONY: publish
 publish:
 	python setup.py sdist bdist_wheel
-	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+	twine upload dist/*
 
 .PHONY: dev_release
 dev_release: dev_version build publish
