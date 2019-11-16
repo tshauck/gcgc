@@ -104,27 +104,37 @@ class SequenceTokenizerSpec:
     @property
     def bos_token_int(self) -> int:
         """Return the integer encoding of the passed token."""
-        return self.vocabulary.token_to_int[self.bos_token]
+        if not self.passed_bos_token:
+            raise ValueError(f"bos_token is false-y ({self.bos_token}), cannot get int.")
+        return self.vocabulary.token_to_int[cast(str, self.bos_token)]
 
     @property
     def eos_token_int(self) -> int:
         """Return the integer encoding of the passed token."""
-        return self.vocabulary.token_to_int[self.eos_token]
+        if not self.passed_eos_token:
+            raise ValueError(f"eos_token is false-y ({self.eos_token}), cannot get int.")
+        return self.vocabulary.token_to_int[cast(str, self.eos_token)]
 
     @property
     def unk_token_int(self) -> int:
         """Return the integer encoding of the passed token."""
-        return self.vocabulary.token_to_int[self.unk_token]
+        if not self.passed_unk_token:
+            raise ValueError(f"unk_token is false-y ({self.unk_token}), cannot get int.")
+        return self.vocabulary.token_to_int[cast(str, self.unk_token)]
 
     @property
     def pad_token_int(self) -> int:
         """Return the integer encoding of the passed token."""
-        return self.vocabulary.token_to_int[self.pad_token]
+        if not self.passed_pad_token:
+            raise ValueError(f"pad_token is false-y ({self.pad_token}), cannot get int.")
+        return self.vocabulary.token_to_int[cast(str, self.pad_token)]
 
     @property
     def mask_token_int(self) -> int:
         """Return the integer encoding of the passed token."""
-        return self.vocabulary.token_to_int[self.mask_token]
+        if not self.passed_mask_token:
+            raise ValueError(f"mask_token is false-y ({self.mask_token}), cannot get int.")
+        return self.vocabulary.token_to_int[cast(str, self.mask_token)]
 
 
 class SequenceTokenizer:
