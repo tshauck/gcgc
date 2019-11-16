@@ -1,12 +1,12 @@
-version: 0.10.0
+version: 0.11.0-dev.1
 tag_template: v{{ yeyo_version }}
 commit_template: v{{ yeyo_version }}
 files:
-  - file_path: VERSION
-    match_template: yeyo_version
-  - file_path: docs/index.md
-    match_template: yeyo_version
-  - file_path: gcgc/__init__.py
-    match_template: yeyo_version
-  - file_path: setup.py
-    match_template: yeyo_version
+- file_path: VERSION
+  match_template: yeyo_version
+- file_path: docs/index.md
+  match_template: yeyo_version
+- file_path: gcgc/__init__.py
+  match_template: yeyo_version
+- file_path: setup.py
+  match_template: yeyo_version

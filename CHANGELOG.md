@@ -1,6 +1,14 @@
 # Changelog
 
+## 0.11.0 (2019-11-15)
+
+### Added
+
+- Added the `SequenceTokenizerSpec` object for specifying the tokenizer.
+
 ## 0.10.0 (2019-11-09)
+
+### Changed
 
 `gcgc` has been revamped quite a bit to better support existing processing
 pipelines for NLP without trying to do to much. See the docs for more
