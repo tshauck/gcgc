@@ -2,68 +2,129 @@
 # All Rights Reserved
 """A Tokenizer that works on biological sequences."""
 
-from typing import List, Optional
+from typing import List, Optional, Dict, cast
+from dataclasses import field
+import itertools as it
 
-import pydantic
+from pydantic import dataclasses
 
 
-class SequenceTokenizerSpec(pydantic.BaseModel):
+@dataclasses.dataclass
+class Vocab:
+    """A vocabulary object."""
+
+    token_to_int: Dict[str, int]
+    int_to_token: Dict[int, str]
+
+    @classmethod
+    def from_list(cls, tokens: List[str]) -> "Vocab":
+        """Create a vocabulary from a list of tokens."""
+        token_to_int = {}
+        int_to_token = {}
+
+        for i, token in enumerate(tokens):
+            int_to_token[i] = token
+            token_to_int[token] = i
+
+        return cls(token_to_int, int_to_token)
+
+
+@dataclasses.dataclass
+class SequenceTokenizerSpec:
     """The specification for the tokenizer."""
 
-    max_length: int = pydantic.Field(..., description="The maximum length of the sequence.")
-    kmer_size: int = pydantic.Field(
-        1, description="How big of kmers to tokenize the sequence into."
-    )
-    kmer_step_size: int = pydantic.Field(1, description="The size of the sliding window of kmer.")
-    bos_token: Optional[str] = pydantic.Field(
-        None, description="The token for the beginning of the sequence."
-    )
-    eos_token: Optional[str] = pydantic.Field(
-        None, description="The token for the end of the sequence."
-    )
-    unk_token: Optional[str] = pydantic.Field(None, description="The token for an unknown token.")
-    pad_token: Optional[str] = pydantic.Field(
-        None, description="The token for the padding character."
-    )
-    cls_token: Optional[str] = pydantic.Field(None, description="The classification token.")
-    mask_token: Optional[str] = pydantic.Field(
-        None, description="The token for the mask character."
-    )
+    max_length: int
+    alphabet: str
+
+    vocabulary: Vocab = field(init=False)
+
+    kmer_size: int = 1
+    kmer_step_size: int = 1
+
+    bos_token: Optional[str] = None
+    eos_token: Optional[str] = None
+    unk_token: Optional[str] = None
+    pad_token: Optional[str] = None
+    mask_token: Optional[str] = None
+
+    def __post_init__(self):
+        """Post inits the tokenizer spec."""
+        self.vocabulary = Vocab.from_list(self.special_tokens + self.possible_kmers)
+
+    @property
+    def possible_kmers(self) -> List[str]:
+        """Return the set of possible kmers given the alphabet and kmer size."""
+        return ["".join(kmer) for kmer in it.product(self.alphabet, repeat=self.kmer_size)]
+
+    @property
+    def special_tokens(self) -> List[str]:
+        """Return the list of special tokens."""
+        return [
+            s
+            for s in [
+                self.bos_token,
+                self.eos_token,
+                self.unk_token,
+                self.pad_token,
+                self.mask_token,
+            ]
+            if s
+        ]
 
     @property
     def passed_bos_token(self) -> bool:
         """Return True if this token is in use."""
-        return self.bos_token is None
+        return self.bos_token is not None
 
     @property
     def passed_eos_token(self) -> bool:
         """Return True if this token is in use."""
-        return self.eos_token is None
+        return self.eos_token is not None
 
     @property
     def passed_unk_token(self) -> bool:
         """Return True if this token is in use."""
-        return self.unk_token is None
+        return self.unk_token is not None
 
     @property
     def passed_pad_token(self) -> bool:
         """Return True if this token is in use."""
-        return self.pad_token is None
-
-    @property
-    def passed_cls_token(self) -> bool:
-        """Return True if this token is in use."""
-        return self.cls_token is None
+        return self.pad_token is not None
 
     @property
     def passed_mask_token(self) -> bool:
         """Return True if this token is in use."""
-        return self.mask_token is None
+        return self.mask_token is not None
 
     @property
-    def max_encoded_length(self) -> int:
-        """Returns how long the encoded sequence can be given the token's used."""
+    def max_tokenized_length(self) -> int:
+        """Return how long the tokenized list can be given the tokens used."""
         return self.max_length - (int(self.passed_bos_token) + int(self.passed_eos_token))
+
+    @property
+    def bos_token_int(self) -> int:
+        """Return the integer encoding of the passed token."""
+        return self.vocabulary.token_to_int[self.bos_token]
+
+    @property
+    def eos_token_int(self) -> int:
+        """Return the integer encoding of the passed token."""
+        return self.vocabulary.token_to_int[self.eos_token]
+
+    @property
+    def unk_token_int(self) -> int:
+        """Return the integer encoding of the passed token."""
+        return self.vocabulary.token_to_int[self.unk_token]
+
+    @property
+    def pad_token_int(self) -> int:
+        """Return the integer encoding of the passed token."""
+        return self.vocabulary.token_to_int[self.pad_token]
+
+    @property
+    def mask_token_int(self) -> int:
+        """Return the integer encoding of the passed token."""
+        return self.vocabulary.token_to_int[self.mask_token]
 
 
 class SequenceTokenizer:
@@ -78,10 +139,6 @@ class SequenceTokenizer:
         """
         self.tokenizer_spec = tokenizer_spec
 
-    @staticmethod
-    def _kmer_one(seq: str) -> List[str]:
-        return list(seq)
-
     def _kmer_n(self, seq: str) -> List[str]:
         seq_len = len(seq)
         iterations = seq_len - self.tokenizer_spec.kmer_size + 1
@@ -94,7 +151,15 @@ class SequenceTokenizer:
         return kmers
 
     def __call__(self, seq: str) -> List[str]:
-        """Integer encode the sequence.
+        """Tokenize the seqeunce, see .tokenize."""
+        return self.tokenize(seq)
+
+    def encode(self, seq: str) -> List[int]:
+        """Encode the underlying sequence."""
+        return [self.tokenizer_spec.vocabulary.token_to_int[s] for s in self.tokenize(seq)]
+
+    def tokenize(self, seq: str) -> List[str]:
+        """Tokenize the sequence.
 
         Args:
             seq: The sequence to encode.
@@ -112,6 +177,16 @@ class SequenceTokenizer:
             )
 
         if self.tokenizer_spec.kmer_size == 1:
-            return self._kmer_one(seq)
+            kmer_list = list(seq)
+        else:
+            kmer_list = self._kmer_n(seq)
 
-        return self._kmer_n(seq)
+        sequence_kmers = kmer_list[: self.tokenizer_spec.max_tokenized_length]
+
+        if self.tokenizer_spec.passed_bos_token:
+            sequence_kmers.insert(0, cast(str, self.tokenizer_spec.bos_token))
+
+        if self.tokenizer_spec.passed_eos_token:
+            sequence_kmers.append(cast(str, self.tokenizer_spec.eos_token))
+
+        return sequence_kmers
