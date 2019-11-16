@@ -185,4 +185,4 @@ defaultdict(<bound method Vocab._default_unk_index of <torchtext.vocab.Vocab obj
 
 ## Documentation Version
 
-The documentation you're reading was build for version: `0.11.0-dev.1`.
+The documentation you're reading was build for version: `0.11.0-dev.2`.
