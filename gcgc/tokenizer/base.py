@@ -16,6 +16,10 @@ class Vocab:
     token_to_int: Dict[str, int]
     int_to_token: Dict[int, str]
 
+    def __len__(self) -> int:
+        """Returns the length of the vocab."""
+        return len(self.token_to_int)
+
     @classmethod
     def from_list(cls, tokens: List[str]) -> "Vocab":
         """Create a vocabulary from a list of tokens."""
