@@ -17,6 +17,7 @@ class Vocab:
     int_to_token: Dict[int, str]
 
     def __len__(self) -> int:
+        """Returns the length of the vocab."""
         return len(self.token_to_int)
 
     @classmethod
