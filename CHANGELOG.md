@@ -6,6 +6,7 @@
 
 - Added the `SequenceTokenizerSpec` object for specifying the tokenizer.
 - Added `Vocab` object for storing the int to token, and token to int encodings.
+- Added example of using tensorflow/keras together with gcgc.
 
 ## 0.10.0 (2019-11-09)
 

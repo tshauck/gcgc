@@ -9,10 +9,6 @@ test:
 clean:
 	rm -rf dist
 
-.PHONY: build
-build: clean
-	flit build
-
 .PHONY: publish
 publish:
 	python setup.py sdist bdist_wheel
