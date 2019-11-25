@@ -2,10 +2,10 @@
 # All Rights Reserved
 """Test a keras model works with the tokenization."""
 
-import tensorflow as tf
-
 import pathlib
 import csv
+
+import tensorflow as tf
 
 from gcgc import SequenceTokenizer, SequenceTokenizerSpec
 
@@ -15,47 +15,68 @@ HERE = pathlib.Path(__file__).parent
 CLASSES = {"N": 2, "EI": 0, "IE": 1}
 
 
-def get_dataset(tokenizer):
-    # https://archive.ics.uci.edu/ml/machine-learning-databases/molecular-biology/splice-junction-gene-sequences/
+def load_and_tokenize_dataset(tokenizer: SequenceTokenizer):
+    """Load the dataset and create a tf.data.Dataset from the underlying records.
+
+    Data from:
+        https://archive.ics.uci.edu/ml/machine-learning-databases/molecular-biology/splice-junction-gene-sequences/
+
+    Args:
+        tokenizer: A tokenizer that converts the input inputs into a format suitable for keras.
+
+    Returns:
+        A tensorflow dataset suitable for model.fit.
+
+    """
     split_tsv = HERE / "./split.tsv"
 
     def yield_records():
+        """Yield encoded records."""
         with split_tsv.open("r") as tsv_handler:
             rows = csv.DictReader(tsv_handler, fieldnames=["label", "sequence"], delimiter="\t")
             for row in rows:
                 yield {"encoded_seq": tokenizer.encode(row["sequence"])}, CLASSES[row["label"]]
 
-    return tf.data.Dataset.from_generator(
-        yield_records,
-        ({"encoded_seq": tf.int32}, tf.int32),
-        (
-            {"encoded_seq": tf.TensorShape([tokenizer.tokenizer_spec.max_length])},
-            tf.TensorShape([]),
-        ),
-    ).batch(64)
+    return (
+        tf.data.Dataset.from_generator(
+            yield_records,
+            ({"encoded_seq": tf.int32}, tf.int32),
+            (
+                {"encoded_seq": tf.TensorShape([tokenizer.tokenizer_spec.max_length])},
+                tf.TensorShape([]),
+            ),
+        )
+        .shuffle(buffer_size=1000)
+        .batch(64)
+    )
 
 
 class CNNClassifier(tf.keras.Model):
+    """An object that runs a CNN over the sequences."""
+
     def __init__(self, tokenizer, *args, **kwargs):
+        """Init the class."""
         super(CNNClassifier, self).__init__(*args, **kwargs)
+
         self.tokenizer = tokenizer
-        self.embedding = tf.keras.layers.Embedding(
-            len(self.tokenizer.tokenizer_spec.vocabulary), 50
+
+        self.submodel = tf.keras.models.Sequential(
+            [
+                tf.keras.layers.InputLayer(input_shape=(60,)),
+                tf.keras.layers.Embedding(len(self.tokenizer.tokenizer_spec.vocabulary), 50),
+                tf.keras.layers.Conv1D(12, 10),
+                tf.keras.layers.Flatten(),
+                tf.keras.layers.ReLU(),
+                tf.keras.layers.Dense(500),
+                tf.keras.layers.ReLU(),
+                tf.keras.layers.Dense(3),
+            ]
         )
-        self.cnn = tf.keras.layers.Conv1D(50, 10)
-        self.cnn2 = tf.keras.layers.Conv1D(50, 10)
 
-        self.flatten = tf.keras.layers.Flatten()
-        self.out = tf.keras.layers.Dense(500)
-        self.out2 = tf.keras.layers.Dense(3)
-
-    def call(self, inputs, **kwargs):
+    def call(self, inputs):
+        """Implment the call method of the model that runs the forward pass."""
         seq = inputs["encoded_seq"]
-
-        embedded = self.embedding(seq)
-        cnn = self.cnn2(self.cnn(embedded))
-        flattened = self.flatten(cnn)
-        return self.out2(tf.nn.relu(self.out(flattened)))
+        return self.submodel(seq)
 
 
 def test_fit_model():
@@ -65,11 +86,11 @@ def test_fit_model():
     spec = SequenceTokenizerSpec(max_length, "ATCGNDRS")
     tokenizer = SequenceTokenizer(spec)
 
-    optimizer = tf.keras.optimizers.Adam(learning_rate=3e-6, epsilon=1e-08, clipnorm=1.0)
+    optimizer = tf.keras.optimizers.Adam()
     loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
     metric = tf.keras.metrics.SparseCategoricalAccuracy("accuracy")
 
-    dataset = get_dataset(tokenizer)
+    dataset = load_and_tokenize_dataset(tokenizer)
     model = CNNClassifier(tokenizer)
     model.compile(loss=loss, optimizer=optimizer, metrics=[metric])
-    model.fit(dataset, epochs=1)
+    model.fit(dataset, epochs=25, verbose=2)
