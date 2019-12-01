@@ -17,7 +17,7 @@ def _get_long_description():
 
 setup(
     name="gcgc",
-    version="0.11.0-dev.3",
+    version="0.11.0",
     description=DESCRIPTION,
     long_description=_get_long_description(),
     long_description_content_type="text/markdown",
@@ -28,5 +28,5 @@ setup(
     license="MIT",
     packages=find_packages(),
     install_requires=["pydantic~=1.1"],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
 )
