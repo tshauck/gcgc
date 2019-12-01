@@ -16,5 +16,3 @@ jobs:
         run: docker run --rm gcgc:development make fmt-check
       - name: Check pydocstyle
         run: docker run --rm gcgc:development make pydocstyle
-      - name: Check mypy
-        run: docker run --rm gcgc:development make mypy

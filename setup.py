@@ -28,5 +28,5 @@ setup(
     license="MIT",
     packages=find_packages(),
     install_requires=["pydantic~=1.1"],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
 )
