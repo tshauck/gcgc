@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Improved the docs to reflect the `SequenceTokenizerSpec`.
+- Made max length optional.
+
 ## 0.11.0 (2019-11-15)
 
 ### Added

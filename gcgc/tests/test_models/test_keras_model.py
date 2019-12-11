@@ -83,7 +83,7 @@ def test_fit_model():
     """Test we can fit a keras model."""
     max_length = 60
 
-    spec = SequenceTokenizerSpec(max_length, "ATCGNDRS")
+    spec = SequenceTokenizerSpec("ATCGNDRS", max_length=max_length)
     tokenizer = SequenceTokenizer(spec)
 
     optimizer = tf.keras.optimizers.Adam()
