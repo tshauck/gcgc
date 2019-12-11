@@ -18,6 +18,12 @@ from gcgc.tokenizer import SequenceTokenizer, SequenceTokenizerSpec
         ),
         (
             "ATCG",
+            SequenceTokenizerSpec(alphabet="ATCG", kmer_size=1, kmer_step_size=1),
+            list("ATCG"),
+            [0, 1, 2, 3],
+        ),
+        (
+            "ATCG",
             SequenceTokenizerSpec(alphabet="ATCG", max_length=2, kmer_size=1, kmer_step_size=1),
             list("AT"),
             [0, 1],

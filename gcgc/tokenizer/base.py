@@ -37,13 +37,14 @@ class Vocab:
 class SequenceTokenizerSpec:
     """The specification for the tokenizer."""
 
-    max_length: int
     alphabet: str
 
     vocabulary: Vocab = field(init=False)
 
     kmer_size: int = 1
     kmer_step_size: int = 1
+
+    max_length: Optional[int] = None
 
     bos_token: Optional[str] = None
     eos_token: Optional[str] = None
@@ -101,8 +102,11 @@ class SequenceTokenizerSpec:
         return self.mask_token is not None
 
     @property
-    def max_tokenized_length(self) -> int:
+    def max_tokenized_length(self) -> Optional[int]:
         """Return how long the tokenized list can be given the tokens used."""
+        if self.max_length is None:
+            return None
+
         return self.max_length - (int(self.passed_bos_token) + int(self.passed_eos_token))
 
     @property
@@ -195,7 +199,10 @@ class SequenceTokenizer:
         else:
             kmer_list = self._kmer_n(seq)
 
-        sequence_kmers = kmer_list[: self.tokenizer_spec.max_tokenized_length]
+        if self.tokenizer_spec.max_tokenized_length:
+            sequence_kmers = kmer_list[: self.tokenizer_spec.max_tokenized_length]
+        else:
+            sequence_kmers = kmer_list
 
         if self.tokenizer_spec.passed_bos_token:
             sequence_kmers.insert(0, cast(str, self.tokenizer_spec.bos_token))
