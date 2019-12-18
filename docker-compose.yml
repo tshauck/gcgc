@@ -5,6 +5,10 @@ services:
     build:
       context: .
     image: tshauck/gcgc
+    volumes:
+      - $PWD/gcgc/data:/data
+    entrypoint:
+      - gcgc
   yeyo:
     image: docker.io/thauck/yeyo:0.3.0-dev.2
     volumes:

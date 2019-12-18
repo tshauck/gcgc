@@ -48,7 +48,7 @@ vulture:
 
 .PHONY: pydocstyle
 pydocstyle:
-	pydocstyle --convention=google gcgc
+	pydocstyle --add-ignore=D202,D203,D301 --convention=google gcgc
 
 .PHONY: flake8
 flake8:

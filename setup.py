@@ -17,7 +17,7 @@ def _get_long_description():
 
 setup(
     name="gcgc",
-    version="0.12.0-dev.1",
+    version="0.12.0-dev.2",
     description=DESCRIPTION,
     long_description=_get_long_description(),
     long_description_content_type="text/markdown",
@@ -28,5 +28,10 @@ setup(
     license="MIT",
     packages=find_packages(),
     install_requires=["pydantic~=1.1"],
-    python_requires=">=3.7",
+    python_requires=">=3.6",
+    extras_require={"sentencepiece": ["sentencepiece~=0.1", "biopython"]},
+    entry_points="""
+        [console_scripts]
+        gcgc=gcgc:cli
+    """,
 )
