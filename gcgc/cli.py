@@ -63,16 +63,17 @@ def sentencepiece_tokenizer(input_fasta: str, model_path: str):
             output_record = {
                 "token_ids": tokenized_sequence,
                 "sequence_id": record.id,
-                "n_tokens": len(tokenized_sequence)
+                "n_tokens": len(tokenized_sequence),
             }
             click.echo(json.dumps(output_record))
+
 
 @cli.group()
 def train():
     """Entrypoint for the train command."""
 
 
-@train.command('sentencepiece')
+@train.command("sentencepiece")
 @click.argument("input_fasta", type=str)
 @click.argument("model_prefix", type=str)
 @click.option("--vocab_size", type=int, default=200, help="The size of the vocabulary to target.")

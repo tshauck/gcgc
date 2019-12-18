@@ -25,5 +25,6 @@ RUN tar -xzf /tmp/piece.tar.gz
 WORKDIR /tmp/sentencepiece-0.1.85
 RUN mkdir build && cd build && cmake .. && make && make install && ldconfig -v
 
+WORKDIR /gcgc
 COPY ./ ./
 RUN pip install .[sentencepiece]
