@@ -28,5 +28,10 @@ setup(
     license="MIT",
     packages=find_packages(),
     install_requires=["pydantic~=1.1"],
-    python_requires=">=3.7",
+    python_requires=">=3.6",
+    extras_require={"sentencepiece": ["sentencepiece~=0.1", "biopython"]},
+    entry_points="""
+        [console_scripts]
+        gcgc=gcgc:cli
+    """,
 )
