@@ -1,11 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.12.0 (Unreleased)
 
-### Changed
-
-- Improved the docs to reflect the `SequenceTokenizerSpec`.
-- Made max length optional.
+- Improved the docs to reflect the `SequenceTokenizerSpec` that was added in
+  0.11.0.
+- Made max length optional for the tokenizer.
+- Added CLI that parses use the Sequence Piece library.
+- Began versioning docker build, and make pushing easier.
 
 ## 0.11.0 (2019-11-15)
 

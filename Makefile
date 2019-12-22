@@ -9,13 +9,18 @@ test:
 clean:
 	rm -rf dist
 
-.PHONY: publish
-publish:
+.PHONY: publish-python
+publish-python:
 	python setup.py sdist bdist_wheel
 	twine upload dist/*
 
-.PHONY: dev_release
-dev_release: dev_version build publish
+.PHONY: publish-docker
+publish-docker:
+	docker-compose build gcgc
+	docker-compose push gcgc
+
+.PHONY: publish
+publish: publish-python publish-docker
 
 .PHONY: isort
 isort:
