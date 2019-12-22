@@ -1,10 +1,10 @@
-version: '3'
+version: "3"
 
 services:
   gcgc:
     build:
       context: .
-    image: tshauck/gcgc
+    image: docker.io/thauck/gcgc:0.12.0-dev.2
     volumes:
       - $PWD/gcgc/data:/data
     entrypoint:

@@ -10,3 +10,5 @@ files:
   match_template: yeyo_version
 - file_path: setup.py
   match_template: yeyo_version
+- file_path: docker-compose.yml
+  match_template: yeyo_version
