@@ -28,3 +28,5 @@ RUN mkdir build && cd build && cmake .. && make && make install && ldconfig -v
 WORKDIR /gcgc
 COPY ./ ./
 RUN pip install .[sentencepiece]
+
+ENTRYPOINT ["gcgc"]
