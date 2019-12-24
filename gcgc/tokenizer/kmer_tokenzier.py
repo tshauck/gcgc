@@ -19,16 +19,11 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
 
     max_length: Optional[int] = Field(None, env="GCGC_MAX_LENGTH")
 
-    bos_token: Optional[str] = None
-    eos_token: Optional[str] = None
-    unk_token: Optional[str] = None
-    pad_token: Optional[str] = None
-    mask_token: Optional[str] = None
-
-    @property
-    def functional_max_length(self) -> int:
-        """Return the max length after taking beginning and end tokens into consideration."""
-        return max_length - int(self.bos_token is None) - int(self.eos_token is None)
+    bos_token: Optional[str] = Field(None, env="GCGC_BOS_TOKEN")
+    eos_token: Optional[str] = Field(None, env="GCGC_EOS_TOKEN")
+    unk_token: Optional[str] = Field(None, env="GCGC_UNK_TOKEN")
+    pad_token: Optional[str] = Field(None, env="GCGC_PAD_TOKEN")
+    mask_token: Optional[str] = Field(None, env="GCGC_MASK_TOKEN")
 
     @property
     def special_tokens(self) -> List[str]:
