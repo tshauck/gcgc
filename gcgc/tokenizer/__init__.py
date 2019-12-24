@@ -2,7 +2,7 @@
 # All Rights Reserved
 """Contains tokenizer level packages."""
 
-from gcgc.tokenizer.base import SequenceTokenizer
-from gcgc.tokenizer.base import SequenceTokenizerSpec
+from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
+from gcgc.tokenizer.kmer_tokenzier import KmerTokenizerSettings
 
-__all__ = ["SequenceTokenizer", "SequenceTokenizerSpec"]
+__all__ = ["KmerTokenizer", "KmerTokenizerSettings"]

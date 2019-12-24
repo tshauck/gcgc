@@ -128,8 +128,3 @@ def sentencepiece_train(
         LOG.info("Copying %s to %s", output_vocab.name, str(output_vocab))
         shutil.move(output_vocab.name, str(output_vocab))
         shutil.move(output_model.name, str(output_model))
-
-
-@train.command()
-def unigram():
-    """Train a Unigram segmentation model."""
