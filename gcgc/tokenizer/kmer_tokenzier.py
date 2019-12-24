@@ -19,12 +19,6 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
 
     max_length: Optional[int] = Field(None, env="GCGC_MAX_LENGTH")
 
-    bos_token: Optional[str] = Field(None, env="GCGC_BOS_TOKEN")
-    eos_token: Optional[str] = Field(None, env="GCGC_EOS_TOKEN")
-    unk_token: Optional[str] = Field(None, env="GCGC_UNK_TOKEN")
-    pad_token: Optional[str] = Field(None, env="GCGC_PAD_TOKEN")
-    mask_token: Optional[str] = Field(None, env="GCGC_MASK_TOKEN")
-
     @property
     def special_tokens(self) -> List[str]:
         return [

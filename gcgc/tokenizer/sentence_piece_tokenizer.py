@@ -3,88 +3,107 @@
 """Module for KMER tokenization."""
 
 from typing import List, Optional
-import itertools as it
 from pathlib import Path
+import shutil
 
 from pydantic import Field
+from typing_extensions import Literal
 
 from gcgc.tokenizer.base import SequenceTokenizer, SequenceTokenizerSettings
 
 try:
     import sentencepiece as spm
 
+    # pylint: disable=invalid-name
     has_spm = True
 except ImportError:
+    # pylint: disable=invalid-name
     has_spm = False
 
 
 class BioSequencePieceSettings(SequenceTokenizerSettings):
     """The settings for the sentence piece model."""
 
-    model_path: Path = Field(..., env="GCGC_SP_MODEL_PATH")
-    vocab_path: Path = Field(..., env="GCGC_SP_VOCAB_PATH")
-
-    max_length: Optional[int] = Field(None, env="GCGC_KMER_MAX_LENGTH")
-
-    bos_token: Optional[str] = Field(None, env="GCGC_BOS_TOKEN")
-    eos_token: Optional[str] = Field(None, env="GCGC_EOS_TOKEN")
-    unk_token: Optional[str] = Field(None, env="GCGC_UNK_TOKEN")
-    pad_token: Optional[str] = Field(None, env="GCGC_PAD_TOKEN")
-    mask_token: Optional[str] = Field(None, env="GCGC_MASK_TOKEN")
+    model_prefix: Path = Field(..., env="GCGC_SP_MODEL_PREFIX")
+    vocab_size: int = Field(8000, env="GCGC_SP_VOCAB_SIZE")
+    model_type: Literal["unigram", "bpe"] = "unigram"
+    max_sequence_length: int = 4192
 
     @property
-    def special_tokens(self) -> List[str]:
-        """Return the special tokens that are not None."""
-        return [
-            x
-            for x in [
-                self.bos_token,
-                self.eos_token,
-                self.unk_token,
-                self.pad_token,
-                self.mask_token,
-            ]
-            if x is not None
-        ]
+    def model_path(self) -> Path:
+        return self.model_prefix.with_suffix(".model")
 
-
-def _create_kmer_vocab_from_token(
-    alphabet, kmer_length, token_characters: Optional[List[str]] = None
-):
-    """Create vocabulary object from a list of tokens."""
-    if token_characters is None:
-        token_characters = []
-
-    token_to_int = {}
-
-    for i, token in enumerate(token_characters):
-        token_to_int[token] = i
-
-    token_list = ["".join(kmer) for kmer in it.product(list(alphabet), repeat=kmer_length)]
-    for i, token in enumerate(token_list, start=len(token_characters)):
-        token_to_int[token] = i
-
-    # pylint: disable=too-many-function-args
-    return token_to_int
+    @property
+    def model_vocab(self) -> Path:
+        return self.model_prefix.with_suffix(".vocab")
 
 
 class BioSequencePiece(SequenceTokenizer):
     """A sentence piece for model on biological sequences."""
 
-    def __init__(self, tokenizer_settings: Optional[BioSequencePieceSettings] = None):
+    def __init__(self, settings: BioSequencePieceSettings):
         """Init the BioSequencePiece class.
 
         Args:
-            tokenizer_settings: The settings for the tokenizer.
-            vocabulary: The vocabulary for the tokenizer.
+            settings: The settings for the tokenizer.
 
         """
-        if not has_spm:
-            raise RuntimeError(f"Trying to use sentencepiece but the python library is missing!")
+        if not has_spm or not shutil.which("spm_train"):
+            raise RuntimeError("Trying to use sentencepiece but the python library is missing!")
 
-        self.tokenizer_settings = tokenizer_settings or BioSequencePieceSettings()
-        self.sp_processor = spm.SentencePieceProcessor()
-        self.sp_processor.load(self.tokenizer_settings.model_path)
+        self.settings = settings or BioSequencePieceSettings()
+
+        self.vocab = {}
+        self._sp_processor = None
+
+    @property
+    def sp_processor(self):
+        if self._sp_processor is not None:
+            return self._sp_processor
+        else:
+            self._sp_processor = spm.SentencePieceProcessor()
+            self._sp_processor.load(str(self.settings.model_path))
+            return self._sp_processor
+
+    def fit_on_text(self, text_file: Path):
+        args = [
+            f"--input={str(text_file)}",
+            f"--model_prefix={self.settings.model_prefix}",
+            f"--vocab_size={self.settings.vocab_size}",
+            f"--model_type={self.settings.model_type}",
+            f"--max_sentence_length={self.settings.max_sequence_length}",
+        ]
+
+        vocab_offset = 0
+        if self.settings.unk_token:
+            self.vocab[vocab_offset] = self.settings.unk_token
+            args.extend([f"--unk_piece={self.settings.unk_token}", f"--unk_id={vocab_offset}"])
+            vocab_offset += 1
+        else:
+            args.extend(["--unk_id=-1"])
+
+        if self.settings.bos_token:
+            self.vocab[vocab_offset] = self.settings.bos_token
+            args.extend([f"--bos_piece={self.settings.bos_token}", f"--bos_id={vocab_offset}"])
+            vocab_offset += 1
+        else:
+            args.extend(["--bos_id=-1"])
+
+        if self.settings.eos_token:
+            self.vocab[vocab_offset] = self.settings.eos_token
+            args.extend([f"--eos_piece={self.settings.eos_token}", f"--eos_id={vocab_offset}"])
+            vocab_offset += 1
+        else:
+            args.extend(["--eos_id=-1"])
+
+        if self.settings.pad_token:
+            self.vocab[vocab_offset] = self.settings.pad_token
+            args.extend([f"--pad_piece={self.settings.pad_token}", f"--pad_id={vocab_offset}"])
+            vocab_offset += 1
+        else:
+            args.extend(["--pad_id=-1"])
+
+        spm.SentencePieceTrainer.Train(" ".join(args))
 
     def encode_as_ids(self, seq: str) -> List[int]:
         """Encode the underlying sequence into a list of tokens."""
@@ -101,3 +120,8 @@ class BioSequencePiece(SequenceTokenizer):
 
         """
         return self.sp_processor.EncodeAsPieces(seq)
+
+    def load_vocab(self):
+        """Load the vocabulary from the file."""
+        for line, token in enumerate(self.settings.model_vocab.open()):
+            self.vocab[line] = token.strip("\n").split("\t")[0]
