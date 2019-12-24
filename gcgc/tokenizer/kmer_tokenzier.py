@@ -21,6 +21,7 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
 
     @property
     def special_tokens(self) -> List[str]:
+        """Returns the list of special tokens that are not None."""
         return [
             x
             for x in [

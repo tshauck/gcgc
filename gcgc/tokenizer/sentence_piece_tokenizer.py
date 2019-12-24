@@ -31,10 +31,12 @@ class BioSequencePieceSettings(SequenceTokenizerSettings):
 
     @property
     def model_path(self) -> Path:
+        """Return the model path based on the prefix."""
         return self.model_prefix.with_suffix(".model")
 
     @property
     def model_vocab(self) -> Path:
+        """Return the model vocab based on the prefix."""
         return self.model_prefix.with_suffix(".vocab")
 
 
@@ -58,6 +60,7 @@ class BioSequencePiece(SequenceTokenizer):
 
     @property
     def sp_processor(self):
+        """Returns the SequencePiece process object."""
         if self._sp_processor is not None:
             return self._sp_processor
         else:
@@ -66,6 +69,7 @@ class BioSequencePiece(SequenceTokenizer):
             return self._sp_processor
 
     def fit_on_text(self, text_file: Path):
+        """Run the the SP algo on the text_file."""
         args = [
             f"--input={str(text_file)}",
             f"--model_prefix={self.settings.model_prefix}",
