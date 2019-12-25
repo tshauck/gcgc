@@ -124,7 +124,7 @@ class BioSequencePiece(SequenceTokenizer):
 
         spm.SentencePieceTrainer.Train(" ".join(args))
 
-    def encode_as_ids(self, seq: str) -> List[int]:
+    def encode(self, seq: str) -> List[int]:
         """Encode the underlying sequence into a list of tokens."""
         return self.sp_processor.EncodeAsIds(seq)
 
