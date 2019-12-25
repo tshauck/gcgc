@@ -8,7 +8,6 @@ import pathlib
 import click
 from Bio import SeqIO
 
-from gcgc import __version__
 from gcgc.tokenizer.sentence_piece_tokenizer import BioSequencePiece, BioSequencePieceSettings
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer, KmerTokenizerSettings
 
@@ -21,7 +20,7 @@ def cli():
 @cli.command()
 def version():
     """Print the version and exit."""
-    click.echo(__version__)
+    click.echo("0.12.0-dev.4")
 
 
 @cli.group("tokenizer")

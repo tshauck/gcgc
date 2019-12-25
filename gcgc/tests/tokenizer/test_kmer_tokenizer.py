@@ -61,5 +61,5 @@ def test_kmer_tokenization(seq, settings, expected_tokens, expected_encoding):
     actual_tokens = tokenizer.encode_as_tokens(seq)
     assert actual_tokens == expected_tokens
 
-    actual_encoded = tokenizer.encode_as_ids(seq)
+    actual_encoded = tokenizer.encode(seq)
     assert actual_encoded == expected_encoding

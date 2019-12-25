@@ -5,9 +5,10 @@
 from typing import List, Optional
 import itertools as it
 
-from pydantic import Field
+from pydantic import Field, validator
 
 from gcgc.tokenizer.base import SequenceTokenizer, SequenceTokenizerSettings
+from gcgc import alphabets
 
 
 class KmerTokenizerSettings(SequenceTokenizerSettings):
@@ -18,6 +19,11 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
     kmer_stride: int = Field(1, env="GCGC_KMER_STRIDE")
 
     max_length: Optional[int] = Field(None, env="GCGC_MAX_LENGTH")
+
+    @validator("alphabet")
+    def resolve_alphabet(cls, alphabet):  # pylint: disable=no-self-use, no-self-argument
+        """Resolve the alphabet if it's a named alphabet."""
+        return alphabets.resolve_alphabet(alphabet)
 
     @property
     def special_tokens(self) -> List[str]:

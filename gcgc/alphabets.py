@@ -4,12 +4,28 @@
 
 # pylint: disable=invalid-name
 
-protein_letters = "ACDEFGHIKLMNPQRSTVWY"
-extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
-ambiguous_dna_letters = "GATCRYWSMKHBVDN"
+_alphabets = {
+    "protein": "ACDEFGHIKLMNPQRSTVWY",
+    "extended_protein": "ACDEFGHIKLMNPQRSTVWYBXZJUO",
+    "ambiguous_dna": "GATCRYWSMKHBVDN",
+    "unambiguous_dna": "GATC",
+    "extended_dna": "GATCBDSW",
+    "ambiguous_rna": "GAUCRYWSMKHBVDN",
+    "unambiguous_rna": "GAUC",
+}
 
-unambiguous_dna_letters = "GATC"
-extended_dna_letters = "GATCBDSW"
 
-ambiguous_rna_letters = "GAUCRYWSMKHBVDN"
-unambiguous_rna_letters = "GAUC"
+def resolve_alphabet(alphabet: str) -> str:
+    """Try to get the alphabet from the known list, otherwise, return what was passed.
+
+    Args:
+        alphabet: The alphabet to resolve.
+
+    Returns:
+        The resolved alphabet.
+    """
+
+    try:
+        return _alphabets[alphabet]
+    except KeyError:
+        return alphabet

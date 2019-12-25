@@ -2,7 +2,10 @@
 # All Rights Reserved
 """Top-level GCGC module."""
 
+import warnings as _warnings
+
 from gcgc.cli import cli
 
 __version__ = "0.12.0-dev.4"
-__all__ = ["cli"]
+
+_warnings.simplefilter(action="ignore", category=PendingDeprecationWarning)
