@@ -2,6 +2,7 @@
 # All Rights Reserved
 """Top-level GCGC module."""
 
-__version__ = "0.12.0-dev.4"
-
 from gcgc.cli import cli
+
+__version__ = "0.12.0-dev.4"
+__all__ = ["cli"]
