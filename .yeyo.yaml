@@ -1,4 +1,4 @@
-version: 0.12.0-dev.4
+version: 0.12.0-dev.5
 tag_template: v{{ yeyo_version }}
 commit_template: v{{ yeyo_version }}
 files:
@@ -10,7 +10,7 @@ files:
   match_template: yeyo_version
 - file_path: gcgc/__init__.py
   match_template: yeyo_version
-- file_path: setup.py
-  match_template: yeyo_version
 - file_path: gcgc/cli.py
+  match_template: yeyo_version
+- file_path: setup.py
   match_template: yeyo_version

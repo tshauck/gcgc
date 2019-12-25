@@ -147,4 +147,4 @@ tensor([[2, 4, 1, 1, 1, 1, 1, 1, 1, 1],
 
 ## Documentation Version
 
-The documentation you're reading was build for version: `0.12.0-dev.4`.
+The documentation you're reading was build for version: `0.12.0-dev.5`.
