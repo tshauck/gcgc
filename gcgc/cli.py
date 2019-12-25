@@ -6,20 +6,14 @@ import json
 import logging
 import pathlib
 import sys
-import shutil
-import tempfile
 
 import click
+from Bio import SeqIO
 
-try:
-    import sentencepiece as spm
-    from Bio import SeqIO
-
-    has_spm = True
-except ImportError:
-    has_spm = False
+import sentencepiece as spm
 
 from gcgc import __version__
+from gcgc.tokenizer.sentence_piece_tokenizer import BioSequencePiece, BioSequencePieceSettings
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 LOG = logging.getLogger(__name__)
@@ -76,12 +70,7 @@ def train():
 @train.command("sentencepiece")
 @click.argument("input_fasta", type=str)
 @click.argument("model_prefix", type=str)
-@click.option("--vocab_size", type=int, default=200, help="The size of the vocabulary to target.")
-@click.option("--model_type", type=str, default="unigram", help="Which model, defaults to unigram.")
-@click.option("--max_sequence_length", type=int, default=4192, help="How long of sequence to use.")
-def sentencepiece_train(
-    input_fasta: str, model_prefix: str, vocab_size: int, model_type: str, max_sequence_length: int
-):
+def sentencepiece_train(input_fasta: str, model_prefix: str):
     """Use sentencepiece to fit a subword tokenization model.
 
     See "SentencePiece: A simple and language independent subword tokenizer and detokenizer for
@@ -97,34 +86,5 @@ def sentencepiece_train(
     if not input_path.exists():
         raise ValueError(f"{input_path} does not exist.")
 
-    if not has_spm:
-        raise RuntimeError(f"Do not have the SentencePiece python package, see setup.py.")
-
-    if shutil.which("spm_train") is None:
-        raise RuntimeError(f"spm_train is not on the path.")
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmppath = pathlib.Path(tmpdir)
-
-        text_file_path = tmppath / "input_textfiles.txt"
-        with text_file_path.open("w") as text_lines, input_path.open("r") as input_handler:
-            for record in SeqIO.parse(input_handler, "fasta"):
-                text_lines.write(f"{str(record.seq)}\n")
-
-        arg_string = " ".join(
-            [
-                f"--input={str(text_file_path)}",
-                f"--model_prefix={model_prefix}",
-                f"--vocab_size={vocab_size}",
-                f"--model_type={model_type}",
-                f"--max_sentence_length={max_sequence_length}",
-            ]
-        )
-        spm.SentencePieceTrainer.Train(arg_string)
-
-        output_vocab = input_path.parent / f"{model_prefix}.vocab"
-        output_model = input_path.parent / f"{model_prefix}.model"
-
-        LOG.info("Copying %s to %s", output_vocab.name, str(output_vocab))
-        shutil.move(output_vocab.name, str(output_vocab))
-        shutil.move(output_model.name, str(output_model))
+    bsp = BioSequencePiece(settings=BioSequencePieceSettings(model_prefix=model_prefix))
+    bsp.fit_on_fasta(input_path)

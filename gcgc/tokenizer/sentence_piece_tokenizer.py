@@ -1,14 +1,16 @@
 # (c) Copyright 2019 Trent Hauck
 # All Rights Reserved
-"""Module for KMER tokenization."""
+"""Module for Sentence Piece tokenization."""
 
-from typing import List, Optional
+import tempfile
+from typing import List
 from pathlib import Path
 import shutil
 
 from pydantic import Field
 from typing_extensions import Literal
 
+from Bio import SeqIO
 from gcgc.tokenizer.base import SequenceTokenizer, SequenceTokenizerSettings
 
 try:
@@ -67,6 +69,19 @@ class BioSequencePiece(SequenceTokenizer):
             self._sp_processor = spm.SentencePieceProcessor()
             self._sp_processor.load(str(self.settings.model_path))
             return self._sp_processor
+
+    def fit_on_fasta(self, fasta_file: Path):
+        """Run the the SP algo on the fasta_file."""
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmppath = Path(tmpdir)
+
+            text_file_path = tmppath / "input_textfiles.txt"
+            with text_file_path.open("w") as text_lines, fasta_file.open("r") as input_handler:
+                for record in SeqIO.parse(input_handler, "fasta"):
+                    text_lines.write(f"{str(record.seq)}\n")
+
+            self.fit_on_text(text_file_path)
 
     def fit_on_text(self, text_file: Path):
         """Run the the SP algo on the text_file."""
