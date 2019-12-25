@@ -3,20 +3,13 @@
 """CLI Functions for GCGC."""
 
 import json
-import logging
 import pathlib
-import sys
 
 import click
 from Bio import SeqIO
 
-import sentencepiece as spm
-
-from gcgc import __version__
 from gcgc.tokenizer.sentence_piece_tokenizer import BioSequencePiece, BioSequencePieceSettings
-
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-LOG = logging.getLogger(__name__)
+from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer, KmerTokenizerSettings
 
 
 @click.group()
@@ -27,33 +20,60 @@ def cli():
 @cli.command()
 def version():
     """Print the version and exit."""
-    print(__version__)
+    click.echo("0.12.0-dev.4")
 
 
-@cli.group()
-def tokenizer():
+@cli.group("tokenizer")
+def tokenizer_group():
     """Entrypoint for the tokenizer command."""
 
 
-@tokenizer.command("sentencepiece")
+@tokenizer_group.command("kmer")
 @click.argument("input_fasta", type=str)
-@click.argument("model_path", type=str)
-def sentencepiece_tokenizer(input_fasta: str, model_path: str):
+@click.option(
+    "--vocab_path", type=str, default="kmer_vocab.json", help="Where to save the vocabulary."
+)
+def kmer_tokernizer(input_fasta: str, vocab_path: str):
+    """Run the kmer tokenizer.
+
+    \b
+    INPUT_FASTA is the path to the FASTA file to use for training.
+
+    """
+    tokenizer = KmerTokenizer(settings=KmerTokenizerSettings())
+    with open(input_fasta) as input_handler:
+        for record in SeqIO.parse(input_handler, format="fasta"):
+            tokenized_sequence = tokenizer.encode(str(record.seq))
+            output_record = {
+                "token_ids": tokenized_sequence,
+                "sequence_id": record.id,
+                "n_tokens": len(tokenized_sequence),
+            }
+            click.echo(json.dumps(output_record))
+
+    if vocab_path:
+        with open(vocab_path, "w") as vocab_file:
+            json.dump(tokenizer.vocab, vocab_file, indent=2)
+
+
+@tokenizer_group.command("sentencepiece")
+@click.argument("input_fasta", type=str)
+@click.argument("model_prefix", type=str)
+def sentencepiece_tokenizer(input_fasta: str, model_prefix: str):
     """Use a pretrained sentencepiece tokenizer to separate a FASTA into a space separate text file.
 
     See `gcgc train sentencepiece` for information on how to generate the pretrained model.
 
     \b
     INPUT_FASTA is the path to the FASTA file to use for training.
-    MODEL_PATH is the path of the pretrained model.
+    MODEL_PREFIX is the path of the pretrained model.
 
     """
-    sentence_piece_processor = spm.SentencePieceProcessor()
-    sentence_piece_processor.load(model_path)
+    tokenizer = BioSequencePiece(settings=BioSequencePieceSettings(model_prefix=model_prefix))
 
     with open(input_fasta) as input_handler:
         for record in SeqIO.parse(input_handler, format="fasta"):
-            tokenized_sequence = sentence_piece_processor.EncodeAsIds(str(record.seq))
+            tokenized_sequence = tokenizer.encode(str(record.seq))
             output_record = {
                 "token_ids": tokenized_sequence,
                 "sequence_id": record.id,

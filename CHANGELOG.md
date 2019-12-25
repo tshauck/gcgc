@@ -7,6 +7,7 @@
 - Made max length optional for the tokenizer.
 - Added CLI that parses use the Sequence Piece library.
 - Began versioning docker build, and make pushing easier.
+- Have the tokenizer resolve the named alphabets.
 
 ## 0.11.0 (2019-11-15)
 

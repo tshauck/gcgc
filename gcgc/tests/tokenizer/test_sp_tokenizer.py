@@ -25,5 +25,5 @@ def test_train_sentence_piece(tmp_path):
     tokenized = sp_tokenizer.encode_as_tokens("ATCGATCGATCG")
     assert all([isinstance(x, str) for x in tokenized])
 
-    ids = sp_tokenizer.encode_as_ids("ATCGATCGATCG")
+    ids = sp_tokenizer.encode("ATCGATCGATCG")
     assert all([isinstance(x, int) for x in ids])
