@@ -124,9 +124,14 @@ class BioSequencePiece(SequenceTokenizer):
 
         spm.SentencePieceTrainer.Train(" ".join(args))
 
+        self.load_vocab()
+
     def encode(self, seq: str) -> List[int]:
         """Encode the underlying sequence into a list of tokens."""
-        return self.sp_processor.EncodeAsIds(seq)
+        return [
+            self.vocab.get(s, self.vocab.get(self.settings.unk_token))
+            for s in self.encode_as_tokens(seq)
+        ]
 
     def encode_as_tokens(self, seq: str) -> List[str]:
         """Tokenize the sequence into a list of token tokens.
