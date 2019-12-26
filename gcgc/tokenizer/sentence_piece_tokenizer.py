@@ -95,28 +95,28 @@ class BioSequencePiece(SequenceTokenizer):
 
         vocab_offset = 0
         if self.settings.unk_token:
-            self.vocab[vocab_offset] = self.settings.unk_token
+            self.vocab[self.settings.unk_token] = vocab_offset
             args.extend([f"--unk_piece={self.settings.unk_token}", f"--unk_id={vocab_offset}"])
             vocab_offset += 1
         else:
             args.extend(["--unk_id=-1"])
 
         if self.settings.bos_token:
-            self.vocab[vocab_offset] = self.settings.bos_token
+            self.vocab[self.settings.bos_token] = vocab_offset
             args.extend([f"--bos_piece={self.settings.bos_token}", f"--bos_id={vocab_offset}"])
             vocab_offset += 1
         else:
             args.extend(["--bos_id=-1"])
 
         if self.settings.eos_token:
-            self.vocab[vocab_offset] = self.settings.eos_token
+            self.vocab[self.settings.eos_token] = vocab_offset
             args.extend([f"--eos_piece={self.settings.eos_token}", f"--eos_id={vocab_offset}"])
             vocab_offset += 1
         else:
             args.extend(["--eos_id=-1"])
 
         if self.settings.pad_token:
-            self.vocab[vocab_offset] = self.settings.pad_token
+            self.vocab[self.settings.pad_token] = vocab_offset
             args.extend([f"--pad_piece={self.settings.pad_token}", f"--pad_id={vocab_offset}"])
             vocab_offset += 1
         else:
@@ -147,5 +147,8 @@ class BioSequencePiece(SequenceTokenizer):
 
     def load_vocab(self):
         """Load the vocabulary from the file."""
-        for line, token in enumerate(self.settings.model_vocab.open()):
-            self.vocab[line] = token.strip("\n").split("\t")[0]
+        for line, token in enumerate(
+            self.settings.model_vocab.open(), start=max(self.vocab.values())
+        ):
+            token = token.strip("\n").split("\t")[0]
+            self.vocab[token] = line

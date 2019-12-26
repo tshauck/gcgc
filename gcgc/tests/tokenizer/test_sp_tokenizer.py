@@ -21,7 +21,6 @@ def test_train_sentence_piece(tmp_path):
     sp_tokenizer = sentence_piece_tokenizer.BioSequencePiece(settings)
     sp_tokenizer.fit_on_text(text_file)
 
-    sp_tokenizer.load_vocab()
     tokenized = sp_tokenizer.encode_as_tokens("ATCGATCGATCG")
     assert all([isinstance(x, str) for x in tokenized])
 
