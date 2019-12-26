@@ -18,8 +18,6 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
     kmer_length: int = Field(1, env="GCGC_KMER_LENGTH")
     kmer_stride: int = Field(1, env="GCGC_KMER_STRIDE")
 
-    max_length: Optional[int] = Field(None, env="GCGC_MAX_LENGTH")
-
     @validator("alphabet")
     def resolve_alphabet(cls, alphabet):  # pylint: disable=no-self-use, no-self-argument
         """Resolve the alphabet if it's a named alphabet."""
@@ -72,6 +70,8 @@ class KmerTokenizer(SequenceTokenizer):
             vocabulary: The vocabulary for the tokenizer.
 
         """
+        super().__init__(settings)
+
         self.settings = settings
         self.vocab = _create_kmer_vocab_from_token(
             self.settings.alphabet, self.settings.kmer_length, self.settings.special_tokens,
@@ -124,7 +124,4 @@ class KmerTokenizer(SequenceTokenizer):
         if self.settings.eos_token:
             kmer_list = kmer_list + [self.settings.eos_token]
 
-        if self.settings.max_length:
-            return kmer_list[: self.settings.max_length]
-
-        return kmer_list
+        return super().apply_length_constraints(kmer_list)

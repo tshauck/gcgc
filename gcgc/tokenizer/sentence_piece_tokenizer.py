@@ -138,7 +138,7 @@ class BioSequencePiece(SequenceTokenizer):
             The list of strs that are the tokens.
 
         """
-        return self.sp_processor.EncodeAsPieces(seq)
+        return super().apply_length_constraints(self.sp_processor.EncodeAsPieces(seq))
 
     def load_vocab(self):
         """Load the vocabulary from the file."""

@@ -47,6 +47,7 @@ def kmer_tokernizer(input_fasta: str, vocab_path: str):
             output_record = {
                 "token_ids": tokenized_sequence,
                 "sequence_id": record.id,
+                "sequence_description": record.description,
                 "n_tokens": len(tokenized_sequence),
             }
             click.echo(json.dumps(output_record))
@@ -77,6 +78,7 @@ def sentencepiece_tokenizer(input_fasta: str, model_prefix: str):
             output_record = {
                 "token_ids": tokenized_sequence,
                 "sequence_id": record.id,
+                "sequence_description": record.description,
                 "n_tokens": len(tokenized_sequence),
             }
             click.echo(json.dumps(output_record))

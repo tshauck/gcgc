@@ -24,15 +24,19 @@ from gcgc.tokenizer import KmerTokenizer, KmerTokenizerSettings
         ),
         (
             "ATCG",
-            KmerTokenizerSettings(alphabet="ATCG", kmer_length=2, kmer_stride=1),
-            ["AT", "TC", "CG"],
-            [2, 7, 12],
+            KmerTokenizerSettings(
+                alphabet="ATCG", min_length=4, pad_token="|", kmer_length=2, kmer_stride=1
+            ),
+            ["AT", "TC", "CG", "|"],
+            [3, 8, 13, 1],
         ),
         (
             "AATT",
-            KmerTokenizerSettings(alphabet="ATCG", max_length=10, kmer_length=2, kmer_stride=2),
-            ["AA", "TT"],
-            [1, 6],
+            KmerTokenizerSettings(
+                alphabet="ATCG", pad_token="|", conform_length=5, kmer_length=2, kmer_stride=2
+            ),
+            ["AA", "TT", "|", "|", "|"],
+            [2, 7, 1, 1, 1],
         ),
         (
             "ATCGATCGATCGATCG",
