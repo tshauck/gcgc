@@ -57,6 +57,7 @@ class SequenceTokenizer:
     """The sequence tokenizer object."""
 
     def __init__(self, settings: SequenceTokenizerSettings):
+        """Inits the sequence tokenizer with a set of settings."""
         self.settings = settings
 
     def apply_length_constraints(self, tokens: List[str]):
