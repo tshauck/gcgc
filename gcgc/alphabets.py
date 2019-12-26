@@ -23,8 +23,8 @@ def resolve_alphabet(alphabet: str) -> str:
 
     Returns:
         The resolved alphabet.
-    """
 
+    """
     try:
         return _alphabets[alphabet]
     except KeyError:

@@ -16,12 +16,11 @@ def test_train_sentence_piece(tmp_path):
     model_prefix = tmp_path / "model"
 
     settings = sentence_piece_tokenizer.BioSequencePieceSettings(
-        model_prefix=model_prefix, vocab_size=20
+        model_prefix=model_prefix, vocab_size=20, bos_token=">", eos_token="<", pad_token="|"
     )
     sp_tokenizer = sentence_piece_tokenizer.BioSequencePiece(settings)
     sp_tokenizer.fit_on_text(text_file)
 
-    sp_tokenizer.load_vocab()
     tokenized = sp_tokenizer.encode_as_tokens("ATCGATCGATCG")
     assert all([isinstance(x, str) for x in tokenized])
 
