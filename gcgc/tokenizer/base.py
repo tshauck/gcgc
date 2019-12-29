@@ -56,9 +56,9 @@ def _pad_token_list(tokens: List[str], pad_to: int, pad_char: str):
 class SequenceTokenizer:
     """The sequence tokenizer object."""
 
-    def __init__(self, settings: SequenceTokenizerSettings):
+    def __init__(self, settings: Optional[SequenceTokenizerSettings] = None):
         """Inits the sequence tokenizer with a set of settings."""
-        self.settings = settings
+        self.settings = settings or SequenceTokenizerSettings()
 
     def apply_length_constraints(self, tokens: List[str]):
         """Apply the constraints of the settings to the passed tokens list."""

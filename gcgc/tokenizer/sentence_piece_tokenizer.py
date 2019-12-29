@@ -3,7 +3,7 @@
 """Module for Sentence Piece tokenization."""
 
 import tempfile
-from typing import List
+from typing import List, Optional, Dict
 from pathlib import Path
 import shutil
 
@@ -45,7 +45,7 @@ class BioSequencePieceSettings(SequenceTokenizerSettings):
 class BioSequencePiece(SequenceTokenizer):
     """A sentence piece for model on biological sequences."""
 
-    def __init__(self, settings: BioSequencePieceSettings):
+    def __init__(self, settings: Optional[BioSequencePieceSettings] = None):
         """Init the BioSequencePiece class.
 
         Args:
@@ -57,22 +57,21 @@ class BioSequencePiece(SequenceTokenizer):
 
         self.settings = settings or BioSequencePieceSettings()
 
-        self.vocab = {}
+        self.vocab: Dict[str, int] = {}
         self._sp_processor = None
 
     @property
     def sp_processor(self):
-        """Returns the SequencePiece process object."""
+        """Return the SequencePiece process object."""
         if self._sp_processor is not None:
             return self._sp_processor
-        else:
-            self._sp_processor = spm.SentencePieceProcessor()
-            self._sp_processor.load(str(self.settings.model_path))
-            return self._sp_processor
+
+        self._sp_processor = spm.SentencePieceProcessor()
+        self._sp_processor.load(str(self.settings.model_path))
+        return self._sp_processor
 
     def fit_on_fasta(self, fasta_file: Path):
         """Run the the SP algo on the fasta_file."""
-
         with tempfile.TemporaryDirectory() as tmpdir:
             tmppath = Path(tmpdir)
 
