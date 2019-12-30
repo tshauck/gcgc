@@ -62,7 +62,7 @@ def _create_kmer_vocab_from_token(
 class KmerTokenizer(SequenceTokenizer):
     """A sequence tokenizer."""
 
-    def __init__(self, settings: KmerTokenizerSettings):
+    def __init__(self, settings: Optional[KmerTokenizerSettings] = None):
         """Init the SequenceTokenizer class.
 
         Args:
@@ -70,9 +70,9 @@ class KmerTokenizer(SequenceTokenizer):
             vocabulary: The vocabulary for the tokenizer.
 
         """
+        self.settings = settings or KmerTokenizerSettings()
         super().__init__(settings)
 
-        self.settings = settings
         self.vocab = _create_kmer_vocab_from_token(
             self.settings.alphabet, self.settings.kmer_length, self.settings.special_tokens,
         )

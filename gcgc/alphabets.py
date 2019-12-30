@@ -2,9 +2,7 @@
 # All Rights Reserved
 """Stores the alphabets, these are the same as BioPython."""
 
-# pylint: disable=invalid-name
-
-_alphabets = {
+_ALPHABETS = {
     "protein": "ACDEFGHIKLMNPQRSTVWY",
     "extended_protein": "ACDEFGHIKLMNPQRSTVWYBXZJUO",
     "ambiguous_dna": "GATCRYWSMKHBVDN",
@@ -26,6 +24,6 @@ def resolve_alphabet(alphabet: str) -> str:
 
     """
     try:
-        return _alphabets[alphabet]
+        return _ALPHABETS[alphabet]
     except KeyError:
         return alphabet
