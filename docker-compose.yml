@@ -4,7 +4,7 @@ services:
   gcgc:
     build:
       context: .
-    image: docker.io/thauck/gcgc:0.12.0-dev.5
+    image: docker.io/thauck/gcgc:0.12.0-dev.6
     volumes:
       - $PWD/gcgc/data:/data
     entrypoint:
