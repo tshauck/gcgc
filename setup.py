@@ -27,7 +27,7 @@ setup(
     url="https://github.com/tshauck/gcgc",
     license="MIT",
     packages=find_packages(),
-    install_requires=["pydantic~=1.1"],
+    install_requires=["pydantic~=1.1", "click~=7.0"],
     python_requires=">=3.6",
     extras_require={"sentencepiece": ["sentencepiece~=0.1", "biopython"]},
     entry_points="""
