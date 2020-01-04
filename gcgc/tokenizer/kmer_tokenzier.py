@@ -74,7 +74,7 @@ class KmerTokenizer(SequenceTokenizer):
         super().__init__(settings)
 
         self.vocab = _create_kmer_vocab_from_token(
-            self.settings.alphabet, self.settings.kmer_length, self.settings.special_tokens,
+            self.settings.alphabet, self.settings.kmer_length, self.settings.special_tokens
         )
 
     def _kmer_n(self, seq: str) -> List[str]:
