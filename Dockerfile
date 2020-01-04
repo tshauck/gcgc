@@ -10,12 +10,14 @@ RUN apt-get update \
             wget \
         && rm -rf /var/lib/apt/lists/*
 
-RUN pip install pip==19.3.1
+RUN pip install pip==19.0.1 poetry==0.12.17
 
 WORKDIR /gcgc
+COPY ./pyproject.toml ./poetry.lock ./
 
-COPY ./dev-requirements.txt ./dev-requirements.txt
-RUN pip install -r ./dev-requirements.txt
+RUN poetry config settings.virtualenvs.create false
+RUN poetry install
+RUN poetry cache:clear pypi --all
 
 RUN wget -O /tmp/piece.tar.gz https://github.com/google/sentencepiece/archive/v0.1.85.tar.gz
 
@@ -27,6 +29,6 @@ RUN mkdir build && cd build && cmake .. && make && make install && ldconfig -v
 
 WORKDIR /gcgc
 COPY ./ ./
-RUN pip install .[sentencepiece]
+RUN poetry install
 
 ENTRYPOINT ["gcgc"]

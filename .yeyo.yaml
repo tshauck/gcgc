@@ -12,5 +12,5 @@ files:
   match_template: yeyo_version
 - file_path: gcgc/cli.py
   match_template: yeyo_version
-- file_path: setup.py
+- file_path: pyproject.toml
   match_template: yeyo_version
