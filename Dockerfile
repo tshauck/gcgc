@@ -1,4 +1,5 @@
-FROM python:3.7
+ARG PY_VERSION
+FROM python:$PY_VERSION
 
 RUN apt-get update \
         && apt-get install -y --no-install-recommends \
