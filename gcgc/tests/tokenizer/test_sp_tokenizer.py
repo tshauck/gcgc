@@ -2,13 +2,19 @@
 # All Rights Reserved
 """Test the sentence models."""
 
-import numpy as np
+import random
 from gcgc.tokenizer import sentence_piece_tokenizer
 
 
 def test_train_sentence_piece(tmp_path):
     """Test fitting the sentence piece model."""
-    sequences = ["".join(x) for x in np.random.choice(list("ATCG"), (20, 20))]
+    sequences = []
+    for _ in range(20):
+        new_seq = []
+        for _ in range(20):
+            new_seq.append(random.choice(list("ATCG")))
+
+        sequences.append("".join(new_seq))
 
     text_file = tmp_path / "sp.txt"
     text_file.write_text("\n".join(sequences))
