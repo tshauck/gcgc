@@ -6,6 +6,6 @@ import warnings as _warnings
 
 from gcgc.cli import cli
 
-__version__ = "0.12.0-dev.7"
+__version__ = "0.12.0-dev.8"
 
 _warnings.simplefilter(action="ignore", category=PendingDeprecationWarning)
