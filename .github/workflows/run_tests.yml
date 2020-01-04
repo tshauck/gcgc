@@ -3,7 +3,7 @@ name: Run Tests and Lint
 on: [push]
 
 jobs:
-  test_37:
+  test_36:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
         run: docker-compose run --rm gcgc fmt-check
       - name: Check pydocstyle
         run: docker-compose run --rm gcgc pydocstyle
-  test_36:
+  test_37:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,15 @@ jobs:
         run: docker-compose build gcgc
         env:
           PY_VERSION: 3.7
-      - name: Build the Docker image
+      - name: Run the unittests
         run: docker-compose run --rm gcgc test
+        env:
+          PY_VERSION: 3.7
+      - name: Check formatting
+        run: docker-compose run --rm gcgc fmt-check
+        env:
+          PY_VERSION: 3.7
+      - name: Check pydocstyle
+        run: docker-compose run --rm gcgc pydocstyle
         env:
           PY_VERSION: 3.7
