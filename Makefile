@@ -11,8 +11,8 @@ clean:
 
 .PHONY: publish-python
 publish-python:
-	python setup.py sdist bdist_wheel
-	twine upload dist/*
+	poetry build
+	poetry publish
 
 .PHONY: publish-docker
 publish-docker:
