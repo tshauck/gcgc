@@ -20,7 +20,7 @@ def cli():
 @cli.command()
 def version():
     """Print the version and exit."""
-    click.echo("0.12.0-dev.8")
+    click.echo("0.12.0-dev.9")
 
 
 @cli.group("tokenizer")
