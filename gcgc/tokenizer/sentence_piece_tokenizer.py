@@ -2,16 +2,19 @@
 # All Rights Reserved
 """Module for Sentence Piece tokenization."""
 
-import tempfile
-from typing import List, Optional, Dict
-from pathlib import Path
 import shutil
+import tempfile
+from pathlib import Path
+from typing import Dict
+from typing import List
+from typing import Optional
 
+from Bio import SeqIO
 from pydantic import Field
 from typing_extensions import Literal
 
-from Bio import SeqIO
-from gcgc.tokenizer.base import SequenceTokenizer, SequenceTokenizerSettings
+from gcgc.tokenizer.base import SequenceTokenizer
+from gcgc.tokenizer.base import SequenceTokenizerSettings
 
 try:
     import sentencepiece as spm
@@ -34,11 +37,13 @@ class BioSequencePieceSettings(SequenceTokenizerSettings):
     @property
     def model_path(self) -> Path:
         """Return the model path based on the prefix."""
+        # pylint: disable=no-member
         return self.model_prefix.with_suffix(".model")
 
     @property
     def model_vocab(self) -> Path:
         """Return the model vocab based on the prefix."""
+        # pylint: disable=no-member
         return self.model_prefix.with_suffix(".vocab")
 
 
@@ -56,6 +61,7 @@ class BioSequencePiece(SequenceTokenizer):
             raise RuntimeError("Trying to use sentencepiece but the python library is missing!")
 
         self.settings = settings or BioSequencePieceSettings()
+        super().__init__(settings)
 
         self.vocab: Dict[str, int] = {}
         self._sp_processor = None

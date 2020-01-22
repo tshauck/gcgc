@@ -2,11 +2,15 @@
 # All Rights Reserved
 """The base tokenizer."""
 
-from typing import Optional, List
+from typing import List
+from typing import Optional
 
-from pydantic import BaseSettings, Field, root_validator
+from pydantic import BaseSettings
+from pydantic import Field
+from pydantic import root_validator
 
 
+# pylint: disable=too-few-public-methods
 class SequenceTokenizerSettings(BaseSettings):
     """The base tokenizer settings."""
 

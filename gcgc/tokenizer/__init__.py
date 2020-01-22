@@ -4,5 +4,5 @@
 
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizerSettings
-
-__all__ = ["KmerTokenizer", "KmerTokenizerSettings"]
+from gcgc.tokenizer.sentence_piece_tokenizer import SequenceTokenizer
+from gcgc.tokenizer.sentence_piece_tokenizer import SequenceTokenizerSettings

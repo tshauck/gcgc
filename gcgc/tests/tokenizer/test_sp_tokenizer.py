@@ -3,6 +3,7 @@
 """Test the sentence models."""
 
 import random
+
 from gcgc.tokenizer import sentence_piece_tokenizer
 
 

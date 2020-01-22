@@ -4,7 +4,8 @@
 
 import pytest
 
-from gcgc.tokenizer import KmerTokenizer, KmerTokenizerSettings
+from gcgc.tokenizer import KmerTokenizer
+from gcgc.tokenizer import KmerTokenizerSettings
 
 
 @pytest.mark.parametrize(
