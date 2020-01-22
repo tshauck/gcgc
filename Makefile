@@ -55,9 +55,9 @@ vulture:
 pydocstyle:
 	pydocstyle --add-ignore=D202,D203,D301 --convention=google gcgc
 
-.PHONY: flake8
-flake8:
-	flake8 gcgc
+.PHONY: pylint
+pylint:
+	pylint gcgc
 
 .PHONY: mypy
 mypy:

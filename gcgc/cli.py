@@ -8,8 +8,10 @@ import pathlib
 import click
 from Bio import SeqIO
 
-from gcgc.tokenizer.sentence_piece_tokenizer import BioSequencePiece, BioSequencePieceSettings
-from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer, KmerTokenizerSettings
+from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
+from gcgc.tokenizer.kmer_tokenzier import KmerTokenizerSettings
+from gcgc.tokenizer.sentence_piece_tokenizer import BioSequencePiece
+from gcgc.tokenizer.sentence_piece_tokenizer import BioSequencePieceSettings
 
 
 @click.group()

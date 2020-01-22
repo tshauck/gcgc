@@ -2,13 +2,16 @@
 # All Rights Reserved
 """Module for KMER tokenization."""
 
-from typing import List, Optional
 import itertools as it
+from typing import List
+from typing import Optional
 
-from pydantic import Field, validator
+from pydantic import Field
+from pydantic import validator
 
-from gcgc.tokenizer.base import SequenceTokenizer, SequenceTokenizerSettings
 from gcgc import alphabets
+from gcgc.tokenizer.base import SequenceTokenizer
+from gcgc.tokenizer.base import SequenceTokenizerSettings
 
 
 class KmerTokenizerSettings(SequenceTokenizerSettings):
