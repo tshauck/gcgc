@@ -5,8 +5,8 @@
 - Improved the docs to reflect the `SequenceTokenizerSpec` that was added in
   0.11.0.
 - Made max length optional for the tokenizer.
-- Added CLI that parses use the Sequence Piece library.
-- Began versioning docker build, and make pushing easier.
+- Added CLI that parses use the SequencePiece library.
+- Began versioning docker build, and make pushing easier during build process.
 - Have the tokenizer resolve the named alphabets.
 - Use poetry along with general updates to a build pipeline.
 

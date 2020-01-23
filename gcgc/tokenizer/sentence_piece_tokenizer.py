@@ -31,8 +31,12 @@ class BioSequencePieceSettings(SequenceTokenizerSettings):
 
     model_prefix: Path = Field(..., env="GCGC_SP_MODEL_PREFIX")
     vocab_size: int = Field(8000, env="GCGC_SP_VOCAB_SIZE")
-    model_type: Literal["unigram", "bpe"] = "unigram"
+    model_type: Literal["unigram", "char"] = Field("unigram", env="GCGC_SP_MODEL_TYPE")
     max_sequence_length: int = 4192
+    num_threads: int = Field(
+        16, description="The number of threads to use.", env="GCGC_SP_NUM_THREADS"
+    )
+    num_sub_iterations: int = Field(2, env="GCGC_SP_NUM_SUB_ITERATIONS")
 
     @property
     def model_path(self) -> Path:
@@ -96,6 +100,8 @@ class BioSequencePiece(SequenceTokenizer):
             f"--vocab_size={self.settings.vocab_size}",
             f"--model_type={self.settings.model_type}",
             f"--max_sentence_length={self.settings.max_sequence_length}",
+            f"--num_sub_iterations={self.settings.num_sub_iterations}",
+            f"--num_threads={self.settings.num_threads}",
         ]
 
         if self.settings.unk_token:

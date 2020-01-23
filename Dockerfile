@@ -33,4 +33,5 @@ WORKDIR /gcgc
 COPY ./ ./
 RUN poetry install -E sentencepiece
 
+WORKDIR /workspace
 ENTRYPOINT ["gcgc"]
