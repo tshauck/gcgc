@@ -15,7 +15,7 @@ Python, but it can also be used as a docker container.
 To install via pip:
 
 ```sh
-$ pip install gcgc
+$ pip install gcgc==0.12.0
 ```
 
 And to pull the docker image:
