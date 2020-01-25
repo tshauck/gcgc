@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.12.0 (Unreleased)
+## 0.12.0 (2020-01-25)
 
 - Improved the docs to reflect the `SequenceTokenizerSpec` that was added in
   0.11.0.
