@@ -11,6 +11,7 @@ services:
       - $PWD/gcgc/data:/data
     entrypoint:
       - make
+    working_dir: /gcgc
   yeyo:
     image: docker.io/thauck/yeyo:0.3.0-dev.2
     volumes:

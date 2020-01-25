@@ -3,15 +3,13 @@
 """CLI Functions for GCGC."""
 
 import json
-import pathlib
 
 import click
 from Bio import SeqIO
 
+from gcgc import cli_utils
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizerSettings
-from gcgc.tokenizer.sentence_piece_tokenizer import BioSequencePiece
-from gcgc.tokenizer.sentence_piece_tokenizer import BioSequencePieceSettings
 
 
 @click.group()
@@ -72,18 +70,8 @@ def sentencepiece_tokenizer(input_fasta: str, model_prefix: str):
     MODEL_PREFIX is the path of the pretrained model.
 
     """
-    tokenizer = BioSequencePiece(settings=BioSequencePieceSettings(model_prefix=model_prefix))
-
-    with open(input_fasta) as input_handler:
-        for record in SeqIO.parse(input_handler, format="fasta"):
-            tokenized_sequence = tokenizer.encode(str(record.seq))
-            output_record = {
-                "token_ids": tokenized_sequence,
-                "sequence_id": record.id,
-                "sequence_description": record.description,
-                "n_tokens": len(tokenized_sequence),
-            }
-            click.echo(json.dumps(output_record))
+    for output_record in cli_utils.sentencepiece_tokenizer(input_fasta, model_prefix):
+        click.echo(json.dumps(output_record))
 
 
 @cli.group()
@@ -106,9 +94,4 @@ def sentencepiece_train(input_fasta: str, model_prefix: str):
     MODEL_PREFIX is the prefix to use for the trained model and the vocabulary.
 
     """
-    input_path = pathlib.Path(input_fasta)
-    if not input_path.exists():
-        raise ValueError(f"{input_path} does not exist.")
-
-    bsp = BioSequencePiece(settings=BioSequencePieceSettings(model_prefix=model_prefix))
-    bsp.fit_on_fasta(input_path)
+    cli_utils.sentencepiece_trainer(input_fasta, model_prefix)
