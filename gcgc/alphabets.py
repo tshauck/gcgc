@@ -13,11 +13,13 @@ _ALPHABETS = {
 }
 
 
-def resolve_alphabet(alphabet: str) -> str:
+def resolve_alphabet(alphabet: str, require: bool = False) -> str:
     """Try to get the alphabet from the known list, otherwise, return what was passed.
 
     Args:
         alphabet: The alphabet to resolve.
+        require: If true, require the passed alphabet be found in the options, else error.
+            Defaults to false.
 
     Returns:
         The resolved alphabet.
@@ -26,4 +28,6 @@ def resolve_alphabet(alphabet: str) -> str:
     try:
         return _ALPHABETS[alphabet]
     except KeyError:
+        if require:
+            raise
         return alphabet
