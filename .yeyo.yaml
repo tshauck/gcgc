@@ -14,3 +14,5 @@ files:
   match_template: yeyo_version
 - file_path: pyproject.toml
   match_template: yeyo_version
+- file_path: README.md
+  match_template: yeyo_version

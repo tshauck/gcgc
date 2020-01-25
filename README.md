@@ -21,7 +21,7 @@ $ pip install gcgc
 And to pull the docker image:
 
 ```sh
-$ docker pull docker.io/thauck/gcgc
+$ docker pull docker.io/thauck/gcgc:0.12.0
 ```
 
 ## Documentation
