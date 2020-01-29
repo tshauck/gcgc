@@ -18,6 +18,8 @@ publish-python:
 publish-docker:
 	docker-compose build gcgc
 	docker-compose push gcgc
+	TAG=latest docker-compose build gcgc
+	TAG=latest docker-compose push gcgc
 
 .PHONY: publish
 publish: publish-python publish-docker
