@@ -1,7 +1,9 @@
-version: 0.12.0
+version: 0.12.1-dev.1
 tag_template: v{{ yeyo_version }}
 commit_template: v{{ yeyo_version }}
 files:
+- file_path: README.md
+  match_template: yeyo_version
 - file_path: VERSION
   match_template: yeyo_version
 - file_path: docker-compose.yml
@@ -13,6 +15,4 @@ files:
 - file_path: gcgc/cli.py
   match_template: yeyo_version
 - file_path: pyproject.toml
-  match_template: yeyo_version
-- file_path: README.md
   match_template: yeyo_version

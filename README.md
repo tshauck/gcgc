@@ -15,13 +15,13 @@ Python, but it can also be used as a docker container.
 To install via pip:
 
 ```sh
-$ pip install gcgc==0.12.0
+$ pip install gcgc==0.12.1-dev.1
 ```
 
 And to pull the docker image:
 
 ```sh
-$ docker pull docker.io/thauck/gcgc:0.12.0
+$ docker pull docker.io/thauck/gcgc:0.12.1-dev.1
 ```
 
 ## Documentation
