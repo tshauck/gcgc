@@ -92,6 +92,15 @@ class BioSequencePiece(SequenceTokenizer):
 
             self.fit_on_text(text_file_path)
 
+    def fit_on_list(self, sequence_list: List[str]):
+        """Fit the SP algo on a list."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmppath = Path(tmpdir)
+
+            text_file_path = tmppath / "input_textfiles.txt"
+            text_file_path.write_text("\n".join(sequence_list))
+            self.fit_on_text(text_file_path)
+
     def fit_on_text(self, text_file: Path):
         """Run the the SP algo on the text_file."""
         args = [

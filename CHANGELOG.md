@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.1 (unreleased)
+
+- Add `fit_on_list` to BioSequencePiece which can be trained on list of strings.
+
 ## 0.12.0 (2020-01-25)
 
 - Improved the docs to reflect the `SequenceTokenizerSpec` that was added in
