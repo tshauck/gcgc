@@ -9,12 +9,12 @@ from typing import Dict
 from typing import List
 from typing import Optional
 
-from Bio import SeqIO
-from pydantic import Field
 from typing_extensions import Literal
 
+from Bio import SeqIO
 from gcgc.tokenizer.base import SequenceTokenizer
 from gcgc.tokenizer.base import SequenceTokenizerSettings
+from pydantic import Field
 
 try:
     import sentencepiece as spm
@@ -90,6 +90,15 @@ class BioSequencePiece(SequenceTokenizer):
                 for record in SeqIO.parse(input_handler, "fasta"):
                     text_lines.write(f"{str(record.seq)}\n")
 
+            self.fit_on_text(text_file_path)
+
+    def fit_on_list(self, sequence_list: List[str]):
+        """Fit the SP algo on a list."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmppath = Path(tmpdir)
+
+            text_file_path = tmppath / "input_textfiles.txt"
+            text_file_path.write_text("\n".join(sequence_list))
             self.fit_on_text(text_file_path)
 
     def fit_on_text(self, text_file: Path):

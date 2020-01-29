@@ -25,16 +25,13 @@ def test_train_sentence_piece(tmp_path, alphabet):
 
         sequences.append("".join(new_seq))
 
-    text_file = tmp_path / "sp.txt"
-    text_file.write_text("\n".join(sequences))
-
     model_prefix = tmp_path / "model"
 
     settings = sentence_piece_tokenizer.BioSequencePieceSettings(
         model_prefix=model_prefix, vocab_size=50, bos_token=">", eos_token="<", pad_token="|"
     )
     sp_tokenizer = sentence_piece_tokenizer.BioSequencePiece(settings)
-    sp_tokenizer.fit_on_text(text_file)
+    sp_tokenizer.fit_on_list(sequences)
 
     test_case = "".join(random.choice(alphabet_list) for _ in range(20))
 
