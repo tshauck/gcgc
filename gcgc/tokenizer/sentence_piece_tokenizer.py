@@ -8,11 +8,12 @@ from pathlib import Path
 from typing import Dict
 from typing import List
 from typing import Optional
+from typing import Union
 
-from Bio import SeqIO
 from pydantic import Field
 from typing_extensions import Literal
 
+from Bio import SeqIO
 from gcgc.tokenizer.base import SequenceTokenizer
 from gcgc.tokenizer.base import SequenceTokenizerSettings
 
@@ -29,7 +30,7 @@ except ImportError:
 class BioSequencePieceSettings(SequenceTokenizerSettings):
     """The settings for the sentence piece model."""
 
-    model_prefix: Path = Field(..., env="GCGC_SP_MODEL_PREFIX")
+    model_prefix: Union[str, Path] = Field(..., env="GCGC_SP_MODEL_PREFIX")
     vocab_size: int = Field(8000, env="GCGC_SP_VOCAB_SIZE")
     model_type: Literal["unigram", "char"] = Field("unigram", env="GCGC_SP_MODEL_TYPE")
     max_sequence_length: int = 4192
@@ -39,16 +40,23 @@ class BioSequencePieceSettings(SequenceTokenizerSettings):
     num_sub_iterations: int = Field(2, env="GCGC_SP_NUM_SUB_ITERATIONS")
 
     @property
+    def _model_prefix_path(self) -> Path:
+        """Return the prefix as a path not matter its actual type."""
+        if isinstance(self.model_prefix, Path):
+            return self.model_prefix
+        return Path(self.model_prefix)
+
+    @property
     def model_path(self) -> Path:
         """Return the model path based on the prefix."""
         # pylint: disable=no-member
-        return self.model_prefix.with_suffix(".model")
+        return self._model_prefix_path.with_suffix(".model")
 
     @property
     def model_vocab(self) -> Path:
         """Return the model vocab based on the prefix."""
         # pylint: disable=no-member
-        return self.model_prefix.with_suffix(".vocab")
+        return self._model_prefix_path.with_suffix(".vocab")
 
 
 class BioSequencePiece(SequenceTokenizer):

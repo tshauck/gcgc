@@ -3,6 +3,8 @@
 ## 0.12.1 (unreleased)
 
 - Add `fit_on_list` to BioSequencePiece which can be trained on list of strings.
+- Make `BioSequencePiece.model_prefix` a `Union[str, Path]`, and rework internal
+  implementation to be consistent.
 
 ## 0.12.0 (2020-01-25)
 
