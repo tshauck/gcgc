@@ -2,7 +2,9 @@
 # All Rights Reserved
 """Test the sentence models."""
 
+import json
 import random
+from pathlib import Path
 
 import pytest
 
@@ -50,3 +52,12 @@ def test_cli_functions_e2e(tmp_path):
     cli_utils.sentencepiece_trainer(fixtures.PF01152_PATH_FULL, prefix)
     tokenized_seqs = list(cli_utils.sentencepiece_tokenizer(fixtures.PF01152_PATH_FULL, prefix))
     print(tokenized_seqs)
+
+
+def test_settings_serialization(tmp_path):
+    """Test writing the settings to a file, then getting its results."""
+    settings_path = Path(tmp_path) / "settings.json"
+    settings = sentence_piece_tokenizer.BioSequencePieceSettings(model_prefix="test")
+
+    settings_path.write_text(json.dumps(settings.dict()))
+    settings = json.loads(settings_path.read_text())
