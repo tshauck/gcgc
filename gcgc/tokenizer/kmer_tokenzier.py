@@ -54,10 +54,9 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
     kmer_length: int = Field(1, env="GCGC_KMER_LENGTH")
     kmer_stride: int = Field(1, env="GCGC_KMER_STRIDE")
 
+    # pylint: disable=no-self-use, no-self-argument
     @validator("alphabet")
-    def resolve_alphabet(
-        cls, alphabet: str
-    ) -> str:  # pylint: disable=no-self-use, no-self-argument
+    def resolve_alphabet(cls, alphabet: str) -> str:
         """Resolve the alphabet if it's a named alphabet.
 
         Args:
