@@ -10,12 +10,12 @@ from typing import List
 from typing import Optional
 from typing import Union
 
+from Bio import SeqIO
+from pydantic import Field
 from typing_extensions import Literal
 
-from Bio import SeqIO
 from gcgc.tokenizer.base import SequenceTokenizer
 from gcgc.tokenizer.base import SequenceTokenizerSettings
-from pydantic import Field
 
 try:
     import sentencepiece as spm

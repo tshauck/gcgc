@@ -84,7 +84,7 @@ class KmerTokenizer(SequenceTokenizer):
         for letter in self.encode_as_tokens(seq):
             try:
                 if self.vocab[letter] == 2 and letter == ">":
-                    __import__('ipdb').set_trace()
+                    __import__("ipdb").set_trace()
                 encoded.append(self.vocab[letter])
             except KeyError:
                 if add_unknown:

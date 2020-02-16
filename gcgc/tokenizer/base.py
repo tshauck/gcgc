@@ -140,6 +140,7 @@ class SequenceTokenizer:
 
         Returns:
             A list of 0s and 1s, where the value is one if the token is a special character.
+
         """
         return [token_id in self.settings.special_token_ids for token_id in token_ids]
 
