@@ -1,6 +1,13 @@
 # (c) Copyright 2019 Trent Hauck
 # All Rights Reserved
-"""Module for Sentence Piece tokenization."""
+"""Module for Sentence Piece tokenization.
+
+This tokenizer uses bindings to call a faster implementation of the algorithm, for now this is the
+google library: https://github.com/google/sentencepiece.
+
+This tokenizer needs to be trained to learn its tokenization logic. See the `fit*` methods for
+different ways to fit the model prior to use.
+"""
 
 import shutil
 import tempfile
@@ -28,7 +35,18 @@ except ImportError:
 
 
 class BioSequencePieceSettings(SequenceTokenizerSettings):
-    """The settings for the sentence piece model."""
+    """The settings for the sentence piece model.
+
+    Like the baseclass, `SequenceTokenizerSettings`, the schema (and thus available fields), can be
+    seen by using the `print_schema` classmethod.
+
+    ```python
+    >>> print(BioSequencePieceSettings.schema_json(indent=2))
+    {
+      "title": "SequenceTokenizerSettings"
+      ...
+    }
+    """
 
     model_prefix: Union[str, Path] = Field(..., env="GCGC_SP_MODEL_PREFIX")
     vocab_size: int = Field(8000, env="GCGC_SP_VOCAB_SIZE")
@@ -82,7 +100,7 @@ class BioSequencePiece(SequenceTokenizer):
         self._sp_processor = None
 
     @property
-    def sp_processor(self):
+    def sp_processor(self) -> spm.SentencePieceProcessor:
         """Return the SequencePiece process object."""
         if self._sp_processor is not None:
             return self._sp_processor

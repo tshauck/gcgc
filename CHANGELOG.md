@@ -10,6 +10,7 @@
 - Add `special_token_ids` returns the set of integers that are special tokens.
 - Add a `get_special_tokens_mask` method on the tokenizer that returns a [0, 1]
   mask of the underlying tokens.
+- Add autodoc of API for main tokenizers.
 
 ## 0.12.0 (2020-01-25)
 

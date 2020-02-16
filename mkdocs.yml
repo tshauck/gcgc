@@ -11,5 +11,8 @@ theme:
 markdown_extensions:
   - codehilite
   - admonition
+plugins:
+  - search
+  - mkdocstrings
 extra_css:
-  - 'stylesheets/extra.css'
+  - "stylesheets/extra.css"

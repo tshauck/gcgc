@@ -1,6 +1,26 @@
 # (c) Copyright 2019 Trent Hauck
 # All Rights Reserved
-"""Module for KMER tokenization."""
+"""This module holds the kmer tokenizer and its settings.
+
+The `KmerTokenizer` tokenizers incoming sequences into kmers of configurable size against a
+configurable alphabet.
+
+For example, given incoming nucleotide sequences, using settings of kmer length 3 and stride 3 they
+encoded sequences will be codons (in the loose sense) with a vocabulary of size 64.
+
+```python
+>>> from gcgc.tokenizer import KmerTokenizer, KmerTokenizerSettings
+
+>>> settings = KmerTokenizerSettings(alphabet="ATCG", kmer_length=3, kmer_stride=3)
+>>> tokenizer = KmerTokenizer(settings=settings)
+
+>>> tokenizer.encode('AAATTTCCC')
+[0, 42, 63]
+
+>>> len(tokenizer.vocab)
+64
+```
+"""
 
 import itertools as it
 from typing import Dict
@@ -16,20 +36,41 @@ from gcgc.tokenizer.base import SequenceTokenizerSettings
 
 
 class KmerTokenizerSettings(SequenceTokenizerSettings):
-    """The specification for the tokenizer."""
+    """The specification for the tokenizer.
+
+    Like the baseclass, `SequenceTokenizerSettings`, the schema (and thus available fields), can be
+    seen by using the `print_schema` classmethod.
+
+    ```python
+    >>> print(KmerTokenizerSettings.schema_json(indent=2))
+    {
+      "title": "SequenceTokenizerSettings"
+      ...
+    }
+
+    """
 
     alphabet: str = Field("ATCG", env="GCGC_ALPHABET")
     kmer_length: int = Field(1, env="GCGC_KMER_LENGTH")
     kmer_stride: int = Field(1, env="GCGC_KMER_STRIDE")
 
+    # pylint: disable=no-self-use, no-self-argument
     @validator("alphabet")
-    def resolve_alphabet(cls, alphabet):  # pylint: disable=no-self-use, no-self-argument
-        """Resolve the alphabet if it's a named alphabet."""
+    def resolve_alphabet(cls, alphabet: str) -> str:
+        """Resolve the alphabet if it's a named alphabet.
+
+        Args:
+            alphabet: The raw alphabet, either the sequence literal or a name of a preset alphabet.
+
+        Returns:
+            The new alphabet.
+
+        """
         return alphabets.resolve_alphabet(alphabet)
 
 
 def _create_kmer_vocab_from_token(settings: KmerTokenizerSettings) -> Dict[str, int]:
-    """Create vocabulary object from a list of tokens."""
+    """Create the vocab object from a list of tokens."""
     token_to_int = {}
 
     for token_id, token in zip(settings.special_token_ids, settings.special_tokens):
@@ -51,14 +92,13 @@ def _create_kmer_vocab_from_token(settings: KmerTokenizerSettings) -> Dict[str, 
 
 
 class KmerTokenizer(SequenceTokenizer):
-    """A sequence tokenizer."""
+    """The Kmer Tokenizer that encodes sequences into chunked kmers."""
 
     def __init__(self, settings: Optional[KmerTokenizerSettings] = None):
         """Init the SequenceTokenizer class.
 
         Args:
             settings: The settings for the tokenizer.
-            vocabulary: The vocabulary for the tokenizer.
 
         """
         self.settings = settings or KmerTokenizerSettings()
@@ -78,13 +118,21 @@ class KmerTokenizer(SequenceTokenizer):
         return kmers
 
     def encode(self, seq: str, add_unknown: bool = False) -> List[int]:
-        """Encode the underlying sequence into a list of tokens."""
+        """Encode the underlying sequence into a list of tokens ids.
+
+        Args:
+            seq: The incoming sequence to encode.
+            add_unknown: If True, add the unknown token rather than throwing an out of vocabulary
+                error.
+
+        Returns:
+            A list of the encoded tokens.
+
+        """
         encoded = []
 
         for letter in self.encode_as_tokens(seq):
             try:
-                if self.vocab[letter] == 2 and letter == ">":
-                    __import__("ipdb").set_trace()
                 encoded.append(self.vocab[letter])
             except KeyError:
                 if add_unknown:
@@ -94,13 +142,8 @@ class KmerTokenizer(SequenceTokenizer):
 
         return encoded
 
-        # return [
-        # self.vocab.get(s, self.vocab.get(self.settings.unk_token))
-        # for s in self.encode_as_tokens(seq)
-        # ]
-
     def encode_as_tokens(self, seq: str) -> List[str]:
-        """Tokenize the sequence into a list of token tokens.
+        """Tokenize the sequence into a list of tokens.
 
         Args:
             seq: The sequence to encode.

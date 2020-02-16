@@ -4,6 +4,7 @@
 
 import warnings as _warnings
 
+from gcgc import tokenizer
 from gcgc.cli import cli
 from gcgc.tokenizer import KmerTokenizer
 from gcgc.tokenizer import KmerTokenizerSettings
