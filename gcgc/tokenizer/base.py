@@ -1,6 +1,10 @@
 # (c) Copyright 2019 Trent Hauck
 # All Rights Reserved
-"""The base tokenizer."""
+"""The base tokenizer from which other tokenizers are expected to inhereit.
+
+The `SequenceTokenizerSettings` in particular holds common tokens and their associated ids for
+common special tokens. For example `unk_token` for unknown tokens.
+"""
 
 from typing import List
 from typing import Optional
@@ -12,7 +16,17 @@ from pydantic import root_validator
 
 # pylint: disable=too-few-public-methods
 class SequenceTokenizerSettings(BaseSettings):
-    """The base tokenizer settings."""
+    """The base tokenizer settings which inherits from pydantic.BaseSettings.
+
+    To see the available fields, use pydantic's `schema_json`.
+
+    ```python
+    >>> print(SequenceTokenizerSettings.schema_json(indent=2))
+    {
+      "title": "SequenceTokenizerSettings"
+      ...
+    }
+    """
 
     unk_token: Optional[str] = Field(None, env="GCGC_UNK_TOKEN")
     unk_token_id: Optional[int] = Field(None, env="GCGC_UNK_TOKEN_ID")
