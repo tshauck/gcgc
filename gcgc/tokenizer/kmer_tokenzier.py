@@ -3,6 +3,7 @@
 """Module for KMER tokenization."""
 
 import itertools as it
+from typing import Dict
 from typing import List
 from typing import Optional
 
@@ -26,39 +27,26 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
         """Resolve the alphabet if it's a named alphabet."""
         return alphabets.resolve_alphabet(alphabet)
 
-    @property
-    def special_tokens(self) -> List[str]:
-        """Return the list of special tokens that are not None."""
-        return [
-            x
-            for x in [
-                self.bos_token,
-                self.eos_token,
-                self.unk_token,
-                self.pad_token,
-                self.mask_token,
-            ]
-            if x is not None
-        ]
 
-
-def _create_kmer_vocab_from_token(
-    alphabet, kmer_length, token_characters: Optional[List[str]] = None
-):
+def _create_kmer_vocab_from_token(settings: KmerTokenizerSettings) -> Dict[str, int]:
     """Create vocabulary object from a list of tokens."""
-    if token_characters is None:
-        token_characters = []
-
     token_to_int = {}
 
-    for i, token in enumerate(token_characters):
-        token_to_int[token] = i
+    for token_id, token in zip(settings.special_token_ids, settings.special_tokens):
+        token_to_int[token] = token_id
 
-    token_list = ["".join(kmer) for kmer in it.product(list(alphabet), repeat=kmer_length)]
-    for i, token in enumerate(token_list, start=len(token_characters)):
-        token_to_int[token] = i
+    token_set = [
+        "".join(kmer) for kmer in it.product(list(settings.alphabet), repeat=settings.kmer_length)
+    ]
 
-    # pylint: disable=too-many-function-args
+    starting_value = 0
+    for token in token_set:
+        while starting_value in settings.special_token_ids:
+            starting_value += 1
+
+        token_to_int[token] = starting_value
+        starting_value += 1
+
     return token_to_int
 
 
@@ -76,9 +64,7 @@ class KmerTokenizer(SequenceTokenizer):
         self.settings = settings or KmerTokenizerSettings()
         super().__init__(settings)
 
-        self.vocab = _create_kmer_vocab_from_token(
-            self.settings.alphabet, self.settings.kmer_length, self.settings.special_tokens
-        )
+        self.vocab = _create_kmer_vocab_from_token(self.settings)
 
     def _kmer_n(self, seq: str) -> List[str]:
         seq_len = len(seq)
@@ -91,12 +77,27 @@ class KmerTokenizer(SequenceTokenizer):
 
         return kmers
 
-    def encode(self, seq: str) -> List[int]:
+    def encode(self, seq: str, add_unknown: bool = False) -> List[int]:
         """Encode the underlying sequence into a list of tokens."""
-        return [
-            self.vocab.get(s, self.vocab.get(self.settings.unk_token))
-            for s in self.encode_as_tokens(seq)
-        ]
+        encoded = []
+
+        for letter in self.encode_as_tokens(seq):
+            try:
+                if self.vocab[letter] == 2 and letter == ">":
+                    __import__("ipdb").set_trace()
+                encoded.append(self.vocab[letter])
+            except KeyError:
+                if add_unknown:
+                    encoded.append(self.settings.unk_token_id)
+                else:
+                    raise
+
+        return encoded
+
+        # return [
+        # self.vocab.get(s, self.vocab.get(self.settings.unk_token))
+        # for s in self.encode_as_tokens(seq)
+        # ]
 
     def encode_as_tokens(self, seq: str) -> List[str]:
         """Tokenize the sequence into a list of token tokens.

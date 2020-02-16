@@ -15,13 +15,13 @@ from gcgc.tokenizer import KmerTokenizerSettings
             "ATCG",
             KmerTokenizerSettings(alphabet="ATCG", kmer_length=1, kmer_stride=1),
             list("ATCG"),
-            [1, 2, 3, 4],
+            [0, 1, 2, 3],
         ),
         (
             "ATCG",
             KmerTokenizerSettings(alphabet="ATCG", max_length=2, kmer_length=1, kmer_stride=1),
             list("AT"),
-            [1, 2],
+            [0, 1],
         ),
         (
             "ATCG",
@@ -29,7 +29,7 @@ from gcgc.tokenizer import KmerTokenizerSettings
                 alphabet="ATCG", min_length=4, pad_token="|", kmer_length=2, kmer_stride=1
             ),
             ["AT", "TC", "CG", "|"],
-            [3, 8, 13, 1],
+            [2, 7, 12, 0],
         ),
         (
             "AATT",
@@ -37,13 +37,13 @@ from gcgc.tokenizer import KmerTokenizerSettings
                 alphabet="ATCG", pad_token="|", conform_length=5, kmer_length=2, kmer_stride=2
             ),
             ["AA", "TT", "|", "|", "|"],
-            [2, 7, 1, 1, 1],
+            [1, 6, 0, 0, 0],
         ),
         (
             "ATCGATCGATCGATCG",
             KmerTokenizerSettings(alphabet="ATCG", max_length=2, kmer_length=2, kmer_stride=1),
             ["AT", "TC"],
-            [2, 7],
+            [1, 6],
         ),
         (
             "ATCGATCG",
@@ -56,15 +56,45 @@ from gcgc.tokenizer import KmerTokenizerSettings
                 kmer_stride=1,
             ),
             [">", "AT", "TC", "CG", "GA", "AT", "TC", "CG", "<"],
-            [0, 4, 9, 14, 15, 4, 9, 14, 1],
+            [1, 3, 8, 13, 14, 3, 8, 13, 2],
         ),
     ],
 )
 def test_kmer_tokenization(seq, settings, expected_tokens, expected_encoding):
-    """Test the kemrs are encoded as expected."""
+    """Test the kmers are encoded as expected."""
     tokenizer = KmerTokenizer(settings)
     actual_tokens = tokenizer.encode_as_tokens(seq)
     assert actual_tokens == expected_tokens
 
     actual_encoded = tokenizer.encode(seq)
     assert actual_encoded == expected_encoding
+
+
+@pytest.mark.parametrize(
+    "token_ids, settings, expected_mask",
+    [
+        (
+            [0, 1, 2, 3],
+            KmerTokenizerSettings(alphabet="ATCG", kmer_length=1, kmer_stride=1),
+            [0, 0, 0, 0],
+        ),
+        (
+            [0, 1, 2, 3, 4],
+            KmerTokenizerSettings(alphabet="ATCG", pad_token="|", kmer_length=1, kmer_stride=1),
+            [1, 0, 0, 0, 0],
+        ),
+        (
+            [0, 1, 2, 3, 4],
+            KmerTokenizerSettings(
+                alphabet="ATCG", bos_token_id=0, bos_token=">", kmer_length=1, kmer_stride=1
+            ),
+            [1, 0, 0, 0, 0],
+        ),
+    ],
+)
+def test_get_special_tokens_mask(token_ids, settings, expected_mask):
+    """Test the special tokens mask returns the proper mask for a given input list of token ids."""
+
+    tokenizer = KmerTokenizer(settings)
+    actual_mask = tokenizer.get_special_tokens_mask(token_ids)
+    assert actual_mask == expected_mask

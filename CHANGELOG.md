@@ -5,6 +5,11 @@
 - Add `fit_on_list` to BioSequencePiece which can be trained on list of strings.
 - Make `BioSequencePiece.model_prefix` a `Union[str, Path]`, and rework internal
   implementation to be consistent.
+- Add token ids for all the special tokens (e.g. `bos_token` now has an
+  accompanying `bos_token_id`).
+- Add `special_token_ids` returns the set of integers that are special tokens.
+- Add a `get_special_tokens_mask` method on the tokenizer that returns a [0, 1]
+  mask of the underlying tokens.
 
 ## 0.12.0 (2020-01-25)
 

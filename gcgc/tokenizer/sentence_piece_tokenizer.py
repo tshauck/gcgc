@@ -10,10 +10,10 @@ from typing import List
 from typing import Optional
 from typing import Union
 
+from Bio import SeqIO
 from pydantic import Field
 from typing_extensions import Literal
 
-from Bio import SeqIO
 from gcgc.tokenizer.base import SequenceTokenizer
 from gcgc.tokenizer.base import SequenceTokenizerSettings
 
@@ -38,6 +38,9 @@ class BioSequencePieceSettings(SequenceTokenizerSettings):
         16, description="The number of threads to use.", env="GCGC_SP_NUM_THREADS"
     )
     num_sub_iterations: int = Field(2, env="GCGC_SP_NUM_SUB_ITERATIONS")
+
+    unk_token: Optional[str] = Field("?", env="GCGC_UNK_TOKEN")
+    unk_token_id: Optional[int] = Field(0, env="GCGC_UNK_TOKEN_ID")
 
     @property
     def _model_prefix_path(self) -> Path:
@@ -119,6 +122,8 @@ class BioSequencePiece(SequenceTokenizer):
             f"--max_sentence_length={self.settings.max_sequence_length}",
             f"--num_sub_iterations={self.settings.num_sub_iterations}",
             f"--num_threads={self.settings.num_threads}",
+            f"--unk_piece={self.settings.unk_token}",
+            f"--unk_id={self.settings.unk_token_id}",
         ]
 
         if self.settings.unk_token:
