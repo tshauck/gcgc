@@ -118,4 +118,4 @@ GCGC implements two types of tokenizers:
 
 ## Documentation Version
 
-The documentation you're reading was build for version: `0.12.1-dev.3`.
+The documentation you're reading was build for version: `0.12.1-dev.4`.
