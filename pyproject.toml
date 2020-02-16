@@ -16,12 +16,8 @@ python = ">=3.6,<4.0"
 click = "^7.0"
 pydantic = "^1.1"
 typing-extensions = "^3.7"
-
-sentencepiece = { version = "^0.1", optional = true }
-biopython = { version = "^1.76", optional = true }
-
-[tool.poetry.extras]
-sentencepiece = ["sentencepiece", "biopython"]
+sentencepiece = "^0.1"
+biopython = "^1.76"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"
