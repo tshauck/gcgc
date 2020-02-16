@@ -17,3 +17,8 @@ services:
     volumes:
       - $PWD:/project
       - $HOME/.gitconfig:/etc/gitconfig
+  poetry:
+    image: jonatkinson/python-poetry
+    volumes:
+      - $PWD:/project
+    working_dir: /project

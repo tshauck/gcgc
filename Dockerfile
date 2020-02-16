@@ -31,7 +31,7 @@ RUN poetry cache:clear pypi --all
 
 WORKDIR /gcgc
 COPY ./ ./
-RUN poetry install -E sentencepiece
+RUN poetry install
 
 WORKDIR /workspace
 ENTRYPOINT ["gcgc"]

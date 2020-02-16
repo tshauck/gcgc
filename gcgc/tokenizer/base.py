@@ -152,11 +152,21 @@ class SequenceTokenizer:
     def get_special_tokens_mask(self, token_ids: List[int]) -> List[int]:
         """Given the input set of tokens, return a list that demarcates special character.
 
+        ```python
+        # Assuming 1 is bos_token, 2 is eos_token, and 0 is pad_token.
+        >>> tokenizer.get_special_tokens_mask([1, 34, 21, 0, 0, 0, 2])
+        [1, 0, 0, 1, 1, 1, 1]
+        ```
+
+        Args:
+            token_ids: The list of integer tokens that may or may not be special tokens according
+                to the toeknizer's settings.
+
         Returns:
             A list of 0s and 1s, where the value is one if the token is a special character.
 
         """
-        return [token_id in self.settings.special_token_ids for token_id in token_ids]
+        return [int(token_id in self.settings.special_token_ids) for token_id in token_ids]
 
     def apply_length_constraints(self, tokens: List[str]) -> List[str]:
         """Apply the constraints from the settings to the passed tokens list."""
