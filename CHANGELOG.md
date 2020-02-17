@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.12.1 (unreleased)
+## 0.12.1 (2020-02-16)
 
 - Add `fit_on_list` to BioSequencePiece which can be trained on list of strings.
 - Make `BioSequencePiece.model_prefix` a `Union[str, Path]`, and rework internal
