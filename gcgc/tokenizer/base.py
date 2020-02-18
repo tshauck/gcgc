@@ -6,12 +6,22 @@ The `SequenceTokenizerSettings` in particular holds common tokens and their asso
 common special tokens. For example `unk_token` for unknown tokens.
 """
 
+from typing import Dict
 from typing import List
 from typing import Optional
+from typing import Union
 
 from pydantic import BaseSettings
 from pydantic import Field
 from pydantic import root_validator
+
+DEFAULT_TOKEN_AND_IDS = {
+    "pad": {"token": "|", "token_id": 0},
+    "bos": {"token": ">", "token_id": 1},
+    "eos": {"token": "<", "token_id": 2},
+    "unk": {"token": "?", "token_id": 3},
+    "mask": {"token": "#", "token_id": 4},
+}
 
 
 # pylint: disable=too-few-public-methods
@@ -48,6 +58,10 @@ class SequenceTokenizerSettings(BaseSettings):
 
     conform_length: Optional[int] = Field(None, env="GCGC_CONFORM_LENGTH")
 
+    def special_token_defaults(self) -> Dict[str, Dict[str, Union[int, str]]]:
+        """Return a dictionary mapping the token to its default token and id."""
+        return DEFAULT_TOKEN_AND_IDS
+
     # pylint: disable=no-self-argument, no-self-use
     @root_validator
     def validate_and_set_special_tokens(cls, values):
@@ -56,15 +70,15 @@ class SequenceTokenizerSettings(BaseSettings):
         If they do not, this will set the default value.
 
         """
-        special_token_defaults = [
-            ("pad_token", "|", 0),
-            ("bos_token", ">", 1),
-            ("eos_token", "<", 2),
-            ("unk_token", "?", 3),
-        ]
-        for token_name, token_char, token_id in special_token_defaults:
+        passed_tokens = {
+            k: v for k, v in values.items() if k.endswith("_token_id") and v is not None
+        }
+
+        for token_type, token_map in DEFAULT_TOKEN_AND_IDS.items():
+            token_name = f"{token_type}_token"
+
             passed_token = values.get(token_name)
-            passed_token_id = values.get(f"{token_name}_id")
+            passed_token_id = values.get(f"{token_type}_token_id")
 
             if (passed_token is None and passed_token_id is None) or (
                 passed_token is not None and passed_token_id is not None
@@ -72,10 +86,18 @@ class SequenceTokenizerSettings(BaseSettings):
                 continue
 
             if passed_token is None and passed_token_id is not None:
-                values[token_name] = token_char
+                values[token_name] = token_map["token"]
 
             if passed_token is not None and passed_token_id is None:
-                values[f"{token_name}_id"] = token_id
+                if token_map["token_id"] in passed_tokens.values():
+                    msg = (
+                        f"Tried to set the default for {token_type}, however it "
+                        f"conflicts with a manually supplied token_id in {passed_tokens}. "
+                        "Supply an associated token value."
+                    )
+                    raise ValueError(msg)
+
+                values[f"{token_name}_id"] = token_map["token_id"]
 
         return values
 
