@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.2 (unreleased)
+
+- Fix bug in the event that a token id is supplied that overrides a default of
+  an inferred token.
+
 ## 0.12.1 (2020-02-16)
 
 - Add `fit_on_list` to BioSequencePiece which can be trained on list of strings.

@@ -11,6 +11,7 @@ from gcgc.tokenizer.base import SequenceTokenizerSettings
 
 @contextmanager
 def does_not_raise():
+    """Dummy context manager that asks as a standin for pytest.raises."""
     yield
 
 
@@ -30,6 +31,7 @@ def does_not_raise():
     ],
 )
 def test_manually_setting_token_ids(settings_dict, expected_token_ids, raises):
+    """Test that manually setting token ids works, or throws an error."""
     with raises:
         settings = SequenceTokenizerSettings.parse_obj(settings_dict)
         assert settings.mask_token_id == expected_token_ids["mask_token_id"]

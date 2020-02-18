@@ -58,6 +58,7 @@ class SequenceTokenizerSettings(BaseSettings):
 
     conform_length: Optional[int] = Field(None, env="GCGC_CONFORM_LENGTH")
 
+    @property
     def special_token_defaults(self) -> Dict[str, Dict[str, Union[int, str]]]:
         """Return a dictionary mapping the token to its default token and id."""
         return DEFAULT_TOKEN_AND_IDS
@@ -93,7 +94,7 @@ class SequenceTokenizerSettings(BaseSettings):
                     msg = (
                         f"Tried to set the default for {token_type}, however it "
                         f"conflicts with a manually supplied token_id in {passed_tokens}. "
-                        "Supply an associated token value."
+                        "Supply an associated token_id value."
                     )
                     raise ValueError(msg)
 
