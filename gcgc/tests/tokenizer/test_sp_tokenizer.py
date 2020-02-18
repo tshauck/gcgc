@@ -30,7 +30,14 @@ def test_train_sentence_piece(tmp_path, alphabet):
     model_prefix = tmp_path / "model"
 
     settings = sentence_piece_tokenizer.BioSequencePieceSettings(
-        model_prefix=model_prefix, vocab_size=50, bos_token=">", eos_token="<", pad_token="|"
+        model_prefix=model_prefix,
+        vocab_size=50,
+        bos_token=">",
+        bos_token_id=2,
+        eos_token="<",
+        eos_token_id=3,
+        pad_token="|",
+        pad_token_id=1,
     )
     sp_tokenizer = sentence_piece_tokenizer.BioSequencePiece(settings)
     sp_tokenizer.fit_on_list(sequences)
