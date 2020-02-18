@@ -1,4 +1,4 @@
-# (c) Copyright 2018 Trent Hauck
+# (c) Copyright 20202 Trent Hauck
 # All Rights Reserved
 """Test the alphabet."""
 
