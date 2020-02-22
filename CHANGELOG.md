@@ -6,6 +6,8 @@
   an inferred token.
 - Add `pad_at_end` boolean setting that when True pads at the end of the
   sequence, and when False pads at the beginning.
+- Add dedicated `Vocab` object which replaces the dictionary of string to
+  integer.
 
 ## 0.12.1 (2020-02-16)
 
