@@ -23,7 +23,6 @@ encoded sequences will be codons (in the loose sense) with a vocabulary of size 
 """
 
 import itertools as it
-from typing import Dict
 from typing import List
 from typing import Optional
 
@@ -33,6 +32,7 @@ from pydantic import validator
 from gcgc import alphabets
 from gcgc.tokenizer.base import SequenceTokenizer
 from gcgc.tokenizer.base import SequenceTokenizerSettings
+from gcgc.vocab import Vocab
 
 
 class KmerTokenizerSettings(SequenceTokenizerSettings):
@@ -69,12 +69,12 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
         return alphabets.resolve_alphabet(alphabet)
 
 
-def _create_kmer_vocab_from_token(settings: KmerTokenizerSettings) -> Dict[str, int]:
+def _create_kmer_vocab_from_token(settings: KmerTokenizerSettings) -> Vocab:
     """Create the vocab object from a list of tokens."""
-    token_to_int = {}
+    vocab = Vocab()
 
     for token_id, token in zip(settings.special_token_ids, settings.special_tokens):
-        token_to_int[token] = token_id
+        vocab[token] = token_id
 
     token_set = [
         "".join(kmer) for kmer in it.product(list(settings.alphabet), repeat=settings.kmer_length)
@@ -85,10 +85,10 @@ def _create_kmer_vocab_from_token(settings: KmerTokenizerSettings) -> Dict[str, 
         while starting_value in settings.special_token_ids:
             starting_value += 1
 
-        token_to_int[token] = starting_value
+        vocab[token] = starting_value
         starting_value += 1
 
-    return token_to_int
+    return vocab
 
 
 class KmerTokenizer(SequenceTokenizer):
