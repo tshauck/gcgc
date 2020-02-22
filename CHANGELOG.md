@@ -4,6 +4,8 @@
 
 - Fix bug in the event that a token id is supplied that overrides a default of
   an inferred token.
+- Add `pad_at_end` boolean setting that when True pads at the end of the
+  sequence, and when False pads at the beginning.
 
 ## 0.12.1 (2020-02-16)
 
