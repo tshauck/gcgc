@@ -52,6 +52,7 @@ class SequenceTokenizerSettings(BaseSettings):
 
     pad_token: Optional[str] = Field(None, env="GCGC_PAD_TOKEN")
     pad_token_id: Optional[int] = Field(None, env="GCGC_PAD_TOKEN_ID")
+    pad_at_end: bool = Field(True, env="GCGC_PAD_AT_END")
 
     max_length: Optional[int] = Field(None, env="GCGC_MAX_LENGTH")
     min_length: Optional[int] = Field(None, env="GCGC_MIN_LENGTH")
@@ -154,7 +155,7 @@ class SequenceTokenizerSettings(BaseSettings):
         ]
 
 
-def _pad_token_list(tokens: List[str], pad_to: int, pad_char: str):
+def _pad_token_list(tokens: List[str], pad_to: int, pad_char: str, pad_at_end: bool):
     """Pad the input tokens list to tokens."""
     token_len = len(tokens)
 
@@ -162,7 +163,11 @@ def _pad_token_list(tokens: List[str], pad_to: int, pad_char: str):
         return tokens
 
     new_tokens = pad_to - token_len
-    return tokens + [pad_char] * new_tokens
+
+    padding = [pad_char] * new_tokens
+    if pad_at_end:
+        return tokens + padding
+    return padding + tokens
 
 
 class SequenceTokenizer:
@@ -194,11 +199,18 @@ class SequenceTokenizer:
     def apply_length_constraints(self, tokens: List[str]) -> List[str]:
         """Apply the constraints from the settings to the passed tokens list."""
         if self.settings.conform_length:
-            tokens = _pad_token_list(tokens, self.settings.conform_length, self.settings.pad_token)
+            tokens = _pad_token_list(
+                tokens,
+                self.settings.conform_length,
+                self.settings.pad_token,
+                self.settings.pad_at_end,
+            )
             return tokens[: self.settings.conform_length]
 
         if self.settings.min_length:
-            tokens = _pad_token_list(tokens, self.settings.min_length, self.settings.pad_token)
+            tokens = _pad_token_list(
+                tokens, self.settings.min_length, self.settings.pad_token, self.settings.pad_at_end
+            )
 
         if self.settings.max_length:
             tokens = tokens[: self.settings.max_length]

@@ -40,6 +40,19 @@ from gcgc.tokenizer import KmerTokenizerSettings
             [1, 6, 0, 0, 0],
         ),
         (
+            "AATT",
+            KmerTokenizerSettings(
+                alphabet="ATCG",
+                pad_token="|",
+                conform_length=5,
+                kmer_length=2,
+                kmer_stride=2,
+                pad_at_end=False,
+            ),
+            ["|", "|", "|", "AA", "TT"],
+            [0, 0, 0, 1, 6],
+        ),
+        (
             "ATCGATCGATCGATCG",
             KmerTokenizerSettings(alphabet="ATCG", max_length=2, kmer_length=2, kmer_stride=1),
             ["AT", "TC"],
