@@ -11,6 +11,6 @@ from gcgc.tokenizer import KmerTokenizerSettings
 from gcgc.tokenizer import SequenceTokenizer
 from gcgc.tokenizer import SequenceTokenizerSettings
 
-__version__ = "0.12.1"
+__version__ = "0.12.2-dev.1"
 
 _warnings.simplefilter(action="ignore", category=PendingDeprecationWarning)
