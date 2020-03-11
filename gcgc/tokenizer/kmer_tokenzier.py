@@ -126,6 +126,7 @@ class KmerTokenizer(SequenceTokenizer):
 
         Returns:
             A list of encoded sequences.
+
         """
         return [self.encode(seq, add_unknown=add_unknown) for seq in seqs]
 
