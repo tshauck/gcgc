@@ -117,6 +117,19 @@ class KmerTokenizer(SequenceTokenizer):
 
         return kmers
 
+    def encode_batches(self, seqs: List[str], add_unknown: bool = True) -> List[List[int]]:
+        """Encode batches rather than a single example.
+
+        Args:
+            seqs: A list of sequences.
+            add_unknown: Passed to encode.
+
+        Returns:
+            A list of encoded sequences.
+
+        """
+        return [self.encode(seq, add_unknown=add_unknown) for seq in seqs]
+
     def encode(self, seq: str, add_unknown: bool = False) -> List[int]:
         """Encode the underlying sequence into a list of tokens ids.
 
