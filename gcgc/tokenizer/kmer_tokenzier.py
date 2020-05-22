@@ -9,10 +9,6 @@ For example, given incoming nucleotide sequences, using settings of kmer length 
 encoded sequences will be codons (in the loose sense) with a vocabulary of size 64.
 
 ```python
->>> from gcgc.tokenizer import KmerTokenizer, KmerTokenizerSettings
-
->>> settings = KmerTokenizerSettings(alphabet="ATCG", kmer_length=3, kmer_stride=3)
->>> tokenizer = KmerTokenizer(settings=settings)
 
 >>> tokenizer.encode('AAATTTCCC')
 [0, 42, 63]
@@ -24,35 +20,43 @@ encoded sequences will be codons (in the loose sense) with a vocabulary of size 
 
 import itertools as it
 from typing import List
-from typing import Optional
 
 from pydantic import Field
+from pydantic import root_validator
 from pydantic import validator
 
 from gcgc import alphabets
 from gcgc.tokenizer.base import SequenceTokenizer
-from gcgc.tokenizer.base import SequenceTokenizerSettings
 from gcgc.vocab import Vocab
 
 
-class KmerTokenizerSettings(SequenceTokenizerSettings):
-    """The specification for the tokenizer.
+def _create_kmer_vocab_from_token(vocab, alphabet: str, kmer_length: int) -> Vocab:
+    """Create the vocab object from a list of tokens."""
 
-    Like the baseclass, `SequenceTokenizerSettings`, the schema (and thus available fields), can be
-    seen by using the `print_schema` classmethod.
+    token_set = ["".join(kmer) for kmer in it.product(list(alphabet), repeat=kmer_length)]
 
-    ```python
-    >>> print(KmerTokenizerSettings.schema_json(indent=2))
-    {
-      "title": "SequenceTokenizerSettings"
-      ...
-    }
+    for token in token_set:
+        vocab.add_item(token)
 
-    """
+    return vocab
+
+
+class KmerTokenizer(SequenceTokenizer):
+    """The Kmer Tokenizer that encodes sequences into chunked kmers."""
 
     alphabet: str = Field("ATCG", env="GCGC_ALPHABET")
     kmer_length: int = Field(1, env="GCGC_KMER_LENGTH")
     kmer_stride: int = Field(1, env="GCGC_KMER_STRIDE")
+
+    @root_validator
+    def augment_vocab_with_kmer(cls, values):  # pylint: disable=no-self-argument,no-self-use
+        """Update the vocab of the SequenceTokenizer with a kmer alphabet."""
+        vocab = values["vocab"]
+        alphabet = values["alphabet"]
+        kmer_length = values["kmer_length"]
+
+        values["vocab"] = _create_kmer_vocab_from_token(vocab, alphabet, kmer_length)
+        return values
 
     # pylint: disable=no-self-use, no-self-argument
     @validator("alphabet")
@@ -68,51 +72,13 @@ class KmerTokenizerSettings(SequenceTokenizerSettings):
         """
         return alphabets.resolve_alphabet(alphabet)
 
-
-def _create_kmer_vocab_from_token(settings: KmerTokenizerSettings) -> Vocab:
-    """Create the vocab object from a list of tokens."""
-    vocab = Vocab()
-
-    for token_id, token in zip(settings.special_token_ids, settings.special_tokens):
-        vocab[token] = token_id
-
-    token_set = [
-        "".join(kmer) for kmer in it.product(list(settings.alphabet), repeat=settings.kmer_length)
-    ]
-
-    starting_value = 0
-    for token in token_set:
-        while starting_value in settings.special_token_ids:
-            starting_value += 1
-
-        vocab[token] = starting_value
-        starting_value += 1
-
-    return vocab
-
-
-class KmerTokenizer(SequenceTokenizer):
-    """The Kmer Tokenizer that encodes sequences into chunked kmers."""
-
-    def __init__(self, settings: Optional[KmerTokenizerSettings] = None):
-        """Init the SequenceTokenizer class.
-
-        Args:
-            settings: The settings for the tokenizer.
-
-        """
-        self.settings = settings or KmerTokenizerSettings()
-        super().__init__(settings)
-
-        self.vocab = _create_kmer_vocab_from_token(self.settings)
-
     def _kmer_n(self, seq: str) -> List[str]:
         seq_len = len(seq)
-        iterations = seq_len - self.settings.kmer_length + 1
+        iterations = seq_len - self.kmer_length + 1
         kmers = []
 
-        for i in range(0, iterations, self.settings.kmer_stride):
-            kmer = seq[i : i + self.settings.kmer_length]
+        for i in range(0, iterations, self.kmer_stride):
+            kmer = seq[i : i + self.kmer_length]
             kmers.append(kmer)
 
         return kmers
@@ -149,7 +115,7 @@ class KmerTokenizer(SequenceTokenizer):
                 encoded.append(self.vocab[letter])
             except KeyError:
                 if add_unknown:
-                    encoded.append(self.settings.unk_token_id)
+                    encoded.append(self.unk_token_id)
                 else:
                     raise
 
@@ -162,26 +128,25 @@ class KmerTokenizer(SequenceTokenizer):
             seq: The sequence to encode.
 
         Returns:
-            The list of strs that are the tokens.
+            The list of strings that are the tokens.
 
         """
         seq_len = len(seq)
 
-        if seq_len < self.settings.kmer_length:
+        if seq_len < self.kmer_length:
             raise ValueError(
-                f"seq length {seq_len} cannot be less than the kmer "
-                "size {self.settings.kmer_length}"
+                f"seq length {seq_len} cannot be less than the kmer size {self.kmer_length}"
             )
 
-        if self.settings.kmer_length == 1:
+        if self.kmer_length == 1:
             kmer_list = list(seq)
         else:
             kmer_list = self._kmer_n(seq)
 
-        if self.settings.bos_token:
-            kmer_list = [self.settings.bos_token] + kmer_list
+        if self.bos_token:
+            kmer_list = [self.bos_token] + kmer_list
 
-        if self.settings.eos_token:
-            kmer_list = kmer_list + [self.settings.eos_token]
+        if self.eos_token:
+            kmer_list = kmer_list + [self.eos_token]
 
         return super().apply_length_constraints(kmer_list)

@@ -1,5 +1,5 @@
 ./gcgc/data/
 .git
-
 ./docs
 ./dist
+.vim

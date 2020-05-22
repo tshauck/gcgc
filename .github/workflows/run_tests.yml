@@ -3,21 +3,6 @@ name: Run Tests and Lint
 on: [push]
 
 jobs:
-  test_36:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: Build the Docker image
-        run: docker-compose build gcgc
-      - name: Run the unittests
-        run: docker-compose run --rm gcgc test
-      - name: Check formatting
-        run: docker-compose run --rm gcgc fmt-check
-      - name: Check pydocstyle
-        run: docker-compose run --rm gcgc pydocstyle
-      - name: Check pylint
-        run: docker-compose run --rm gcgc pylint
   test_37:
     runs-on: ubuntu-latest
 
@@ -25,21 +10,11 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build the Docker image
         run: docker-compose build gcgc
-        env:
-          PY_VERSION: 3.7
       - name: Run the unittests
         run: docker-compose run --rm gcgc test
-        env:
-          PY_VERSION: 3.7
       - name: Check formatting
         run: docker-compose run --rm gcgc fmt-check
-        env:
-          PY_VERSION: 3.7
       - name: Check pydocstyle
         run: docker-compose run --rm gcgc pydocstyle
-        env:
-          PY_VERSION: 3.7
       - name: Check pylint
         run: docker-compose run --rm gcgc pylint
-        env:
-          PY_VERSION: 3.7

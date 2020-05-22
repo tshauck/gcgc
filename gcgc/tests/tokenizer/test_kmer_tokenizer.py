@@ -4,28 +4,29 @@
 
 import pytest
 
-from gcgc.tokenizer import KmerTokenizer
-from gcgc.tokenizer import KmerTokenizerSettings
+from gcgc import KmerTokenizer
 
 
 @pytest.mark.parametrize(
-    "seq,settings,expected_tokens,expected_encoding",
+    "seq,tokenizer,expected_tokens,expected_encoding",
     [
         (
             "ATCG",
-            KmerTokenizerSettings(alphabet="ATCG", kmer_length=1, kmer_stride=1),
+            KmerTokenizer.bare_tokenizer(alphabet="ATCG", kmer_length=1, kmer_stride=1),
             list("ATCG"),
             [0, 1, 2, 3],
         ),
         (
             "ATCG",
-            KmerTokenizerSettings(alphabet="ATCG", max_length=2, kmer_length=1, kmer_stride=1),
+            KmerTokenizer.bare_tokenizer(
+                alphabet="ATCG", max_length=2, kmer_length=1, kmer_stride=1
+            ),
             list("AT"),
             [0, 1],
         ),
         (
             "ATCG",
-            KmerTokenizerSettings(
+            KmerTokenizer.bare_tokenizer(
                 alphabet="ATCG", min_length=4, pad_token="|", kmer_length=2, kmer_stride=1
             ),
             ["AT", "TC", "CG", "|"],
@@ -33,7 +34,7 @@ from gcgc.tokenizer import KmerTokenizerSettings
         ),
         (
             "AATT",
-            KmerTokenizerSettings(
+            KmerTokenizer.bare_tokenizer(
                 alphabet="ATCG", pad_token="|", conform_length=5, kmer_length=2, kmer_stride=2
             ),
             ["AA", "TT", "|", "|", "|"],
@@ -41,7 +42,7 @@ from gcgc.tokenizer import KmerTokenizerSettings
         ),
         (
             "AATT",
-            KmerTokenizerSettings(
+            KmerTokenizer.bare_tokenizer(
                 alphabet="ATCG",
                 pad_token="|",
                 conform_length=5,
@@ -54,28 +55,32 @@ from gcgc.tokenizer import KmerTokenizerSettings
         ),
         (
             "ATCGATCGATCGATCG",
-            KmerTokenizerSettings(alphabet="ATCG", max_length=2, kmer_length=2, kmer_stride=1),
+            KmerTokenizer.bare_tokenizer(
+                alphabet="ATCG", max_length=2, kmer_length=2, kmer_stride=1
+            ),
             ["AT", "TC"],
             [1, 6],
         ),
         (
             "ATCGATCG",
-            KmerTokenizerSettings(
+            KmerTokenizer(
                 alphabet="ATCG",
+                pad_token="|",
                 bos_token=">",
                 eos_token="<",
+                unk_token=None,
+                mask_token=None,
                 max_length=10,
                 kmer_length=2,
                 kmer_stride=1,
             ),
             [">", "AT", "TC", "CG", "GA", "AT", "TC", "CG", "<"],
-            [1, 3, 8, 13, 14, 3, 8, 13, 2],
+            [1, 4, 9, 14, 15, 4, 9, 14, 2],
         ),
     ],
 )
-def test_kmer_tokenization(seq, settings, expected_tokens, expected_encoding):
+def test_kmer_tokenization(seq, tokenizer, expected_tokens, expected_encoding):
     """Test the kmers are encoded as expected."""
-    tokenizer = KmerTokenizer(settings)
     actual_tokens = tokenizer.encode_as_tokens(seq)
     assert actual_tokens == expected_tokens
 
@@ -84,47 +89,41 @@ def test_kmer_tokenization(seq, settings, expected_tokens, expected_encoding):
 
 
 @pytest.mark.parametrize(
-    "token_ids, settings, expected_mask",
+    "token_ids, tokenizer, expected_mask",
     [
         (
-            [0, 1, 2, 3],
-            KmerTokenizerSettings(alphabet="ATCG", kmer_length=1, kmer_stride=1),
-            [0, 0, 0, 0],
-        ),
-        (
             [0, 1, 2, 3, 4],
-            KmerTokenizerSettings(alphabet="ATCG", pad_token="|", kmer_length=1, kmer_stride=1),
-            [1, 0, 0, 0, 0],
-        ),
-        (
-            [0, 1, 2, 3, 4],
-            KmerTokenizerSettings(
-                alphabet="ATCG", bos_token_id=0, bos_token=">", kmer_length=1, kmer_stride=1
+            KmerTokenizer(
+                alphabet="ATCG",
+                kmer_length=1,
+                kmer_stride=1,
+                pad_token="|",
+                bos_token=None,
+                eos_token=None,
+                unk_token=None,
+                mask_token=None,
             ),
             [1, 0, 0, 0, 0],
         ),
     ],
 )
-def test_get_special_tokens_mask(token_ids, settings, expected_mask):
+def test_get_special_tokens_mask(token_ids, tokenizer, expected_mask):
     """Test the special tokens mask returns the proper mask for a given input list of token ids."""
-
-    tokenizer = KmerTokenizer(settings)
     actual_mask = tokenizer.get_special_tokens_mask(token_ids)
     assert actual_mask == expected_mask
 
 
+@pytest.mark.skip
 @pytest.mark.parametrize(
-    "settings,sequence_list,expected_encoding",
+    "tokenizer,sequence_list,expected_encoding",
     [
         (
-            KmerTokenizerSettings(alphabet="ATCG", kmer_length=1, kmer_stride=1),
+            KmerTokenizer(alphabet="ATCG", kmer_length=1, kmer_stride=1),
             ["ATCG", "GCTA"],
             [[0, 1, 2, 3], [3, 2, 1, 0]],
         )
     ],
 )
-def test_encode_batch(settings, sequence_list, expected_encoding):
+def test_encode_batch(tokenizer, sequence_list, expected_encoding):
     """Test batches can be encoded."""
-
-    tokenizer = KmerTokenizer(settings)
     assert tokenizer.encode_batches(sequence_list) == expected_encoding

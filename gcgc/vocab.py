@@ -15,13 +15,7 @@ import pydantic
 class Vocab(pydantic.BaseModel):
     """The Vocab object that holds the mapping between integers and characters."""
 
-    stoi: typing.Dict[str, int] = None
-
-    # pylint: disable=no-self-argument,no-self-use
-    @pydantic.validator("stoi", pre=True, always=True)
-    def default_stoi(cls, value) -> typing.Dict[str, int]:
-        """Get the default string to integer mapping."""
-        return {} if value is None else value
+    stoi: typing.Dict[str, int] = {}
 
     @property
     def itos(self):

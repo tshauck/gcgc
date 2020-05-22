@@ -5,11 +5,10 @@
 import warnings as _warnings
 
 from gcgc import tokenizer
-from gcgc.cli import cli
-from gcgc.tokenizer import KmerTokenizer
-from gcgc.tokenizer import KmerTokenizerSettings
-from gcgc.tokenizer import SequenceTokenizer
-from gcgc.tokenizer import SequenceTokenizerSettings
+from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
+from gcgc.tokenizer.kmer_tokenzier import SequenceTokenizer
+
+__all__ = ["tokenizer", "KmerTokenizer", "SequenceTokenizer"]
 
 __version__ = "0.12.2-dev.1"
 
