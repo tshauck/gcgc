@@ -10,6 +10,6 @@ from gcgc.tokenizer.kmer_tokenzier import SequenceTokenizer
 
 __all__ = ["tokenizer", "KmerTokenizer", "SequenceTokenizer"]
 
-__version__ = "0.12.2-dev.1"
+__version__ = "0.12.2-dev.2"
 
 _warnings.simplefilter(action="ignore", category=PendingDeprecationWarning)

@@ -1,4 +1,4 @@
-version: 0.12.2-dev.1
+version: 0.12.2-dev.2
 tag_template: v{{ yeyo_version }}
 commit_template: v{{ yeyo_version }}
 files:
@@ -9,8 +9,6 @@ files:
 - file_path: docs/index.md
   match_template: yeyo_version
 - file_path: gcgc/__init__.py
-  match_template: yeyo_version
-- file_path: gcgc/cli.py
   match_template: yeyo_version
 - file_path: pyproject.toml
   match_template: yeyo_version
