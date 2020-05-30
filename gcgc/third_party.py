@@ -106,7 +106,6 @@ class GenomicDataset(torch.utils.data.Dataset):
         alphabet=IUPAC.ExtendedIUPACProtein(),
     ) -> "GenomicDataset":
         """Init from a single file. This is a convenience method that delegates to from_paths."""
-
         return cls.from_paths([path], tokenizer, file_format, alphabet)
 
     @classmethod

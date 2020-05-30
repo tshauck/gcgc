@@ -6,8 +6,6 @@ files:
   match_template: yeyo_version
 - file_path: docker-compose.yml
   match_template: yeyo_version
-- file_path: docs/index.md
-  match_template: yeyo_version
 - file_path: gcgc/__init__.py
   match_template: yeyo_version
 - file_path: pyproject.toml
