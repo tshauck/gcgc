@@ -54,7 +54,7 @@ class GCGCTransformersTokenizer(PreTrainedTokenizer):
         return self.kmer_tokenizer.vocab.stoi[token]
 
     def _tokenize(self, text: str, **kwargs):
-        return self.kmer_tokenizer.encode(text)
+        return self.kmer_tokenizer.tokenize(text)
 
     def save_vocabulary(self, save_directory) -> Tuple[str]:
         """Save the vocabulary string to integer map in the save_directory."""
@@ -139,7 +139,7 @@ class GenomicDataset(torch.utils.data.Dataset):
             except KeyError:
                 continue
 
-            tokenized = self._tokenizer.tokenize(str(seq_record.seq))
+            tokenized = self._tokenizer.encode(str(seq_record.seq))
             # pylint: disable=not-callable, no-member
             return torch.tensor(tokenized, dtype=torch.long)
 

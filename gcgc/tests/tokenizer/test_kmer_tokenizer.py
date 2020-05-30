@@ -81,7 +81,7 @@ from gcgc import KmerTokenizer
 )
 def test_kmer_tokenization(seq, tokenizer, expected_tokens, expected_encoding):
     """Test the kmers are encoded as expected."""
-    actual_tokens = tokenizer.encode_as_tokens(seq)
+    actual_tokens = tokenizer.tokenize(seq)
     assert actual_tokens == expected_tokens
 
     actual_encoded = tokenizer.encode(seq)
@@ -111,19 +111,3 @@ def test_get_special_tokens_mask(token_ids, tokenizer, expected_mask):
     """Test the special tokens mask returns the proper mask for a given input list of token ids."""
     actual_mask = tokenizer.get_special_tokens_mask(token_ids)
     assert actual_mask == expected_mask
-
-
-@pytest.mark.skip
-@pytest.mark.parametrize(
-    "tokenizer,sequence_list,expected_encoding",
-    [
-        (
-            KmerTokenizer(alphabet="ATCG", kmer_length=1, kmer_stride=1),
-            ["ATCG", "GCTA"],
-            [[0, 1, 2, 3], [3, 2, 1, 0]],
-        )
-    ],
-)
-def test_encode_batch(tokenizer, sequence_list, expected_encoding):
-    """Test batches can be encoded."""
-    assert tokenizer.encode_batches(sequence_list) == expected_encoding

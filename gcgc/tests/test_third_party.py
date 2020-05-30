@@ -46,3 +46,22 @@ def test_transformers_model(tmpdir):
     )
 
     trainer.train()
+
+
+def test_tokenizer():
+    """Test the tokenizer interface."""
+    kmer_tokenizer = KmerTokenizer(alphabet="extended_protein")
+    transformers_tokenizer = third_party.GCGCTransformersTokenizer(kmer_tokenizer)
+
+    # Includes start and stop ids.
+    expected = [1, 15, 22, 15, 2]
+    assert expected == transformers_tokenizer.encode("MVM")
+
+    # Trim off the start and stop id.
+    assert expected[1:-1] == transformers_tokenizer.convert_tokens_to_ids(list("MVM"))
+
+    assert {
+        "input_ids": [1, 15, 22, 15, 2],
+        "token_type_ids": [0, 0, 0, 0, 0],
+        "attention_mask": [1, 1, 1, 1, 1],
+    } == transformers_tokenizer.encode_plus("MVM")
