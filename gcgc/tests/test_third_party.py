@@ -35,7 +35,7 @@ def test_transformers_model(tmpdir):
     )
     model = AutoModelWithLMHead.from_config(config)
 
-    training_args = TrainingArguments(str(tmpdir))
+    training_args = TrainingArguments(str(tmpdir), max_steps=10)
 
     trainer = Trainer(
         model=model,
@@ -65,3 +65,6 @@ def test_tokenizer():
         "token_type_ids": [0, 0, 0, 0, 0],
         "attention_mask": [1, 1, 1, 1, 1],
     } == transformers_tokenizer.encode_plus("MVM")
+
+    # Test decode
+    assert transformers_tokenizer.decode([1, 15, 22, 15, 2]) == ">MVM<"

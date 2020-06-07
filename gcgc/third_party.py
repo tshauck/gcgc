@@ -7,11 +7,13 @@ import os.path
 from pathlib import Path
 from typing import Any
 from typing import Dict
+from typing import List
 from typing import Sequence
 from typing import Tuple
 
 import torch
 import torch.utils.data
+
 from Bio import File
 from Bio import SeqIO
 from Bio.Alphabet import IUPAC
@@ -55,6 +57,10 @@ class GCGCTransformersTokenizer(PreTrainedTokenizer):
 
     def _tokenize(self, text: str, **kwargs):
         return self.kmer_tokenizer.tokenize(text)
+
+    def convert_tokens_to_string(self, tokens: List[str]) -> str:
+        """Convert the tokens into a string."""
+        return "".join(tokens)
 
     def save_vocabulary(self, save_directory) -> Tuple[str]:
         """Save the vocabulary string to integer map in the save_directory."""
