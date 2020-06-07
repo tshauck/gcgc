@@ -6,7 +6,7 @@ services:
       context: .
       args:
         PY_VERSION: "${PY_VERSION:-3.7}"
-    image: docker.io/thauck/gcgc:${TAG-0.12.2-dev.3}
+    image: docker.io/thauck/gcgc:${TAG-0.12.2-dev.4}
     volumes:
       - $PWD/gcgc/data:/data
     entrypoint:
