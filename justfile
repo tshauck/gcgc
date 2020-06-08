@@ -23,12 +23,9 @@ isort:
 	isort
 
 docs: clean_docs
-	rm -rf docs/github
-	mkdir docs/github
-	cp ./CHANGELOG.md ./docs/github
-	sed 's/# GCGC/# README/g' README.md > ./docs/github/README.md
+	cp ./CHANGELOG.md ./docs/
+	cp ./README.md ./docs/index.md
 	mkdocs build
-	rm -rf ./docs/github/
 
 clean_docs:
 	rm -rf site
