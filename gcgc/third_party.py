@@ -13,31 +13,52 @@ from typing import Tuple
 
 import torch
 import torch.utils.data
-
 from Bio import File
 from Bio import SeqIO
 from Bio.Alphabet import IUPAC
-from transformers.tokenization_utils import PreTrainedTokenizer
 
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
+from transformers.tokenization_utils import PreTrainedTokenizer
 
 
 class GCGCTransformersTokenizer(PreTrainedTokenizer):
     """A GCGC Tokenizer that is compatible with the transformers library."""
 
-    VOCABULARY_FILENAME = "gcgc-vocab.json"
+    VOCABULARY_FILENAME = "gcgc_vocab.json"
 
-    def __init__(self, kmer_tokenizer: KmerTokenizer, **kwargs: Dict[str, Any]):
+    def __init__(self, alphabet, kmer_length, kmer_stride, **kwargs: Dict[str, Any]):
         """Init the GCGCTransformersTokenizer object."""
-        self.kmer_tokenizer = kmer_tokenizer
+
+        self.kmer_tokenizer = KmerTokenizer(
+            alphabet=alphabet,
+            kmer_length=kmer_length,
+            kmer_stride=kmer_stride,
+            bos_token=kwargs.get("bos_token"),
+            eos_token=kwargs.get("eos_token"),
+            unk_token=kwargs.get("unk_token"),
+            pad_token=kwargs.get("pad_token"),
+            mask_token=kwargs.get("mask_token"),
+        )
 
         super().__init__(
-            bos_token=self.kmer_tokenizer.bos_token,
-            eos_token=self.kmer_tokenizer.eos_token,
-            unk_token=self.kmer_tokenizer.unk_token,
-            pad_token=self.kmer_tokenizer.pad_token,
-            mask_token=self.kmer_tokenizer.mask_token,
-            **kwargs,
+            alphabet=alphabet, kmer_length=kmer_length, kmer_stride=kmer_stride, **kwargs,
+        )
+
+        self.init_inputs = (alphabet, kmer_length, kmer_stride)
+        self.init_kwargs = kwargs
+
+    @classmethod
+    def from_kmer_tokenizer(cls, kmer_tokenizer: KmerTokenizer):
+        """Init from a kmer tokenizer."""
+        return cls(
+            kmer_tokenizer.alphabet,
+            kmer_tokenizer.kmer_length,
+            kmer_tokenizer.kmer_stride,
+            bos_token=kmer_tokenizer.bos_token,
+            eos_token=kmer_tokenizer.eos_token,
+            unk_token=kmer_tokenizer.unk_token,
+            pad_token=kmer_tokenizer.pad_token,
+            mask_token=kmer_tokenizer.mask_token,
         )
 
     def get_vocab(self):

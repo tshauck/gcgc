@@ -2,6 +2,8 @@
 # All Rights Reserved
 """Tests for third party modules."""
 
+import pathlib
+import tempfile
 from pathlib import Path
 
 from transformers import CONFIG_MAPPING
@@ -20,7 +22,9 @@ def test_transformers_model(tmpdir):
     tmpdir = Path(tmpdir)
 
     kmer_tokenizer = KmerTokenizer(alphabet="extended_protein")
-    transformers_tokenizer = third_party.GCGCTransformersTokenizer(kmer_tokenizer)
+    transformers_tokenizer = third_party.GCGCTransformersTokenizer.from_kmer_tokenizer(
+        kmer_tokenizer
+    )
 
     dataset = third_party.GenomicDataset.from_path(PF01152_PATH_FULL, transformers_tokenizer)
     data_collator = DataCollatorForLanguageModeling(tokenizer=transformers_tokenizer, mlm=True,)
@@ -51,7 +55,20 @@ def test_transformers_model(tmpdir):
 def test_tokenizer():
     """Test the tokenizer interface."""
     kmer_tokenizer = KmerTokenizer(alphabet="extended_protein")
-    transformers_tokenizer = third_party.GCGCTransformersTokenizer(kmer_tokenizer)
+
+    transformers_tokenizer = third_party.GCGCTransformersTokenizer.from_kmer_tokenizer(
+        kmer_tokenizer
+    )
+
+    with tempfile.TemporaryDirectory() as tempdir:
+        temppath = pathlib.Path(tempdir)
+        model_path = temppath / "model"
+        model_path.mkdir(exist_ok=True)
+
+        transformers_tokenizer.save_pretrained(str(model_path))
+        transformers_tokenizer = third_party.GCGCTransformersTokenizer.from_pretrained(
+            str(model_path)
+        )
 
     # Includes start and stop ids.
     expected = [1, 15, 22, 15, 2]
@@ -67,4 +84,4 @@ def test_tokenizer():
     } == transformers_tokenizer.encode_plus("MVM")
 
     # Test decode
-    assert transformers_tokenizer.decode([1, 15, 22, 15, 2]) == ">MVM<"
+    assert transformers_tokenizer.decode([1, 15, 22, 3, 2, 0]) == ">MV#<|"
