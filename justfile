@@ -59,3 +59,12 @@ fmt:
 
 fmt-check:
 	black --check .
+
+build:
+	docker-compose build gcgc
+
+docker-tests: build
+	docker-compose run --rm gcgc test
+	docker-compose run --rm gcgc fmt-check
+	docker-compose run --rm gcgc pydocstyle
+	docker-compose run --rm gcgc pylint

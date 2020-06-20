@@ -16,9 +16,9 @@ import torch.utils.data
 from Bio import File
 from Bio import SeqIO
 from Bio.Alphabet import IUPAC
+from transformers.tokenization_utils import PreTrainedTokenizer
 
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
-from transformers.tokenization_utils import PreTrainedTokenizer
 
 
 class GCGCTransformersTokenizer(PreTrainedTokenizer):

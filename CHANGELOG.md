@@ -9,6 +9,7 @@
 - Add dedicated `Vocab` object which replaces the dictionary of string to
   integer.
 - Update tokenizer integration to override `convert_tokens_to_string`
+- Fix bug when trying to save the huggingface tokenizer.
 
 ## 0.12.1 (2020-02-16)
 
