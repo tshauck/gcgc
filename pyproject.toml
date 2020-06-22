@@ -14,9 +14,13 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = ">=3.7,<4.0"
 pydantic = "^1"
-biopython = "^1"
-transformers = "^2"
-torch = "^1.5"
+
+biopython = { version = "^1", optional = true }
+transformers = { version = ">=2", optional = true }
+torch = {version = ">=1.5", optional = true }
+
+[tool.poetry.extras]
+third_party = ["biopython", "transformers", "torch"]
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"

@@ -11,14 +11,21 @@ from typing import List
 from typing import Sequence
 from typing import Tuple
 
-import torch
-import torch.utils.data
-from Bio import File
-from Bio import SeqIO
-from Bio.Alphabet import IUPAC
-from transformers.tokenization_utils import PreTrainedTokenizer
-
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
+
+try:
+    import torch
+    import torch.utils.data
+    from transformers.tokenization_utils import PreTrainedTokenizer
+
+    from Bio import File
+    from Bio import SeqIO
+    from Bio.Alphabet import IUPAC
+
+except ImportError as exp:
+    # pylint: disable=invalid-name
+    needed = "torch, transformers, biopython"
+    raise ImportError(f"Missing one or more libraries needed: {needed}. Please install: {exp}")
 
 
 class GCGCTransformersTokenizer(PreTrainedTokenizer):
@@ -28,7 +35,6 @@ class GCGCTransformersTokenizer(PreTrainedTokenizer):
 
     def __init__(self, alphabet, kmer_length, kmer_stride, **kwargs: Dict[str, Any]):
         """Init the GCGCTransformersTokenizer object."""
-
         self.kmer_tokenizer = KmerTokenizer(
             alphabet=alphabet,
             kmer_length=kmer_length,

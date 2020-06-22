@@ -4,12 +4,12 @@ RUN echo $PY_VERSION
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/bin/
 
-RUN pip install pip==19.0.1 poetry==1.0.5
+RUN pip install -U pip poetry
 
 WORKDIR /gcgc
 COPY ./pyproject.toml ./poetry.lock ./
 
-RUN POETRY_VIRTUALENVS_CREATE=false poetry install
+RUN POETRY_VIRTUALENVS_CREATE=false poetry install -E third_party
 
 WORKDIR /gcgc
 COPY ./ ./
