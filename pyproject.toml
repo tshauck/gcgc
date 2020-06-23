@@ -18,6 +18,7 @@ pydantic = "^1"
 biopython = { version = "^1", optional = true }
 transformers = { version = ">=2", optional = true }
 torch = {version = ">=1.5", optional = true }
+phmdoctest = "^0.1.0"
 
 [tool.poetry.extras]
 third_party = ["biopython", "transformers", "torch"]

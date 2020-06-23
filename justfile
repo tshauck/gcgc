@@ -2,7 +2,9 @@
 # All Rights Reserved
 
 test:
-	pytest -v -s --cov-report term-missing --cov=gcgc
+	phmdoctest README.md --outfile README_test.py
+	pytest --strict --doctest-modules -v -s --cov-report term-missing --cov=gcgc
+	rm README_test.py
 
 clean:
 	rm -rf dist

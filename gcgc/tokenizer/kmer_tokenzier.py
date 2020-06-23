@@ -8,14 +8,14 @@ configurable alphabet.
 For example, given incoming nucleotide sequences, using settings of kmer length 3 and stride 3 they
 encoded sequences will be codons (in the loose sense) with a vocabulary of size 64.
 
-```python
+>>> from gcgc import KmerTokenizer
+>>> tokenizer = KmerTokenizer.bare_tokenizer(kmer_length=3, kmer_stride=3)
 
->>> tokenizer.encode('AAATTTCCC')
-[0, 42, 63]
+>>> tokenizer.encode('AAATTTCCCGGG')
+[0, 21, 42, 63]
 
 >>> len(tokenizer.vocab)
 64
-```
 """
 
 import itertools as it
@@ -82,6 +82,10 @@ class KmerTokenizer(SequenceTokenizer):
             kmers.append(kmer)
 
         return kmers
+
+    def decode(self, token_ids: List[int]) -> List[str]:
+        """Given the token ids, convert the the list into the associated strings."""
+        return [self.vocab.itos[i] for i in token_ids]
 
     def encode(self, seq: str, add_unknown: bool = False) -> List[int]:
         """Encode the underlying sequence into a list of tokens ids.
