@@ -16,6 +16,12 @@ encoded sequences will be codons (in the loose sense) with a vocabulary of size 
 
 >>> len(tokenizer.vocab)
 64
+
+>>> tokenizer.encode_batch(['AAATTTCCCGGG', 'GGGCCCTTTAAA'])
+[[0, 21, 42, 63], [63, 42, 21, 0]]
+
+>>> tokenizer.tokenize_batch(['AAATTTCCCGGG', 'GGGCCCTTTAAA'])
+[['AAA', 'TTT', 'CCC', 'GGG'], ['GGG', 'CCC', 'TTT', 'AAA']]
 """
 
 import itertools as it
@@ -141,3 +147,11 @@ class KmerTokenizer(SequenceTokenizer):
             kmer_list = kmer_list + [self.eos_token]
 
         return super().apply_length_constraints(kmer_list)
+
+    def tokenize_batch(self, seqs: List[str]) -> List[List[str]]:
+        """Tokenize a list of sequences."""
+        return [self.tokenize(s) for s in seqs]
+
+    def encode_batch(self, seqs: List[str]) -> List[List[int]]:
+        """Tokenize a list of sequences."""
+        return [self.encode(s) for s in seqs]

@@ -104,3 +104,5 @@ ENV/
 .mypy_cache/
 
 .pyre/
+
+docs/CHANGELOG.md

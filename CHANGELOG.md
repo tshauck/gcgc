@@ -11,6 +11,7 @@
 - Update tokenizer integration to override `convert_tokens_to_string`
 - Fix bug when trying to save the huggingface tokenizer.
 - Make the third party "extras" during python packaging.
+- Add better testing and batch encoding operatons.
 
 ## 0.12.1 (2020-02-16)
 
