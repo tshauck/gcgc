@@ -27,7 +27,7 @@ def test_transformers_model(tmpdir):
     )
 
     dataset = third_party.GenomicDataset.from_path(PF01152_PATH_FULL, transformers_tokenizer)
-    data_collator = DataCollatorForLanguageModeling(tokenizer=transformers_tokenizer, mlm=True,)
+    data_collator = DataCollatorForLanguageModeling(tokenizer=transformers_tokenizer, mlm=True)
 
     config = CONFIG_MAPPING["bert"](
         vocab_size=len(kmer_tokenizer.vocab),
@@ -54,7 +54,7 @@ def test_transformers_model(tmpdir):
 
 def test_tokenizer():
     """Test the tokenizer interface."""
-    kmer_tokenizer = KmerTokenizer(alphabet="extended_protein")
+    kmer_tokenizer = KmerTokenizer(alphabet="extended_protein", conform_length=9)
 
     transformers_tokenizer = third_party.GCGCTransformersTokenizer.from_kmer_tokenizer(
         kmer_tokenizer
@@ -78,10 +78,12 @@ def test_tokenizer():
     assert expected[1:-1] == transformers_tokenizer.convert_tokens_to_ids(list("MVM"))
 
     assert {
-        "input_ids": [1, 15, 22, 15, 2],
-        "token_type_ids": [0, 0, 0, 0, 0],
-        "attention_mask": [1, 1, 1, 1, 1],
-    } == transformers_tokenizer.encode_plus("MVM")
+        "input_ids": [1, 15, 22, 15, 2, 0, 0, 0, 0],
+        "token_type_ids": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        "attention_mask": [1, 1, 1, 1, 1, 0, 0, 0, 0],
+    } == transformers_tokenizer.encode_plus(
+        "MVM", max_length=9, pad_to_max_length=True, truncation=True
+    )
 
     # Test decode
     assert transformers_tokenizer.decode([1, 15, 22, 3, 2, 0]) == ">MV#<|"

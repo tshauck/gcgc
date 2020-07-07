@@ -12,6 +12,8 @@ services:
     entrypoint:
       - just
     working_dir: /gcgc
+    stdin_open: true
+    tty: true
   yeyo:
     image: docker.io/thauck/yeyo:0.3.0-dev.2
     volumes:
