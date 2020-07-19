@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.12.2 (unreleased)
+## 0.12.2
 
 - Fix bug in the event that a token id is supplied that overrides a default of
   an inferred token.
