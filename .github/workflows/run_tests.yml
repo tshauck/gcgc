@@ -13,4 +13,4 @@ jobs:
           version: '3'
       - uses: actions/checkout@v1
       - name: Run tests
-        run: task test
+        run: task ci-test

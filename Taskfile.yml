@@ -1,11 +1,39 @@
-# https://taskfile.dev
-
 version: "3"
 
+env:
+  GCGC_VERSION: v0.12.3
+
 tasks:
+  ci-test:
+    cmds:
+      - task: build
+      - task: black-check
+      - task: pydocstyle
+      - task: pylint
+      - task: test
+  build:
+    cmds:
+      - docker-compose build gcgc
+  black-check:
+    cmds:
+      - docker-compose run gcgc black --check .
+  pydocstyle:
+    cmds:
+      - docker-compose run gcgc pydocstyle --add-ignore=D202,D203,D301 --convention=google gcgc
+  pylint:
+    cmds:
+      - docker-compose run gcgc pylint gcgc
   test:
     cmds:
-      - docker-compose run --rm gcgc fmt-check
-      - docker-compose run --rm gcgc pydocstyle
-      - docker-compose run --rm gcgc pylint
-      - docker-compose run --rm gcgc test
+      - docker-compose run gcgc pytest --strict --doctest-modules -v -s --cov-report term-missing --cov=gcgc
+  publish:
+    cmds:
+      - python -m pip install --pre -U poetry
+      - poetry install
+      - poetry build
+      - twine upload dist/*
+    env:
+      TWINE_USERNAME:
+        sh: echo "$TWINE_USERNAME"
+      TWIN_PASSWORD:
+        sh: echo "$TWINE_PASSWORD"

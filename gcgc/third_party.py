@@ -20,12 +20,11 @@ try:
 
     from Bio import File
     from Bio import SeqIO
-    from Bio.Alphabet import IUPAC
 
 except ImportError as exp:
     # pylint: disable=invalid-name
     needed = "torch, transformers, biopython"
-    raise ImportError(f"Missing one or more libraries needed: {needed}. Please install: {exp}")
+    raise ImportError(f"Missing one or more libraries: {needed}. Please install: {exp}") from exp
 
 
 class GCGCTransformersTokenizer(PreTrainedTokenizer):
@@ -132,14 +131,10 @@ class GenomicDataset(torch.utils.data.Dataset):
 
     @classmethod
     def from_path(
-        cls,
-        path: Path,
-        tokenizer: GCGCTransformersTokenizer,
-        file_format: str = "fasta",
-        alphabet=IUPAC.ExtendedIUPACProtein(),
+        cls, path: Path, tokenizer: GCGCTransformersTokenizer, file_format: str = "fasta",
     ) -> "GenomicDataset":
         """Init from a single file. This is a convenience method that delegates to from_paths."""
-        return cls.from_paths([path], tokenizer, file_format, alphabet)
+        return cls.from_paths([path], tokenizer, file_format)
 
     @classmethod
     def from_paths(
@@ -147,7 +142,6 @@ class GenomicDataset(torch.utils.data.Dataset):
         path_sequence: Sequence[Path],
         tokenizer: GCGCTransformersTokenizer,
         file_format="fasta",
-        alphabet=IUPAC.ExtendedIUPACProtein(),
     ) -> "GenomicDataset":
         """Initialize the GenomicDataset from a pathlib.Path sequence."""
         file_index = {}
@@ -155,7 +149,7 @@ class GenomicDataset(torch.utils.data.Dataset):
 
         for file_path in sorted(path_sequence):
             file_index[file_path] = SeqIO.index(
-                str(file_path), file_format, key_function=seq_indexer, alphabet=alphabet
+                str(file_path), file_format, key_function=seq_indexer
             )
 
         return cls(file_index, tokenizer)
