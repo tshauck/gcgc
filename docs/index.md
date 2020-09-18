@@ -9,7 +9,7 @@
 ## Installation
 
 GCGC is primarily intended to be used as part of a larger workflow inside
-Python, but it can also be used as a docker container.
+Python.
 
 To install via pip:
 
@@ -22,7 +22,7 @@ third party libraries, either install those packages separately, or use gcgc's
 extras.
 
 ```sh
-$ pip install gcgc[third_party]
+$ pip install 'gcgc[third_party]'
 ```
 
 ## Documentation
@@ -81,4 +81,35 @@ sample output:
 
 ```
 {'|': 0, '>': 1, '<': 2, '#': 3, '?': 4, 'G': 5, 'A': 6, 'T': 7, 'C': 8}
+```
+
+### Transformers
+
+The [Transformers](https://huggingface.co/transformers/) library has an
+idea of a tokenizer that is used for various modeling tasks.
+
+To make it easier to use the Transformers library on biological sequences, gcgc
+has a Transformers compatible tokenizer that can be created from the
+KmerTokenizer.
+
+```python
+from gcgc import KmerTokenizer
+from gcgc import third_party
+
+kmer_tokenizer = KmerTokenizer(
+  kmer_length=2, kmer_stride=2, alphabet="unambiguous_dna"
+)
+
+tt = third_party.GCGCTransformersTokenizer.from_kmer_tokenizer(
+    kmer_tokenizer
+)
+
+batch = tt.batch_encode_plus(["ATGC", "GCGC"])
+print(batch["input_ids"])
+```
+
+sample output:
+
+```
+[[1, 11, 8, 2], [1, 8, 8, 2]]
 ```

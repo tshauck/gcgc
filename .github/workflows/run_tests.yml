@@ -7,14 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install Tasks
+        uses: Arduino/actions/setup-taskfile@master
+        with:
+          version: '3'
       - uses: actions/checkout@v1
-      - name: Build the Docker image
-        run: docker-compose build gcgc
-      - name: Run the unittests
-        run: docker-compose run --rm gcgc test
-      - name: Check formatting
-        run: docker-compose run --rm gcgc fmt-check
-      - name: Check pydocstyle
-        run: docker-compose run --rm gcgc pydocstyle
-      - name: Check pylint
-        run: docker-compose run --rm gcgc pylint
+      - name: Run tests
+        run: task test
