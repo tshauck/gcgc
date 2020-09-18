@@ -1,4 +1,5 @@
 site_name: "GCGC Documentation"
+site_url: http://gcgc.trenthauck.com/
 theme:
   name: "material"
   logo:
