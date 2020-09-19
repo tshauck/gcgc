@@ -1,7 +1,7 @@
 version: "3"
 
 env:
-  GCGC_VERSION: v0.12.3
+  GCGC_VERSION: v0.12.4
 
 tasks:
   ci-test:
@@ -28,14 +28,8 @@ tasks:
       - docker-compose run gcgc pytest --strict --doctest-modules -v -s --cov-report term-missing --cov=gcgc
   gh-release:
     cmds:
-      - python -m pip install --pre -U commitizen
-      - cz ch --start-rev {{ .LAST_TAG }}
-      - gh release create {{ .CURRENT_TAG }} -F CHANGELOG.md
-    vars:
-      LAST_TAG:
-        sh: git tag --sort=-v:refname | grep 'v\d\{1,2\}\.\d\{1,2\}\.\d\{1,2\}$' | head -n 2 | tail -n 1
-      CURRENT_TAG:
-        sh: git tag --sort=-v:refname | grep 'v\d\{1,2\}\.\d\{1,2\}\.\d\{1,2\}$' | head -n 1
+      - docker-compose build hub
+      - docker-compose run hub
     env:
       GITHUB_TOKEN:
         sh: echo "$GITHUB_TOKEN"
