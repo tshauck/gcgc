@@ -2,6 +2,7 @@
 # All Rights Reserved
 """Top-level GCGC module."""
 
+import os
 import warnings as _warnings
 
 from gcgc import tokenizer
@@ -10,6 +11,6 @@ from gcgc.tokenizer.kmer_tokenzier import SequenceTokenizer
 
 __all__ = ["tokenizer", "KmerTokenizer", "SequenceTokenizer"]
 
-__version__ = "0.12.2"
+__version__ = os.environ["GCGC_VERSION"]
 
 _warnings.simplefilter(action="ignore", category=PendingDeprecationWarning)

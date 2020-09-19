@@ -6,19 +6,15 @@ services:
       context: .
       args:
         PY_VERSION: "${PY_VERSION:-3.7}"
-    image: docker.io/thauck/gcgc:${TAG-0.12.2}
+        GCGC_VERSION: "${GCGC_VERSION}"
+    environment:
+      GCGC_VERSION: "${GCGC_VERSION}"
+    image: docker.io/thauck/gcgc:${GCGC_VERSION}
     volumes:
       - $PWD/gcgc/data:/data
-    entrypoint:
-      - just
     working_dir: /gcgc
     stdin_open: true
     tty: true
-  yeyo:
-    image: docker.io/thauck/yeyo:0.3.0-dev.2
-    volumes:
-      - $PWD:/project
-      - $HOME/.gitconfig:/etc/gitconfig
   poetry:
     image: jonatkinson/python-poetry
     volumes:

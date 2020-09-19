@@ -55,18 +55,3 @@ test_integration:
 
 test_unit:
 	pytest --cov-report term-missing --cov=gcgc -m 'not integration'
-
-fmt:
-	black .
-
-fmt-check:
-	black --check .
-
-build:
-	docker-compose build gcgc
-
-docker-tests: build
-	docker-compose run --rm gcgc fmt-check
-	docker-compose run --rm gcgc pydocstyle
-	docker-compose run --rm gcgc pylint
-	docker-compose run --rm gcgc test
