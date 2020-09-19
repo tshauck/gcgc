@@ -21,3 +21,13 @@ services:
       - $PWD:/project
     working_dir: /project
     command: [poetry]
+  hub:
+    build:
+      context: .
+      dockerfile: ./build/hub/Dockerfile
+    image: hub
+    working_dir: /src
+    volumes:
+      - ./:/src
+    environment:
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
