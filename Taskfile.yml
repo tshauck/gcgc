@@ -28,7 +28,7 @@ tasks:
       - docker-compose run gcgc pytest --strict --doctest-modules -v -s --cov-report term-missing --cov=gcgc
   publish:
     cmds:
-      - python -m pip install --pre -U poetry
+      - python -m pip install --pre -U poetry twine
       - poetry install
       - poetry build
       - twine upload dist/*
