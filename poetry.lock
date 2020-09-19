@@ -958,7 +958,7 @@ third_party = ["biopython", "transformers", "torch"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<4.0"
-content-hash = "9ed6862581d712083ddfd1d66a9b31af102acaa0ac434e6c96fc47c33cd48b8f"
+content-hash = "5eb73b53c9dc3025485d995abb1f6852612a501f68fab25f18100b6a6fcc82e5"
 
 [metadata.files]
 appdirs = [
