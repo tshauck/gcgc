@@ -4,5 +4,6 @@ version = "0.12.4"
 tag_format = "v$version"
 version_files = [
   "./Taskfile.yml",
+  "./gcgc/__init__.py",
   "./pyproject.toml"
 ]
