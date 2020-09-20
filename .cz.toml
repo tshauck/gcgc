@@ -1,6 +1,6 @@
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.12.4"
+version = "0.12.5"
 tag_format = "v$version"
 version_files = [
   "./Taskfile.yml",
