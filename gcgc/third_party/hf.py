@@ -1,6 +1,6 @@
 # (c) Copyright 2020 Trent Hauck
 # All Rights Reserved
-"""Module holding third party code."""
+"""Modules for huggingface's transformers."""
 
 import json
 import os.path
@@ -14,16 +14,17 @@ from typing import Tuple
 from gcgc.tokenizer.kmer_tokenzier import KmerTokenizer
 
 try:
+    from transformers.tokenization_utils import PreTrainedTokenizer
+
     import torch
     import torch.utils.data
-    from transformers.tokenization_utils import PreTrainedTokenizer
 
     from Bio import File
     from Bio import SeqIO
 
 except ImportError as exp:
     # pylint: disable=invalid-name
-    needed = "torch, transformers, biopython"
+    needed = "transformers"
     raise ImportError(f"Missing one or more libraries: {needed}. Please install: {exp}") from exp
 
 
@@ -84,7 +85,8 @@ class GCGCTransformersTokenizer(PreTrainedTokenizer):
     def _tokenize(self, text: str, **kwargs):
         return self.kmer_tokenizer.tokenize(text)
 
-    def convert_tokens_to_string(self, tokens: List[str]) -> str:
+    @staticmethod
+    def convert_tokens_to_string(tokens: List[str]) -> str:
         """Convert the tokens into a string."""
         return "".join(tokens)
 

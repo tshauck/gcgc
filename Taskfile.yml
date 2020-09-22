@@ -20,6 +20,9 @@ tasks:
   pydocstyle:
     cmds:
       - docker-compose run gcgc pydocstyle --add-ignore=D202,D203,D301 --convention=google gcgc
+  shell:
+    cmds:
+      - docker-compose run --entrypoint /bin/bash gcgc
   pylint:
     cmds:
       - docker-compose run gcgc pylint gcgc
