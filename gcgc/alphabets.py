@@ -1,8 +1,8 @@
 # (c) Copyright 2019 Trent Hauck
 # All Rights Reserved
-"""Stores the alphabets, these are the same as BioPython."""
+"""Stores a common set of alphabets."""
 
-_ALPHABETS = {
+ALPHABETS = {
     "protein": "ACDEFGHIKLMNPQRSTVWY",
     "extended_protein": "ACDEFGHIKLMNPQRSTVWYBXZJUO",
     "ambiguous_dna": "GATCRYWSMKHBVDN",
@@ -19,14 +19,15 @@ def resolve_alphabet(alphabet: str, require: bool = False) -> str:
     Args:
         alphabet: The alphabet to resolve.
         require: If true, require the passed alphabet be found in the options, else error.
-            Defaults to false.
+            Defaults to false. This is useful if you want to use a named alphabet, but want to make
+            sure it's valid.
 
     Returns:
         The resolved alphabet.
 
     """
     try:
-        return _ALPHABETS[alphabet]
+        return ALPHABETS[alphabet]
     except KeyError:
         if require:
             raise
