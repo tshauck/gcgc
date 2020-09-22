@@ -22,7 +22,8 @@ third party libraries, either install those packages separately, or use gcgc's
 extras.
 
 ```sh
-$ pip install 'gcgc[third_party]'
+# hf is huggingface
+$ pip install 'gcgc[hf,pytorch]'
 ```
 
 ## Documentation

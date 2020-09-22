@@ -953,12 +953,13 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [extras]
-third_party = ["biopython", "transformers", "torch"]
+hf = ["transformers"]
+pytorch = ["biopython", "torch"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<4.0"
-content-hash = "5eb73b53c9dc3025485d995abb1f6852612a501f68fab25f18100b6a6fcc82e5"
+content-hash = "e749a29d23d4f7a8bdd7cacd3d20f1c36ef35adc6cd6c48aefd45c16c0712487"
 
 [metadata.files]
 appdirs = [
