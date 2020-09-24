@@ -16,7 +16,7 @@ python = ">=3.6.1,<4.0"
 pydantic = "^1"
 
 biopython = { version = ">=1.78", optional = true }
-transformers = { version = ">=3", optional = true }
+transformers = { version = ">=3,<3.3", optional = true }
 dataclasses = { version = ">=0.7", optional = true, python = ">=3.6.1,<3.7" }
 torch = {version = ">=1.6", optional = true }
 

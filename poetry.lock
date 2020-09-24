@@ -1012,7 +1012,7 @@ hf = ["transformers", "dataclasses"]
 pytorch = ["biopython", "torch"]
 
 [metadata]
-content-hash = "ddfd580829ff67a1e2c0c2a632b47b9f151b0a997be6178e86f2195bf438dfa5"
+content-hash = "da20f42bb8c52f3e6634a9b9a43a473afff484ae162d2dbf5a46b547e8b37504"
 lock-version = "1.0"
 python-versions = ">=3.6.1,<4.0"
 
