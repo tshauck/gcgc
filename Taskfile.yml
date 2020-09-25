@@ -42,9 +42,8 @@ tasks:
         sh: echo "$GITHUB_TOKEN"
   publish:
     cmds:
-      - python -m pip install --pre -U poetry twine
-      - poetry install
-      - poetry build
+      - python -m pip install --pre -U twine
+      - python setup.py sdist bdist_wheel
       - twine upload dist/*
     env:
       TWINE_USERNAME:
