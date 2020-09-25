@@ -29,6 +29,10 @@ tasks:
   test:
     cmds:
       - docker-compose run gcgc pytest --strict --doctest-modules -v -s --cov-report term-missing --cov=gcgc
+  test-py36:
+    cmds:
+      - docker-compose build --build-arg PY_VERSION=3.6 gcgc
+      - docker-compose run gcgc pytest --strict --doctest-modules -v -s --cov-report term-missing --cov=gcgc
   gh-release:
     cmds:
       - docker-compose build hub
