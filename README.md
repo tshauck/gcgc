@@ -49,7 +49,7 @@ sample output:
 [1, 6, 7, 8, 5, 2]
 ```
 
-This output includes the "bos" token, the "eos" token, and the three amino acid
+This output includes the "bos" token, the "eos" token, and the four nucleotide
 tokens in between.
 
 You can go the other way and convert the integers to strings.
@@ -94,13 +94,13 @@ KmerTokenizer.
 
 ```python
 from gcgc import KmerTokenizer
-from gcgc import third_party
+from gcgc.third_party.hf import GCGCTransformersTokenizer
 
 kmer_tokenizer = KmerTokenizer(
   kmer_length=2, kmer_stride=2, alphabet="unambiguous_dna"
 )
 
-tt = third_party.GCGCTransformersTokenizer.from_kmer_tokenizer(
+tt = GCGCTransformersTokenizer.from_kmer_tokenizer(
     kmer_tokenizer
 )
 

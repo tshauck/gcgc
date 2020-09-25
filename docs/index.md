@@ -95,13 +95,13 @@ KmerTokenizer.
 
 ```python
 from gcgc import KmerTokenizer
-from gcgc import third_party
+from gcgc.third_party.hf import GCGCTransformersTokenizer
 
 kmer_tokenizer = KmerTokenizer(
   kmer_length=2, kmer_stride=2, alphabet="unambiguous_dna"
 )
 
-tt = third_party.GCGCTransformersTokenizer.from_kmer_tokenizer(
+tt = GCGCTransformersTokenizer.from_kmer_tokenizer(
     kmer_tokenizer
 )
 
