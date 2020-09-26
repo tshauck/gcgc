@@ -9,6 +9,8 @@ services:
         GCGC_VERSION: "${GCGC_VERSION}"
     environment:
       GCGC_VERSION: "${GCGC_VERSION}"
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
     image: docker.io/thauck/gcgc:${GCGC_VERSION}
     volumes:
       - $PWD/gcgc/data:/data

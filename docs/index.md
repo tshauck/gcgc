@@ -22,8 +22,7 @@ third party libraries, either install those packages separately, or use gcgc's
 extras.
 
 ```sh
-# hf is huggingface
-$ pip install 'gcgc[hf,pytorch]'
+$ pip install 'gcgc[pytorch,hf]'
 ```
 
 ## Documentation
@@ -50,7 +49,7 @@ sample output:
 [1, 6, 7, 8, 5, 2]
 ```
 
-This output includes the "bos" token, the "eos" token, and the three amino acid
+This output includes the "bos" token, the "eos" token, and the four nucleotide
 tokens in between.
 
 You can go the other way and convert the integers to strings.
