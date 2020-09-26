@@ -9,10 +9,6 @@ test:
 clean:
 	rm -rf dist
 
-publish-python:
-	poetry build
-	poetry publish
-
 publish-docker:
 	docker-compose build gcgc
 	docker-compose push gcgc

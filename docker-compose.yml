@@ -15,12 +15,6 @@ services:
     working_dir: /gcgc
     stdin_open: true
     tty: true
-  poetry:
-    image: jonatkinson/python-poetry
-    volumes:
-      - $PWD:/project
-    working_dir: /project
-    command: [poetry]
   hub:
     build:
       context: .
