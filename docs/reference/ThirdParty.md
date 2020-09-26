@@ -1,1 +1,2 @@
-::: gcgc.third_party
+::: gcgc.third_party.hf
+::: gcgc.third_party.pytorch

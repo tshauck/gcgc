@@ -3,7 +3,5 @@ name = "cz_conventional_commits"
 version = "0.13.0"
 tag_format = "v$version"
 version_files = [
-  "./Taskfile.yml",
-  "./gcgc/__init__.py",
-  "./pyproject.toml"
+  "./Taskfile.yml"
 ]

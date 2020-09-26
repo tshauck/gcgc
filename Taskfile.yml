@@ -50,3 +50,33 @@ tasks:
         sh: echo "$TWINE_USERNAME"
       TWIN_PASSWORD:
         sh: echo "$TWINE_PASSWORD"
+  docs-mk:
+    cmds:
+      - cz ch
+      - cp ./CHANGELOG.md ./docs/
+      - cp ./README.md ./docs/index.md
+      - mkdocs build
+  docs-rm:
+    cmds:
+      - rm -rf ./site
+  docs-upload:
+    cmds:
+      - aws s3 cp --recursive ./site s3://gcgc.trenthauck.com/
+  docs-publish:
+    cmds:
+      - task: docs-rm
+      - task: docs-mk
+      - task: docs-upload
+    env:
+      AWS_SECRET_ACCESS_KEY:
+        sh: echo "$AWS_SECRET_ACCESS_KEY"
+      AWS_ACCESS_KEY_ID:
+        sh: echo "$AWS_ACCESS_KEY_ID"
+  docs-publish-docker:
+    cmds:
+      - docker-compose run gcgc task docs-publish
+    env:
+      AWS_SECRET_ACCESS_KEY:
+        sh: echo "$AWS_SECRET_ACCESS_KEY"
+      AWS_ACCESS_KEY_ID:
+        sh: echo "$AWS_ACCESS_KEY_ID"
