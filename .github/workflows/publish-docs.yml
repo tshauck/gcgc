@@ -9,6 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Tasks
+        uses: Arduino/actions/setup-taskfile@master
+        with:
+          version: '3'
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
