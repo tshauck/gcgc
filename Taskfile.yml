@@ -2,6 +2,8 @@ version: "3"
 
 env:
   GCGC_VERSION: v0.14.4
+  AWS_DEFAULT_REGION: us-west-2
+
 
 tasks:
   ci-test:
