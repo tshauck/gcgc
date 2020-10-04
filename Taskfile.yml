@@ -1,7 +1,7 @@
 version: "3"
 
 env:
-  GCGC_VERSION: v0.13.0
+  GCGC_VERSION: v0.14.0
 
 tasks:
   ci-test:
