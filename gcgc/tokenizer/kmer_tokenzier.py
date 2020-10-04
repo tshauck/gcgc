@@ -8,20 +8,20 @@ configurable alphabet.
 For example, given incoming nucleotide sequences, using settings of kmer length 3 and stride 3 they
 encoded sequences will be codons (in the loose sense) with a vocabulary of size 64.
 
->>> from gcgc import KmerTokenizer
->>> tokenizer = KmerTokenizer.bare_tokenizer(kmer_length=3, kmer_stride=3)
+    >>> from gcgc import KmerTokenizer
+    >>> tokenizer = KmerTokenizer.bare_tokenizer(kmer_length=3, kmer_stride=3)
 
->>> tokenizer.encode('AAATTTCCCGGG')
-[0, 21, 42, 63]
+    >>> tokenizer.encode('AAATTTCCCGGG')
+    [0, 21, 42, 63]
 
->>> len(tokenizer.vocab)
-64
+    >>> len(tokenizer.vocab)
+    64
 
->>> tokenizer.encode_batch(['AAATTTCCCGGG', 'GGGCCCTTTAAA'])
-[[0, 21, 42, 63], [63, 42, 21, 0]]
+    >>> tokenizer.encode_batch(['AAATTTCCCGGG', 'GGGCCCTTTAAA'])
+    [[0, 21, 42, 63], [63, 42, 21, 0]]
 
->>> tokenizer.tokenize_batch(['AAATTTCCCGGG', 'GGGCCCTTTAAA'])
-[['AAA', 'TTT', 'CCC', 'GGG'], ['GGG', 'CCC', 'TTT', 'AAA']]
+    >>> tokenizer.tokenize_batch(['AAATTTCCCGGG', 'GGGCCCTTTAAA'])
+    [['AAA', 'TTT', 'CCC', 'GGG'], ['GGG', 'CCC', 'TTT', 'AAA']]
 """
 
 import itertools as it
@@ -38,7 +38,6 @@ from gcgc.vocab import Vocab
 
 def _create_kmer_vocab_from_token(vocab, alphabet: str, kmer_length: int) -> Vocab:
     """Create the vocab object from a list of tokens."""
-
     token_set = ["".join(kmer) for kmer in it.product(list(alphabet), repeat=kmer_length)]
 
     for token in token_set:

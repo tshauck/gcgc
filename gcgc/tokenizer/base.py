@@ -146,12 +146,12 @@ class SequenceTokenizer(BaseSettings):
     def get_special_tokens_mask(self, token_ids: List[int]) -> List[int]:
         """Given the input set of tokens, return a list that demarcates special character.
 
-        >>> from gcgc import KmerTokenizer
-        >>> tokenizer = KmerTokenizer()
+            >>> from gcgc import KmerTokenizer
+            >>> tokenizer = KmerTokenizer()
 
-        # Assuming 1 is bos_token, 2 is eos_token, and 0 is pad_token.
-        >>> tokenizer.get_special_tokens_mask([1, 34, 21, 0, 0, 0, 2])
-        [1, 0, 0, 1, 1, 1, 1]
+            # Assuming 1 is bos_token, 2 is eos_token, and 0 is pad_token.
+            >>> tokenizer.get_special_tokens_mask([1, 34, 21, 0, 0, 0, 2])
+            [1, 0, 0, 1, 1, 1, 1]
 
         Args:
             token_ids: The list of integer tokens that may or may not be special tokens according

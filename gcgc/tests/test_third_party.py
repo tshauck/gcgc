@@ -6,6 +6,7 @@ import pathlib
 import tempfile
 from pathlib import Path
 
+import pytest
 from transformers import CONFIG_MAPPING
 from transformers import AutoModelWithLMHead
 from transformers import DataCollatorForLanguageModeling
@@ -13,8 +14,9 @@ from transformers import Trainer
 from transformers import TrainingArguments
 
 from gcgc import KmerTokenizer
-from gcgc.third_party import hf
 from gcgc.tests.fixtures import PF01152_PATH_FULL
+from gcgc.third_party import hf
+from gcgc.third_party import hf_datasets
 
 
 def test_transformers_model(tmpdir):
@@ -81,3 +83,12 @@ def test_tokenizer():
 
     # Test decode
     assert transformers_tokenizer.decode([1, 15, 22, 3, 2, 0]) == ">MV#<|"
+
+
+@pytest.mark.skip
+def test_download_swissprot():
+    """Test it's possible to download the swissprot dataset."""
+    ref = hf_datasets.UniprotDataset(name="sprot")
+    ref.download_and_prepare()
+    dataset = ref.as_dataset()
+    assert "sprot" in dataset.keys()
