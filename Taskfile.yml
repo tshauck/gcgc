@@ -42,7 +42,7 @@ tasks:
         sh: echo "$GITHUB_TOKEN"
   publish:
     cmds:
-      - python -m pip install --pre -U twine
+      - python -m pip install --pre -U twine setuptools-scm
       - python setup.py sdist bdist_wheel
       - twine upload dist/*
     env:
