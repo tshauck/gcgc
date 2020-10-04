@@ -1,7 +1,7 @@
 version: "3"
 
 env:
-  GCGC_VERSION: v0.14.5
+  GCGC_VERSION: v0.14.6
   AWS_DEFAULT_REGION: us-west-2
 
 
