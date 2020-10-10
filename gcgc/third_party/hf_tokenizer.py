@@ -35,6 +35,7 @@ class KmerPreTokenizer:
                 non-overlapping kmers.
             alphabet: The particular alphabet
             unk_token: The unknown token to use for the pre-tokenization.
+
         """
         self.kmer_tokenzier = KmerTokenizer(
             kmer_length=kmer_length,
@@ -48,8 +49,10 @@ class KmerPreTokenizer:
         )
 
     def pre_tokenize(self, pre_tok: PreTokenizedString):
+        """Pretokenize the input string."""
         pre_tok.split(self._split)
 
+    # pylint: disable=unused-argument
     def _split(self, i: int, normalized_string: NormalizedString) -> List[NormalizedString]:
         pre_tokenized_sequence = self.kmer_tokenzier.tokenize(str(normalized_string))
         return [NormalizedString(split) for split in pre_tokenized_sequence]
@@ -74,8 +77,3 @@ def build_hf_tokenizer(
     tokenizer.decoder = ByteLevel()
 
     return tokenizer
-
-
-if __name__ == "__main__":
-    tokenizer = build_hf_tokenizer(2, 2, "ATCG", "?")
-    encoded = tokenizer.encode("AYCGCGCGCG")
