@@ -22,7 +22,7 @@ third party libraries, either install those packages separately, or use gcgc's
 extras.
 
 ```sh
-$ pip install 'gcgc[pytorch,hf]'
+$ pip install 'gcgc[hf]'
 ```
 
 ## Documentation
